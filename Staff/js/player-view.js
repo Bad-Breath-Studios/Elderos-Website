@@ -635,6 +635,8 @@ const PlayerView = {
         `;
     },
 
+    CONTAINER_KEYS: new Set(['inventory', 'equipment', 'bank']),
+
     renderFieldValue(field) {
         let valueClass = 'player-view-data-value';
         if (field.type === 'mono') valueClass += ' mono';
@@ -647,10 +649,33 @@ const PlayerView = {
             return `<span class="${valueClass}"><span class="player-view-badge player-view-badge-${field.badgeClass}">${field.displayValue}</span></span>`;
         }
 
+        // Container fields — show visual editor button instead of raw JSON
+        if (this.CONTAINER_KEYS.has(field.key)) {
+            let itemCount = 0;
+            try {
+                const parsed = field.value ? JSON.parse(field.value) : [];
+                itemCount = Array.isArray(parsed) ? parsed.length : 0;
+            } catch (e) { /* ignore parse errors */ }
+            const labels = { inventory: 'Inventory', equipment: 'Equipment', bank: 'Bank' };
+            return `<span class="${valueClass}">
+                <button class="btn-container-view" data-container="${field.key}" onclick="PlayerView.openContainerEditor('${field.key}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                    View ${labels[field.key] || field.key} (${itemCount} items)
+                </button>
+            </span>`;
+        }
+
         return `<span class="${valueClass}">${field.displayValue || field.value || '\u2014'}</span>`;
     },
 
     renderFieldInput(field, section) {
+        // Container fields are edited via ContainerEditor modal, not inline
+        if (this.CONTAINER_KEYS.has(field.key)) return '';
+
         switch (field.inputType) {
             case 'text':
                 return `<input type="text"
@@ -744,6 +769,13 @@ const PlayerView = {
             }
             PlayerViewPanels.loadPunishments(this.player?.id);
         }
+    },
+
+    openContainerEditor(containerType) {
+        if (!this.player) return;
+        const isOnline = this.player.online || false;
+        const playerName = this.player.username || this.player.displayName || '';
+        ContainerEditor.open(this.player.id, containerType, playerName, isOnline);
     },
 
     toggleSection(headerEl) {

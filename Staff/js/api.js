@@ -414,6 +414,29 @@ const API = {
         }
     },
 
+    // ==================== CONTAINER ENDPOINTS ====================
+
+    containers: {
+        /**
+         * Get container data for a player
+         * @param {number} playerId
+         * @param {string} type - inventory, equipment, or bank
+         */
+        async get(playerId, type) {
+            return API.get(`/containers/${playerId}/${type}`);
+        },
+
+        /**
+         * Update a container slot
+         * @param {number} playerId
+         * @param {string} type - inventory, equipment, or bank
+         * @param {object} action - {action:'set'|'delete'|'swap'|'clear', ...}
+         */
+        async update(playerId, type, action) {
+            return API.post(`/containers/${playerId}/${type}/update`, action);
+        }
+    },
+
     // ==================== STATS ENDPOINTS ====================
 
     stats: {

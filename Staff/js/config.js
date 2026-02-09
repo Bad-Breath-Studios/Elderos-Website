@@ -80,6 +80,7 @@ const CONFIG = {
         DELETE_NOTE: 'DELETE_NOTE',
         // Data
         MODIFY_PLAYER_DATA: 'MODIFY_PLAYER_DATA',
+        EDIT_CONTAINERS: 'EDIT_CONTAINERS',
         // Staff
         VIEW_STAFF: 'VIEW_STAFF',
         MANAGE_STAFF: 'MANAGE_STAFF',
