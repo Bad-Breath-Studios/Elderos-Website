@@ -1,5 +1,5 @@
 /**
- * Elderos Vote Page — Main Application Logic
+ * Elderos Vote Page — Main Application Logic (Reskin v2)
  */
 const Vote = {
     state: {
@@ -93,7 +93,7 @@ const Vote = {
             this.renderDailyProgress();
             this.renderClaimBanner();
             this.renderRankProgress();
-            this.renderStreakRoadmap();
+            this.renderRewardsPanel(); // re-render to update streak timeline state
         } catch (e) {
             console.error('Failed to load authenticated data:', e);
             if (e.message === 'Session expired') return;
@@ -104,7 +104,6 @@ const Vote = {
     // === Login ===
 
     setupLoginForm() {
-        // Step 1: Credentials form
         const form = document.getElementById('login-form');
         if (form) {
             form.addEventListener('submit', async (e) => {
@@ -144,7 +143,6 @@ const Vote = {
             });
         }
 
-        // Step 2: 2FA form
         const tfaForm = document.getElementById('twofa-form');
         if (tfaForm) {
             tfaForm.addEventListener('submit', async (e) => {
@@ -183,11 +181,9 @@ const Vote = {
                 }
             });
 
-            // Auto-advance and paste support for 2FA digit inputs
             this.setup2FAInputs();
         }
 
-        // Back button
         const backBtn = document.getElementById('twofa-back');
         if (backBtn) {
             backBtn.addEventListener('click', () => this.showCredentialsStep());
@@ -216,7 +212,6 @@ const Vote = {
                 const val = e.target.value.replace(/\D/g, '');
                 e.target.value = val.slice(0, 1);
                 if (val && i < 5) digits[i + 1].focus();
-                // Auto-submit when all 6 filled
                 if (i === 5 && val) {
                     const code = Array.from(digits).map(d => d.value).join('');
                     if (code.length === 6) document.getElementById('twofa-form').requestSubmit();
@@ -263,51 +258,96 @@ const Vote = {
         Auth.logout();
     },
 
-    // === Render: Status Banner ===
+    // === Render: Status Banner (3-section horizontal card) ===
 
     renderStatusBanner() {
         const container = document.getElementById('status-banner');
         if (!container) return;
 
         const { streak, today, sites } = this.state;
+        const currentStreak = streak.current || 0;
+        const longestStreak = streak.longest || 0;
         const enabledSites = sites.filter(s => s.voted !== undefined);
+        const votedCount = today.voted || 0;
+        const requiredCount = today.required || enabledSites.length || 3;
 
         // Find next streak milestone
-        const milestones = [3, 7, 14, 30];
-        const nextMilestone = milestones.find(m => m > (streak.current || 0)) || 30;
-        const daysUntil = nextMilestone - (streak.current || 0);
+        const milestones = this._getStreakMilestones();
+        const nextMilestone = milestones.find(m => m.days > currentStreak);
+        const daysUntil = nextMilestone ? nextMilestone.days - currentStreak : 0;
+
+        // Streak section
+        let streakHtml;
+        if (currentStreak === 0) {
+            streakHtml = `
+                <div class="streak-display">
+                    <span class="streak-fire">&#128293;</span>
+                    <span class="streak-number">0</span>
+                    <span class="streak-label">day streak</span>
+                </div>
+                <div class="streak-sub">Start your streak by voting today!</div>
+            `;
+        } else {
+            streakHtml = `
+                <div class="streak-display">
+                    <span class="streak-fire">&#128293;</span>
+                    <span class="streak-number">${currentStreak}</span>
+                    <span class="streak-label">day streak</span>
+                </div>
+                <div class="streak-sub">Longest: ${longestStreak} days</div>
+            `;
+        }
+
+        // Next milestone section
+        let milestoneHtml;
+        if (nextMilestone) {
+            const rewardPreview = this._getMilestoneRewardPreview(nextMilestone);
+            milestoneHtml = `
+                <div class="milestone-tag">NEXT MILESTONE</div>
+                <div class="milestone-name">${nextMilestone.days}-Day Streak</div>
+                <div class="milestone-detail">${daysUntil} more day${daysUntil !== 1 ? 's' : ''} ${rewardPreview ? '&rarr; ' + rewardPreview : ''}</div>
+            `;
+        } else {
+            milestoneHtml = `
+                <div class="milestone-tag">MILESTONES</div>
+                <div class="milestone-name">All Complete!</div>
+                <div class="milestone-detail">You've reached every milestone</div>
+            `;
+        }
+
+        // Today's votes dots
+        const dotsHtml = enabledSites.map((s, i) =>
+            `<div class="today-dot ${s.voted ? 'voted' : ''}">${s.voted ? '&#10003;' : (i + 1)}</div>`
+        ).join('');
 
         container.innerHTML = `
-            <div class="status-cards">
-                <div class="status-card">
-                    <div class="status-value">${streak.current || 0}</div>
-                    <div class="status-label">Day Streak</div>
+            <div class="status-banner-card">
+                <div class="status-section">
+                    ${streakHtml}
                 </div>
-                <div class="status-card">
-                    <div class="status-value">${streak.longest || 0}</div>
-                    <div class="status-label">Best Streak</div>
+                <div class="status-divider"></div>
+                <div class="status-section">
+                    ${milestoneHtml}
                 </div>
-                <div class="status-card">
-                    <div class="status-value">${this.state.totalVotes}</div>
-                    <div class="status-label">Total Votes</div>
-                </div>
-                <div class="status-card accent">
-                    <div class="status-value">${daysUntil}</div>
-                    <div class="status-label">Days to ${nextMilestone}-day bonus</div>
+                <div class="status-divider"></div>
+                <div class="status-section">
+                    <div class="today-tag">TODAY'S VOTES</div>
+                    <div class="today-dots">${dotsHtml}</div>
+                    <div class="today-counter">${votedCount}/${requiredCount} complete</div>
                 </div>
             </div>
         `;
         container.style.display = 'block';
     },
 
-    // === Render: Vote Sites ===
+    // === Render: Vote Sites (accent bars, pulsing dots, timer/READY text) ===
 
     renderVoteSites() {
         const container = document.getElementById('vote-sites');
         if (!container) return;
 
         if (!Auth.isAuthenticated()) {
-            container.innerHTML = '<div class="auth-message">Log in to vote and earn rewards</div>';
+            container.innerHTML = '<div class="auth-message">Log in to start voting and earning rewards</div>';
             return;
         }
 
@@ -316,17 +356,24 @@ const Vote = {
             const voted = site.voted;
             const onCooldown = site.cooldownRemaining > 0 && !voted;
             let statusClass = 'ready';
-            let btnText = 'VOTE';
-            let btnDisabled = '';
+            let statusText = 'Ready to vote';
+            let dotClass = 'ready';
+            let timerHtml = '<div class="vote-timer ready-text">READY</div>';
+            let btnHtml = `<button class="vote-btn ready" data-site-id="${site.id}" data-vote-url="${this.escapeHtml(site.voteUrl)}" onclick="Vote.openVoteSite(this)">VOTE &rarr;</button>`;
 
             if (voted) {
                 statusClass = 'voted';
-                btnText = 'VOTED';
-                btnDisabled = 'disabled';
+                statusText = 'Voted';
+                dotClass = 'voted';
+                const remaining = (site.cooldownEndsAt || 0) - Date.now();
+                timerHtml = `<div class="vote-timer">${remaining > 0 ? this.formatCountdown(remaining) : '---'}</div>`;
+                btnHtml = `<button class="vote-btn voted" disabled>&#10003; Voted</button>`;
             } else if (onCooldown) {
                 statusClass = 'cooldown';
-                btnText = this.formatCountdown(site.cooldownRemaining);
-                btnDisabled = 'disabled';
+                statusText = 'On cooldown';
+                dotClass = '';
+                timerHtml = `<div class="vote-timer" data-cooldown-end="${site.cooldownEndsAt || 0}">${this.formatCountdown(site.cooldownRemaining)}</div>`;
+                btnHtml = `<button class="vote-btn cooldown" disabled>Cooldown</button>`;
             }
 
             return `
@@ -335,16 +382,14 @@ const Vote = {
                         <div class="vote-site-icon">${this.getSiteEmoji(site.id)}</div>
                         <div class="vote-site-info">
                             <div class="vote-site-name">${this.escapeHtml(site.name)}</div>
-                            <div class="vote-site-status">${voted ? 'Voted today' : onCooldown ? 'On cooldown' : 'Ready to vote'}</div>
+                            <div class="vote-site-status">
+                                ${dotClass ? `<span class="status-dot ${dotClass}"></span>` : ''}
+                                ${statusText}
+                            </div>
                         </div>
                     </div>
-                    <button class="vote-btn ${statusClass}" ${btnDisabled}
-                            data-site-id="${site.id}"
-                            data-vote-url="${this.escapeHtml(site.voteUrl)}"
-                            data-cooldown-end="${site.cooldownEndsAt || 0}"
-                            onclick="Vote.openVoteSite(this)">
-                        ${btnText}
-                    </button>
+                    ${timerHtml}
+                    ${btnHtml}
                 </div>
             `;
         }).join('');
@@ -366,11 +411,16 @@ const Vote = {
         const required = today.required || 3;
         const pct = required > 0 ? Math.round((voted / required) * 100) : 0;
         const completed = today.completed;
+        const remaining = required - voted;
+
+        const labelText = completed
+            ? 'All sites voted! &#10003;'
+            : `${voted}/${required} sites &mdash; ${remaining} more to complete today`;
 
         container.innerHTML = `
             <div class="progress-header">
-                <span>Daily Progress</span>
-                <span class="progress-count">${voted}/${required} sites</span>
+                <span class="progress-label">${labelText}</span>
+                <span class="progress-count">${pct}%</span>
             </div>
             <div class="progress-bar-track">
                 <div class="progress-bar-fill ${completed ? 'complete' : ''}" style="width: ${pct}%"></div>
@@ -379,7 +429,7 @@ const Vote = {
         `;
     },
 
-    // === Render: Rewards Panel ===
+    // === Render: Rewards Panel (daily + streak timeline inside) ===
 
     renderRewardsPanel() {
         const container = document.getElementById('rewards-panel');
@@ -390,102 +440,136 @@ const Vote = {
         const rewards = this.state.rewards[selected];
         if (!rewards) return;
 
-        // World type tabs
-        const tabs = types.map(t =>
-            `<button class="reward-tab ${t === selected ? 'active' : ''}" onclick="Vote.selectWorldType('${t}')">${t.charAt(0).toUpperCase() + t.slice(1)}</button>`
-        ).join('');
-
-        // Daily reward
-        const daily = rewards.daily;
-        const dailyHtml = `
-            <div class="reward-section">
-                <h4>Daily Reward</h4>
-                <div class="reward-item-card">
-                    <div class="reward-desc">${this.escapeHtml(daily.description)}</div>
-                    <div class="reward-details">
-                        ${daily.voteTokens > 0 ? `<span class="reward-tag token">${daily.voteTokens} Vote Tokens</span>` : ''}
-                        ${daily.donatorValue > 0 ? `<span class="reward-tag donator">+$${(daily.donatorValue / 100).toFixed(2)} rank progress</span>` : ''}
-                    </div>
-                    <div class="reward-items">${daily.items.map(i => `<span class="item-pill">${i.quantity}x ${this.formatItemName(i.id)}</span>`).join('')}</div>
+        // World type tabs (only if multiple types)
+        let tabsHtml = '';
+        if (types.length > 1) {
+            tabsHtml = `
+                <div class="rewards-tabs">
+                    ${types.map(t =>
+                        `<button class="reward-tab ${t === selected ? 'active' : ''}" onclick="Vote.selectWorldType('${t}')">${t.charAt(0).toUpperCase() + t.slice(1)}</button>`
+                    ).join('')}
                 </div>
+            `;
+        }
+
+        // Daily reward card
+        const daily = rewards.daily;
+        let dailyRows = '';
+        if (daily.items && daily.items.length > 0) {
+            dailyRows += daily.items.map(i =>
+                `<div class="daily-reward-row">
+                    <span class="daily-reward-icon">&#127873;</span>
+                    <span class="daily-reward-name">${i.quantity}x ${this.formatItemName(i.id)}</span>
+                </div>`
+            ).join('');
+        }
+        if (daily.voteTokens > 0) {
+            dailyRows += `<div class="daily-reward-row">
+                <span class="daily-reward-icon">&#11088;</span>
+                <span class="daily-reward-name">Vote Tokens</span>
+                <span class="daily-reward-value">${daily.voteTokens}</span>
+            </div>`;
+        }
+        if (daily.donatorValue > 0) {
+            dailyRows += `<div class="daily-reward-row">
+                <span class="daily-reward-icon">&#128176;</span>
+                <span class="daily-reward-name">Rank Progress</span>
+                <span class="daily-reward-value">+$${(daily.donatorValue / 100).toFixed(2)}</span>
+            </div>`;
+        }
+
+        const dailyHtml = `
+            <div class="daily-reward-card">
+                <div class="daily-reward-title">Daily Completion</div>
+                ${dailyRows}
             </div>
         `;
 
-        // Streak rewards
-        const streaksHtml = `
-            <div class="reward-section">
-                <h4>Streak Bonuses</h4>
-                ${rewards.streaks.map(s => `
-                    <div class="reward-item-card streak">
-                        <div class="reward-milestone">${s.days}-Day</div>
-                        <div class="reward-desc">${this.escapeHtml(s.description)}</div>
-                        <div class="reward-details">
-                            ${s.voteTokens > 0 ? `<span class="reward-tag token">${s.voteTokens} Tokens</span>` : ''}
-                        </div>
-                        <div class="reward-items">${s.items.map(i => `<span class="item-pill">${i.quantity}x ${this.formatItemName(i.id)}</span>`).join('')}</div>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-
-        // Weekly top
-        const weeklyHtml = `
-            <div class="reward-section">
-                <h4>Weekly Top Voters</h4>
-                ${rewards.weeklyTop.map(w => {
-                    const label = w.rank ? `#${w.rank}` : (w.rankRange ? `#${w.rankRange[0]}-${w.rankRange[1]}` : '');
-                    return `
-                        <div class="reward-item-card weekly">
-                            <div class="reward-milestone">${label}</div>
-                            <div class="reward-desc">${this.escapeHtml(w.description)}</div>
-                            <div class="reward-details">
-                                ${w.voteTokens > 0 ? `<span class="reward-tag token">${w.voteTokens} Tokens</span>` : ''}
-                            </div>
-                            <div class="reward-items">${w.items.map(i => `<span class="item-pill">${i.quantity}x ${this.formatItemName(i.id)}</span>`).join('')}</div>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        `;
+        // Streak timeline
+        const streakTimelineHtml = this._renderStreakTimeline(rewards.streaks || []);
 
         container.innerHTML = `
-            <div class="rewards-tabs">${tabs}</div>
+            <div class="panel-header">
+                <div class="panel-title">Rewards</div>
+                ${tabsHtml}
+            </div>
             ${dailyHtml}
-            ${streaksHtml}
-            ${weeklyHtml}
+            ${streakTimelineHtml}
+        `;
+    },
+
+    _renderStreakTimeline(streaks) {
+        if (!streaks || streaks.length === 0) return '';
+
+        const currentStreak = this.state.streak.current || 0;
+        const todayCompleted = this.state.today.completed || false;
+
+        const items = streaks.map((s, i) => {
+            const completed = currentStreak >= s.days;
+            const isCurrent = !completed && (i === 0 || currentStreak >= (streaks[i - 1]?.days || 0));
+            const daysAway = s.days - currentStreak;
+            const isLast = i === streaks.length - 1;
+
+            let dotClass = 'future';
+            let connectorClass = '';
+            let dayClass = 'future';
+            let descClass = '';
+            let badgeHtml = '';
+
+            if (completed) {
+                dotClass = 'completed';
+                connectorClass = 'completed';
+                dayClass = 'completed';
+                descClass = 'completed';
+                badgeHtml = '<span class="timeline-badge claimed">CLAIMED</span>';
+            } else if (isCurrent) {
+                dotClass = 'current';
+                connectorClass = 'current';
+                dayClass = 'current';
+                if (todayCompleted) {
+                    badgeHtml = '<span class="timeline-badge here">Claim with ::claimvote</span>';
+                } else {
+                    badgeHtml = '<span class="timeline-badge here">&#8592; YOU ARE HERE</span>';
+                }
+            } else {
+                badgeHtml = `<span class="timeline-badge future">${daysAway} more day${daysAway !== 1 ? 's' : ''}</span>`;
+            }
+
+            // Reward description
+            const rewardParts = [];
+            if (s.items && s.items.length > 0) {
+                rewardParts.push(s.items.map(it => `${it.quantity}x ${this.formatItemName(it.id)}`).join(', '));
+            }
+            if (s.voteTokens > 0) rewardParts.push(`${s.voteTokens} tokens`);
+            if (s.donatorValue > 0) rewardParts.push(`+$${(s.donatorValue / 100).toFixed(2)} rank`);
+            const rewardDesc = rewardParts.join(' + ');
+
+            return `
+                <div class="timeline-item">
+                    <div class="timeline-dot-col">
+                        <div class="timeline-dot ${dotClass}"></div>
+                        ${!isLast ? `<div class="timeline-connector ${connectorClass}"></div>` : ''}
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-day ${dayClass}">${s.days}-Day Streak</div>
+                        <div class="timeline-desc ${descClass}">${rewardDesc}</div>
+                        ${badgeHtml}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <div class="streak-timeline-title">Streak Milestones</div>
+            <div class="streak-timeline">
+                ${items}
+            </div>
         `;
     },
 
     selectWorldType(type) {
         this.state.selectedWorldType = type;
         this.renderRewardsPanel();
-    },
-
-    // === Render: Streak Roadmap ===
-
-    renderStreakRoadmap() {
-        const container = document.getElementById('streak-roadmap');
-        if (!container) return;
-
-        const current = this.state.streak.current || 0;
-        const milestones = [3, 7, 14, 30];
-
-        container.innerHTML = `
-            <h3 class="section-title">Streak Roadmap</h3>
-            <div class="roadmap">
-                ${milestones.map(m => {
-                    const completed = current >= m;
-                    const isCurrent = !completed && (milestones.indexOf(m) === 0 || current >= milestones[milestones.indexOf(m) - 1]);
-                    return `
-                        <div class="roadmap-node ${completed ? 'completed' : ''} ${isCurrent ? 'current' : ''}">
-                            <div class="roadmap-dot"></div>
-                            <div class="roadmap-label">${m} Days</div>
-                            ${completed ? '<div class="roadmap-check">&#10003;</div>' : ''}
-                        </div>
-                    `;
-                }).join('<div class="roadmap-line"></div>')}
-            </div>
-        `;
     },
 
     // === Render: Leaderboard ===
@@ -497,52 +581,81 @@ const Vote = {
         const entries = this.state.leaderboard;
 
         if (entries.length === 0) {
-            container.innerHTML = '<div class="lb-empty">No votes this week yet. Be the first!</div>';
+            container.innerHTML = `
+                <div class="panel-header">
+                    <div class="panel-title">Weekly Voters</div>
+                    <div class="panel-subtitle" id="lb-countdown"></div>
+                </div>
+                <div class="lb-empty">No votes this week yet. Be the first!</div>
+            `;
             return;
         }
 
-        // Podium (top 3)
         const podium = entries.slice(0, 3);
         const rows = entries.slice(3, 10);
-        const username = Auth.getUsername();
+        const username = Auth.isAuthenticated() ? Auth.getUsername() : null;
 
         const podiumHtml = podium.length > 0 ? `
             <div class="lb-podium">
-                ${podium.map((p, i) => `
-                    <div class="lb-podium-item rank-${i + 1} ${p.username === username ? 'highlight' : ''}">
-                        <div class="lb-podium-rank">${this.getRankEmoji(i + 1)}</div>
-                        <div class="lb-podium-name">${this.escapeHtml(p.username)}</div>
-                        <div class="lb-podium-score">${p.completions} days</div>
-                    </div>
-                `).join('')}
+                ${podium.map((p, i) => {
+                    const isUser = p.username === username;
+                    return `
+                        <div class="lb-podium-item rank-${i + 1} ${isUser ? 'highlight' : ''}">
+                            <div class="lb-podium-rank">${this.getRankEmoji(i + 1)}</div>
+                            <div class="lb-podium-name">${this.escapeHtml(p.username)}${isUser ? '<span class="lb-you-badge">YOU</span>' : ''}</div>
+                            <div class="lb-podium-score">${p.completions}/${7} days</div>
+                        </div>
+                    `;
+                }).join('')}
             </div>
         ` : '';
 
-        const rowsHtml = rows.map(r => `
-            <div class="lb-row ${r.username === username ? 'highlight' : ''}">
-                <span class="lb-rank">#${r.rank}</span>
-                <span class="lb-name">${this.escapeHtml(r.username)}</span>
-                <span class="lb-score">${r.completions}</span>
-            </div>
-        `).join('');
+        const rowsHtml = rows.map(r => {
+            const isUser = r.username === username;
+            return `
+                <div class="lb-row ${isUser ? 'highlight' : ''}">
+                    <span class="lb-rank">#${r.rank}</span>
+                    <span class="lb-name">${this.escapeHtml(r.username)}${isUser ? '<span class="lb-you-badge">YOU</span>' : ''}</span>
+                    <span class="lb-score">${r.completions}</span>
+                </div>
+            `;
+        }).join('');
+
+        // Check if user is in leaderboard
+        let userRankHtml = '';
+        if (username) {
+            const userEntry = entries.find(e => e.username === username);
+            if (!userEntry) {
+                // User not in top entries - we don't have their rank data from API, skip
+            }
+        }
 
         container.innerHTML = `
+            <div class="panel-header">
+                <div class="panel-title">Weekly Voters</div>
+                <div class="panel-subtitle" id="lb-countdown"></div>
+            </div>
             ${podiumHtml}
             <div class="lb-rows">${rowsHtml}</div>
-            <div class="lb-reset" id="lb-countdown"></div>
+            ${userRankHtml}
         `;
     },
 
-    // === Render: Rank Progress ===
+    // === Render: Rank Progress (full-width card with color dots) ===
 
     renderRankProgress() {
         const container = document.getElementById('rank-progress');
         if (!container) return;
 
+        if (!Auth.isAuthenticated()) {
+            container.innerHTML = '';
+            return;
+        }
+
         const dp = this.state.donatorProgress;
         if (!dp || dp.maxRankReached) {
             container.innerHTML = dp?.maxRankReached
-                ? '<div class="rank-max">Maximum rank achieved!</div>'
+                ? '<div class="rank-card"><div class="rank-max">Maximum donator rank achieved!</div></div>'
                 : '';
             return;
         }
@@ -552,16 +665,21 @@ const Vote = {
         const pct = dp.progressPercent || 0;
         const spent = ((dp.totalSpentCents || 0) / 100).toFixed(2);
         const threshold = ((dp.nextThresholdCents || 0) / 100).toFixed(2);
+        const currentColor = dp.currentColor || 'var(--text-muted)';
+        const nextColor = dp.nextColor || 'var(--accent)';
 
         container.innerHTML = `
-            <h3 class="section-title">Donator Rank Progress</h3>
-            <div class="rank-bar-wrapper">
+            <div class="rank-card">
+                <div class="rank-card-header">
+                    <div class="rank-card-title">Donator Rank Progress</div>
+                    <div class="rank-card-earned"><strong>$${spent}</strong> earned from voting</div>
+                </div>
                 <div class="rank-bar-labels">
-                    <span class="rank-current">${this.capitalize(current)}</span>
-                    <span class="rank-next" style="color: ${dp.nextColor || 'var(--text-dim)'}">${this.capitalize(next)}</span>
+                    <span class="rank-current"><span class="rank-color-dot" style="background: ${currentColor}"></span> ${this.capitalize(current)}</span>
+                    <span class="rank-next" style="color: ${nextColor}"><span class="rank-color-dot" style="background: ${nextColor}"></span> ${this.capitalize(next)}</span>
                 </div>
                 <div class="rank-bar-track">
-                    <div class="rank-bar-fill" style="width: ${pct}%; background: ${dp.nextColor || 'var(--accent)'}"></div>
+                    <div class="rank-bar-fill" style="width: ${pct}%; background: linear-gradient(90deg, ${currentColor}, ${nextColor})"></div>
                 </div>
                 <div class="rank-bar-detail">$${spent} / $${threshold}</div>
             </div>
@@ -575,13 +693,15 @@ const Vote = {
         if (!container) return;
 
         if (this.state.pendingRewards > 0) {
+            const count = this.state.pendingRewards;
             container.innerHTML = `
                 <div class="claim-content">
-                    <div class="claim-icon">&#127873;</div>
+                    <div class="claim-icon">&#128230;</div>
                     <div class="claim-text">
-                        <div class="claim-title">You have ${this.state.pendingRewards} pending reward${this.state.pendingRewards > 1 ? 's' : ''}!</div>
-                        <div class="claim-desc">Type <code>::claimvote</code> in-game to collect your rewards.</div>
+                        <div class="claim-title">${count} Unclaimed Reward${count > 1 ? 's' : ''}</div>
+                        <div class="claim-desc">Claim on your preferred world &mdash; rewards are world-type specific</div>
                     </div>
+                    <div class="claim-code">::claimvote</div>
                 </div>
             `;
             container.style.display = 'block';
@@ -591,7 +711,6 @@ const Vote = {
     },
 
     renderUnauthenticatedState() {
-        // Show placeholder content for unauthenticated users
         const statusBanner = document.getElementById('status-banner');
         if (statusBanner) statusBanner.style.display = 'none';
 
@@ -606,9 +725,6 @@ const Vote = {
 
         const rankProgress = document.getElementById('rank-progress');
         if (rankProgress) rankProgress.innerHTML = '';
-
-        const streakRoadmap = document.getElementById('streak-roadmap');
-        if (streakRoadmap) streakRoadmap.innerHTML = '';
     },
 
     // === Timers ===
@@ -616,18 +732,38 @@ const Vote = {
     startCooldownTimers() {
         if (this.timers.cooldown) clearInterval(this.timers.cooldown);
         this.timers.cooldown = setInterval(() => {
-            document.querySelectorAll('.vote-btn.cooldown').forEach(btn => {
-                const endAt = parseInt(btn.dataset.cooldownEnd);
+            // Update vote card timers
+            document.querySelectorAll('.vote-timer[data-cooldown-end]').forEach(timer => {
+                const endAt = parseInt(timer.dataset.cooldownEnd);
                 if (!endAt) return;
                 const remaining = endAt - Date.now();
                 if (remaining <= 0) {
-                    btn.textContent = 'VOTE';
-                    btn.classList.remove('cooldown');
-                    btn.classList.add('ready');
-                    btn.disabled = false;
+                    timer.textContent = 'READY';
+                    timer.classList.add('ready-text');
+                    // Update the card and button
+                    const card = timer.closest('.vote-card');
+                    if (card) {
+                        card.classList.remove('cooldown', 'voted');
+                        card.classList.add('ready');
+                        const btn = card.querySelector('.vote-btn');
+                        if (btn) {
+                            btn.className = 'vote-btn ready';
+                            btn.disabled = false;
+                            btn.innerHTML = 'VOTE &rarr;';
+                        }
+                    }
                 } else {
-                    btn.textContent = this.formatCountdown(remaining);
+                    timer.textContent = this.formatCountdown(remaining);
                 }
+            });
+
+            // Also update voted card timers (no data-cooldown-end attribute)
+            document.querySelectorAll('.vote-card.voted .vote-timer:not([data-cooldown-end])').forEach(timer => {
+                const card = timer.closest('.vote-card');
+                if (!card) return;
+                const btn = card.querySelector('.vote-btn');
+                if (!btn) return;
+                // These are already voted, just need timer display from the site data
             });
         }, CONFIG.COOLDOWN_TICK);
     },
@@ -666,6 +802,26 @@ const Vote = {
         }
     },
 
+    // === Helper: Get streak milestones from rewards config ===
+
+    _getStreakMilestones() {
+        const selected = this.state.selectedWorldType || this.state.activeWorldTypes[0] || 'economy';
+        const rewards = this.state.rewards?.[selected];
+        if (!rewards?.streaks) return [{ days: 3 }, { days: 7 }, { days: 14 }, { days: 30 }];
+        return rewards.streaks;
+    },
+
+    _getMilestoneRewardPreview(milestone) {
+        const parts = [];
+        if (milestone.items && milestone.items.length > 0) {
+            parts.push(milestone.items.map(i => this.formatItemName(i.id)).join(', '));
+        }
+        if (milestone.donatorValue > 0) {
+            parts.push(`$${(milestone.donatorValue / 100).toFixed(2)} rank`);
+        }
+        return parts.join(' + ');
+    },
+
     // === Utility ===
 
     showError(msg) {
@@ -677,12 +833,12 @@ const Vote = {
     },
 
     formatCountdown(ms) {
-        if (ms <= 0) return 'VOTE';
+        if (ms <= 0) return 'READY';
         const hours = Math.floor(ms / 3600000);
         const mins = Math.floor((ms % 3600000) / 60000);
         const secs = Math.floor((ms % 60000) / 1000);
-        if (hours > 0) return `${hours}h ${mins}m`;
-        if (mins > 0) return `${mins}m ${secs}s`;
+        if (hours > 0) return `${String(hours).padStart(2, '0')}h ${String(mins).padStart(2, '0')}m`;
+        if (mins > 0) return `${mins}m ${String(secs).padStart(2, '0')}s`;
         return `${secs}s`;
     },
 
@@ -698,7 +854,7 @@ const Vote = {
     },
 
     formatItemName(id) {
-        return id.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        return String(id).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
     },
 
     capitalize(str) {
