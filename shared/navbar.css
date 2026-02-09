@@ -36,7 +36,9 @@
 .nav-left {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 4px;
+    min-width: 160px;
 }
 
 /* === Center Logo === */
@@ -82,11 +84,13 @@
     z-index: 1;
 }
 
-/* === Right Links (Discord + Play Now) === */
+/* === Right Links === */
 .nav-right-links {
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     gap: 4px;
+    min-width: 160px;
 }
 
 /* === Nav Links === */
