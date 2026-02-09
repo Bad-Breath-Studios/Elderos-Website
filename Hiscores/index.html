@@ -10,43 +10,17 @@
     <meta property="og:type" content="website">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/hiscores.css?v=7">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <link rel="stylesheet" href="css/hiscores.css?v=8">
 </head>
 <body>
     <div class="ambient-bg"></div>
     <div class="top-loader" id="top-loader"></div>
 
-    <!-- Navigation -->
-    <nav id="nav">
-        <a href="https://elderos.io" class="nav-logo">
-            <img src="assets/logo.png?v=2" alt="Elderos" class="nav-logo-img">
-            <span class="nav-logo-text">ELDEROS</span>
-        </a>
-
-        <div class="nav-links">
-            <a href="https://elderos.io#features" class="nav-link">Features</a>
-            <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
-            <a href="#" class="nav-link active">Hiscores</a>
-            <a href="https://vote.elderos.io" class="nav-link">Vote</a>
-            <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-            <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
-        </div>
-
-        <div class="nav-hamburger" id="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
-    </nav>
-
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="https://elderos.io#features" class="nav-link">Features</a>
-        <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
-        <a href="#" class="nav-link active">Hiscores</a>
-        <a href="https://vote.elderos.io" class="nav-link">Vote</a>
-        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-        <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
-    </div>
+    <!-- Shared Navbar -->
+    <div id="navbar"></div>
 
     <div class="page-wrapper">
 
@@ -150,25 +124,14 @@
 
     </div>
 
-    <script src="js/hiscores.js?v=7"></script>
-    <script>
-        // Mobile menu toggle
-        document.getElementById('hamburger').addEventListener('click', function() {
-            const menu = document.getElementById('mobileMenu');
-            const isOpen = menu.classList.contains('open');
-            if (isOpen) {
-                menu.style.opacity = '0';
-                menu.style.transform = 'translateY(-10px)';
-                setTimeout(() => menu.classList.remove('open'), 300);
-            } else {
-                menu.classList.add('open');
-                requestAnimationFrame(() => {
-                    menu.style.opacity = '1';
-                    menu.style.transform = 'translateY(0)';
-                });
-            }
-            this.classList.toggle('active');
-        });
-    </script>
+    <!-- Shared Footer -->
+    <div id="footer"></div>
+
+    <!-- Shared JS -->
+    <script src="/shared/auth.js?v=1"></script>
+    <script src="/shared/navbar.js?v=1"></script>
+    <script src="/shared/footer.js?v=1"></script>
+
+    <script src="js/hiscores.js?v=8"></script>
 </body>
 </html>

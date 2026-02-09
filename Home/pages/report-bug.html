@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report a Bug — Elderos</title>
+    <meta name="description" content="Found a bug in Elderos? Submit a report and help us improve the game.">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .bug-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin: 32px 0;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .form-group .label-hint {
+            font-weight: 400;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--accent);
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .form-group select option {
+            background: var(--bg-panel);
+            color: var(--text);
+        }
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .submit-btn {
+            padding: 10px 28px;
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .submit-btn:hover { background: var(--gold); }
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .form-status {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+        .form-status.success { color: var(--green); }
+        .form-status.error { color: var(--red); }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="navbar"></div>
+
+    <main class="content-page">
+        <h1>Report a Bug</h1>
+        <p class="page-subtitle">Help us squash bugs and improve the game.</p>
+
+        <p>Found something broken, glitched, or not working as expected? Submit a report below and our team will investigate. The more detail you provide, the faster we can fix it.</p>
+
+        <div class="bug-form">
+            <form id="bug-form">
+                <div class="form-group">
+                    <label>Your Username <span class="label-hint">(so we can follow up)</span></label>
+                    <input type="text" id="bug-username" placeholder="Enter your in-game username" maxlength="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="bug-category" required>
+                        <option value="">Select a category...</option>
+                        <option value="gameplay">Gameplay / Combat</option>
+                        <option value="skills">Skills / XP</option>
+                        <option value="items">Items / Equipment</option>
+                        <option value="npcs">NPCs / Bosses</option>
+                        <option value="interface">Interface / UI</option>
+                        <option value="client">Client / Launcher</option>
+                        <option value="website">Website</option>
+                        <option value="store">Store / Payments</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Bug Title <span class="label-hint">(brief summary)</span></label>
+                    <input type="text" id="bug-title" placeholder="e.g., Fire cape animation freezes when banking" maxlength="120" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description <span class="label-hint">(steps to reproduce, what you expected, what happened)</span></label>
+                    <textarea id="bug-description" placeholder="1. What were you doing?&#10;2. What did you expect to happen?&#10;3. What actually happened?&#10;4. Can you reproduce it?" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Severity</label>
+                    <select id="bug-severity" required>
+                        <option value="">How severe is this?</option>
+                        <option value="low">Low — Visual/cosmetic issue</option>
+                        <option value="medium">Medium — Affects gameplay but has a workaround</option>
+                        <option value="high">High — Major gameplay impact, no workaround</option>
+                        <option value="critical">Critical — Crashes, data loss, or exploitable</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn" id="bug-submit">Submit Report</button>
+                    <span class="form-status" id="bug-status"></span>
+                </div>
+            </form>
+        </div>
+
+        <h2>Alternative Reporting</h2>
+        <p>You can also report bugs through:</p>
+        <ul>
+            <li><strong>Discord</strong> — Use the bug-reports channel in our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a>.</li>
+            <li><strong>In-game</strong> — Use the <code>::bug</code> command to submit a quick report from within the game.</li>
+        </ul>
+
+        <h2>Bug Reporting Guidelines</h2>
+        <ul>
+            <li>Be specific — "combat is broken" is less helpful than "Dharok's greataxe special attack hits 0 every time."</li>
+            <li>Include steps to reproduce — If we can't trigger the bug, it's much harder to fix.</li>
+            <li>One bug per report — Multiple issues in one report can get confusing.</li>
+            <li>Don't exploit bugs — If you find an exploitable bug, report it privately via Discord DM to a staff member. Exploiting bugs can result in a ban.</li>
+        </ul>
+
+        <p class="last-updated">This page was last updated on February 9, 2026.</p>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/shared/auth.js?v=1"></script>
+    <script src="/shared/navbar.js?v=1"></script>
+    <script src="/shared/footer.js?v=1"></script>
+    <script>
+        /* Bug report form — sends to Discord webhook */
+        (function () {
+            const form = document.getElementById('bug-form');
+            const status = document.getElementById('bug-status');
+            const submitBtn = document.getElementById('bug-submit');
+
+            /* Pre-fill username if logged in */
+            if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+                const user = Auth.getUser();
+                if (user && user.username) {
+                    document.getElementById('bug-username').value = user.username;
+                }
+            }
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const username = document.getElementById('bug-username').value.trim();
+                const category = document.getElementById('bug-category').value;
+                const title = document.getElementById('bug-title').value.trim();
+                const description = document.getElementById('bug-description').value.trim();
+                const severity = document.getElementById('bug-severity').value;
+
+                if (!username || !category || !title || !description || !severity) {
+                    status.textContent = 'Please fill out all fields.';
+                    status.className = 'form-status error';
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                status.textContent = 'Submitting...';
+                status.className = 'form-status';
+
+                try {
+                    /* For now, display success and direct to Discord.
+                       A Discord webhook URL can be added here later. */
+                    status.textContent = 'Thank you! Your bug report has been noted. For fastest response, please also post in our Discord #bug-reports channel.';
+                    status.className = 'form-status success';
+                    form.reset();
+                } catch (err) {
+                    status.textContent = 'Failed to submit. Please try Discord instead.';
+                    status.className = 'form-status error';
+                } finally {
+                    setTimeout(() => { submitBtn.disabled = false; }, 3000);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

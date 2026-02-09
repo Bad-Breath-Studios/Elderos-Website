@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started — Elderos</title>
+    <meta name="description" content="New to Elderos? Follow this step-by-step guide to download, install, and start playing.">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .step {
+            display: flex;
+            gap: 20px;
+            margin: 32px 0;
+            align-items: flex-start;
+        }
+        .step-number {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--accent-soft);
+            border: 1px solid var(--accent-glow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent);
+        }
+        .step-body h3 {
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        .step-body p {
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+        .step-body a { color: var(--accent); text-decoration: none; }
+        .step-body a:hover { color: var(--gold); }
+        .tip-box {
+            background: var(--accent-soft);
+            border-left: 3px solid var(--accent);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 24px 0;
+        }
+        .tip-box p {
+            color: var(--text);
+            font-size: 0.88rem;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+        .tip-label {
+            color: var(--accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 4px;
+        }
+        .req-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 24px;
+            margin: 12px 0 24px;
+        }
+        .req-list li {
+            list-style: none;
+            font-size: 0.88rem;
+            color: var(--text-dim);
+            padding-left: 0;
+        }
+        .req-list li::before {
+            content: '\2713';
+            color: var(--green);
+            margin-right: 8px;
+            font-weight: 700;
+        }
+        @media (max-width: 600px) {
+            .step { flex-direction: column; gap: 12px; }
+            .req-list { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="navbar"></div>
+
+    <main class="content-page">
+        <h1>Getting Started</h1>
+        <p class="page-subtitle">New to Elderos? Follow these steps to get into the game.</p>
+
+        <h2>System Requirements</h2>
+        <p>Elderos runs on most modern computers. You'll need:</p>
+        <ul class="req-list">
+            <li>Windows 10/11 or macOS 12+</li>
+            <li>4 GB RAM minimum</li>
+            <li>Java 23+ (bundled with launcher)</li>
+            <li>Stable internet connection</li>
+        </ul>
+
+        <h2>Setup Guide</h2>
+
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-body">
+                <h3>Download the Launcher</h3>
+                <p>Head to <a href="https://play.elderos.io">play.elderos.io</a> and download the Elderos Launcher for your operating system. The launcher handles everything — client updates, account management, and the in-game store.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-body">
+                <h3>Create an Account</h3>
+                <p>Open the launcher and click "Create Account." Choose a username and password. Your username will be your in-game display name, so pick wisely. We recommend using a unique password that you don't use elsewhere.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-body">
+                <h3>Enable Two-Factor Authentication</h3>
+                <p>After creating your account, go to Account Settings in the launcher and enable 2FA. This adds an extra layer of security using an authenticator app like Google Authenticator or Authy. Scan the QR code and enter the 6-digit code to confirm.</p>
+            </div>
+        </div>
+
+        <div class="tip-box">
+            <div class="tip-label">Tip</div>
+            <p>Save your 2FA backup codes in a safe place. If you lose access to your authenticator app, these codes are the only way to recover your account.</p>
+        </div>
+
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-body">
+                <h3>Choose a World</h3>
+                <p>Select a world from the world selector in the launcher. Economy worlds offer the standard experience, while PvP worlds add an extra layer of danger. Choose the region closest to you for the best connection.</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-body">
+                <h3>Start Playing</h3>
+                <p>Click "Play" and the launcher will download the latest client and connect you to the game. Create your character, choose your game mode, and begin your adventure in Gielinor.</p>
+            </div>
+        </div>
+
+        <h2>First Steps In-Game</h2>
+        <p>Once you're logged in, here are some things to do:</p>
+        <ul>
+            <li><strong>Talk to the Starter Guide</strong> — Located at the spawn point. They'll give you starter equipment and explain the basics.</li>
+            <li><strong>Explore the home area</strong> — Find shops, banks, altars, and teleportation portals.</li>
+            <li><strong>Set up your bank PIN</strong> — Protect your items with an extra layer of security.</li>
+            <li><strong>Join the Discord</strong> — Connect with the community for tips, trading, and updates.</li>
+            <li><strong>Check the Wiki</strong> — Our <a href="https://wiki.elderos.io" target="_blank">Wiki</a> has guides for skills, bosses, quests, and more.</li>
+        </ul>
+
+        <h2>Useful Links</h2>
+        <ul>
+            <li><a href="https://play.elderos.io">Download Launcher</a></li>
+            <li><a href="https://hiscores.elderos.io">Hiscores</a></li>
+            <li><a href="https://wiki.elderos.io" target="_blank">Wiki</a></li>
+            <li><a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord</a></li>
+            <li><a href="/pages/faq.html">FAQ</a></li>
+        </ul>
+
+        <h2>Need Help?</h2>
+        <p>If you run into any issues, check the <a href="/pages/faq.html">FAQ</a> or reach out on our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a>. Our community and staff are happy to help.</p>
+
+        <p class="last-updated">This guide was last updated on February 9, 2026.</p>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/shared/auth.js?v=1"></script>
+    <script src="/shared/navbar.js?v=1"></script>
+    <script src="/shared/footer.js?v=1"></script>
+</body>
+</html>

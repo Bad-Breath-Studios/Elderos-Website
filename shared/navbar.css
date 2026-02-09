@@ -1,0 +1,597 @@
+/* ================================================================
+   Elderos — Shared Navbar Styles
+   ================================================================ */
+
+/* === Navbar Container === */
+.shared-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 0 clamp(20px, 5vw, 80px);
+    height: 72px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background: rgba(6, 6, 10, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s ease;
+}
+
+.shared-nav.scrolled {
+    background: rgba(6, 6, 10, 0.9);
+}
+
+/* === Left Links === */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* === Center Logo === */
+.nav-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    position: relative;
+}
+
+.nav-logo-img {
+    height: 72px;
+    width: auto;
+    filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.3));
+    position: relative;
+    top: 8px;
+    transition: filter 0.3s ease;
+}
+
+.nav-logo:hover .nav-logo-img {
+    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.5));
+}
+
+/* === Right Section (links + auth) === */
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+/* === Nav Links === */
+.nav-link {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-link.active {
+    color: var(--accent);
+}
+
+/* === Play Now CTA === */
+.nav-cta {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: none;
+    padding: 9px 22px;
+    border-radius: 8px;
+    background: var(--accent);
+    margin-left: 8px;
+    transition: all 0.25s ease;
+    box-shadow: 0 0 20px var(--accent-glow);
+    white-space: nowrap;
+}
+
+.nav-cta:hover {
+    background: #ea680c;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 25px var(--accent-glow);
+}
+
+.nav-cta.active {
+    background: #ea680c;
+    box-shadow: 0 0 25px var(--accent-glow);
+}
+
+/* === Auth Section === */
+.nav-auth {
+    margin-left: 12px;
+    position: relative;
+}
+
+.nav-login-link {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+.nav-login-link:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* === User Menu (logged in) === */
+.nav-user-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    color: var(--text);
+}
+
+.nav-user-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--border-hover);
+}
+
+.nav-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--accent);
+}
+
+.nav-username {
+    font-size: 0.85rem;
+    font-weight: 500;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nav-chevron {
+    width: 14px;
+    height: 14px;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+}
+
+.nav-user-btn.open .nav-chevron {
+    transform: rotate(180deg);
+}
+
+/* === Dropdown Menu === */
+.nav-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 200px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-hover);
+    border-radius: 10px;
+    padding: 6px;
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 110;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.nav-dropdown.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.nav-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    font-family: inherit;
+    text-align: left;
+}
+
+.nav-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+}
+
+.nav-dropdown-item svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.6;
+}
+
+.nav-dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 8px;
+}
+
+.nav-dropdown-item.logout {
+    color: var(--red);
+}
+
+.nav-dropdown-item.logout:hover {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* === Login Modal === */
+.nav-login-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-login-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.nav-login-card {
+    max-width: 380px;
+    width: 100%;
+    background: var(--bg-card);
+    border: 1px solid var(--border-hover);
+    border-radius: 16px;
+    padding: 40px 32px;
+    text-align: center;
+    position: relative;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-login-modal.active .nav-login-card {
+    transform: scale(1) translateY(0);
+}
+
+.nav-login-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.nav-login-close:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+}
+
+.nav-login-close svg {
+    width: 16px;
+    height: 16px;
+}
+
+.nav-login-card h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.nav-login-card .login-sub {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+}
+
+.nav-login-field {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg-input, #0a0a10);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-family: inherit;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.nav-login-field:focus {
+    border-color: var(--accent);
+}
+
+.nav-login-field::placeholder {
+    color: var(--text-muted);
+}
+
+.nav-login-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 4px;
+    font-family: inherit;
+}
+
+.nav-login-btn:hover {
+    background: #ea680c;
+}
+
+.nav-login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.nav-login-error {
+    display: none;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    color: var(--red, #ef4444);
+    font-size: 0.8rem;
+}
+
+.nav-login-note {
+    margin-top: 16px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.nav-login-note a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.nav-login-note a:hover {
+    color: var(--gold);
+}
+
+/* === 2FA Step === */
+.nav-2fa-inputs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.nav-2fa-digit {
+    width: 44px;
+    height: 52px;
+    background: var(--bg-input, #0a0a10);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s ease;
+    caret-color: var(--accent);
+}
+
+.nav-2fa-digit:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.nav-login-back {
+    display: block;
+    margin-top: 12px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s ease;
+}
+
+.nav-login-back:hover {
+    color: var(--text);
+}
+
+/* === Hamburger (Mobile) === */
+.nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+    border: none;
+    background: none;
+}
+
+.nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text-dim);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.nav-hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* === Mobile Menu === */
+.nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: rgba(6, 6, 10, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 24px 24px;
+    z-index: 99;
+    flex-direction: column;
+    gap: 4px;
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-mobile-menu.open {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.nav-mobile-menu .nav-link {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+}
+
+.nav-mobile-menu .nav-cta {
+    margin-left: 0;
+    margin-top: 8px;
+    text-align: center;
+    padding: 14px;
+    display: block;
+}
+
+.nav-mobile-auth {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-mobile-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-mobile-user .nav-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+}
+
+.nav-mobile-user-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--accent);
+}
+
+.nav-mobile-logout {
+    font-size: 0.8rem;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.nav-mobile-logout:hover {
+    color: var(--text);
+    border-color: var(--border-hover);
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+    .nav-left,
+    .nav-right {
+        display: none;
+    }
+
+    .shared-nav {
+        grid-template-columns: 1fr auto 1fr;
+    }
+
+    .nav-hamburger {
+        display: flex;
+        justify-self: end;
+    }
+}
+
+@media (min-width: 901px) {
+    .nav-mobile-menu {
+        display: none !important;
+    }
+}

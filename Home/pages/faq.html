@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — Elderos</title>
+    <meta name="description" content="Frequently asked questions about Elderos — account help, gameplay, donations, and more.">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .faq-section { margin-top: 40px; }
+        .faq-section-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+        .faq-item:hover { border-color: var(--border-hover); }
+        .faq-item.open { border-color: var(--accent-glow); }
+        .faq-question {
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text);
+            background: var(--bg-card);
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+        .faq-question:hover { background: var(--bg-card-hover); }
+        .faq-chevron {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+            margin-left: 12px;
+        }
+        .faq-item.open .faq-chevron { transform: rotate(180deg); }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .faq-answer-inner {
+            padding: 0 20px 16px;
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: var(--text-dim);
+        }
+        .faq-answer-inner a { color: var(--accent); text-decoration: none; }
+        .faq-answer-inner a:hover { color: var(--gold); }
+        .faq-answer-inner p { margin-bottom: 8px; }
+        .faq-answer-inner ul { padding-left: 20px; margin: 8px 0; }
+        .faq-answer-inner li { margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="navbar"></div>
+
+    <main class="content-page">
+        <h1>Frequently Asked Questions</h1>
+        <p class="page-subtitle">Quick answers to common questions about Elderos.</p>
+
+        <!-- Getting Started -->
+        <div class="faq-section">
+            <div class="faq-section-title">Getting Started</div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What is Elderos?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Elderos is an Old School RuneScape private server (RSPS) focused on delivering an authentic OSRS experience with quality-of-life improvements, custom content, and a welcoming community. We support multiple game modes and world types.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I play?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Download the Elderos Launcher from <a href="https://play.elderos.io">play.elderos.io</a>. Create an account through the launcher, then log in and start playing. For a detailed walkthrough, see our <a href="/pages/getting-started.html">Getting Started guide</a>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Is Elderos free to play?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Yes! Elderos is completely free to play. We offer optional cosmetic purchases and donator ranks through the in-game store, but these are not required to enjoy the full game experience.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What game modes are available?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Elderos supports multiple game modes:</p>
+                        <ul>
+                            <li><strong>Normal</strong> — Standard gameplay experience.</li>
+                            <li><strong>Ironman</strong> — Self-sufficient, no trading with other players.</li>
+                            <li><strong>Hardcore Ironman</strong> — One life. Death is permanent.</li>
+                            <li><strong>Ultimate Ironman</strong> — No bank. Carry everything.</li>
+                            <li><strong>Group Ironman</strong> — Ironman with a team.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account & Security -->
+        <div class="faq-section">
+            <div class="faq-section-title">Account & Security</div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I enable two-factor authentication (2FA)?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>You can enable 2FA through the Elderos Launcher under Account Settings. You'll need an authenticator app like Google Authenticator or Authy to scan the QR code. Once enabled, you'll need to enter a 6-digit code each time you log in.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>I forgot my password. What do I do?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Contact our support team on <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord</a> for account recovery assistance. You'll need to verify your identity to reset your password.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I change my username?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Username changes are not currently available through the launcher. If you need a name change, please contact staff on Discord.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donations & Store -->
+        <div class="faq-section">
+            <div class="faq-section-title">Donations & Store</div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What are Eldercoins?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Eldercoins are the virtual currency used in the Elderos store. You can purchase them through the launcher and spend them on donator ranks, cosmetic items, and other perks.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Can I get a refund?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Purchases of digital goods are generally final. Refunds may be issued for duplicate charges, undelivered items, or unauthorized purchases. See our full <a href="/pages/refund.html">Refund Policy</a> for details.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Do donator ranks give gameplay advantages?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Donator ranks provide quality-of-life perks and cosmetic benefits. We strive to keep the game balanced — donator perks do not provide direct combat advantages or items that cannot be obtained through normal gameplay.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rules & Moderation -->
+        <div class="faq-section">
+            <div class="faq-section-title">Rules & Moderation</div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>What are the rules?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Full rules are outlined in our <a href="/pages/terms.html">Terms of Service</a>. The short version: no botting, no bug abuse, no real-world trading, no harassment, and be respectful to other players and staff.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>I was banned. Can I appeal?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>Ban appeals can be submitted through a support ticket on our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a>. Provide your username and a detailed explanation. Appeals are reviewed by staff and responses are not guaranteed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>How do I report a player or bug?</span>
+                    <span class="faq-chevron">&#9660;</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        <p>You can report players in-game using the right-click report option, or on Discord. For bugs, use our <a href="/pages/report-bug.html">bug report form</a> or the bug-reports channel on Discord.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/shared/auth.js?v=1"></script>
+    <script src="/shared/navbar.js?v=1"></script>
+    <script src="/shared/footer.js?v=1"></script>
+    <script>
+        /* Accordion toggle */
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                const answer = item.querySelector('.faq-answer');
+                const isOpen = item.classList.contains('open');
+
+                /* Close all others */
+                document.querySelectorAll('.faq-item.open').forEach(other => {
+                    if (other !== item) {
+                        other.classList.remove('open');
+                        other.querySelector('.faq-answer').style.maxHeight = null;
+                    }
+                });
+
+                if (isOpen) {
+                    item.classList.remove('open');
+                    answer.style.maxHeight = null;
+                } else {
+                    item.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookie Policy — Elderos</title>
+    <meta name="description" content="Elderos Cookie Policy — how we use localStorage and similar technologies.">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .storage-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0 24px;
+            font-size: 0.85rem;
+        }
+        .storage-table th, .storage-table td {
+            text-align: left;
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .storage-table th {
+            color: var(--text);
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .storage-table td {
+            color: var(--text-dim);
+        }
+        .storage-table code {
+            background: rgba(255,255,255,0.06);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="navbar"></div>
+
+    <main class="content-page">
+        <h1>Cookie Policy</h1>
+        <p class="page-subtitle">Last updated: February 9, 2026</p>
+
+        <p>The Elderos website primarily uses <strong>localStorage</strong> rather than traditional HTTP cookies. This page explains what data is stored in your browser and why.</p>
+
+        <h2>1. What Are Cookies & localStorage?</h2>
+        <p><strong>Cookies</strong> are small text files stored by your browser that are sent to the server with every request. <strong>localStorage</strong> is a browser storage mechanism that keeps data on your device without sending it to the server automatically. We primarily use localStorage because it is more efficient for our use case.</p>
+
+        <h2>2. What We Store</h2>
+        <p>The Elderos website stores the following data in your browser's localStorage:</p>
+
+        <table class="storage-table">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Purpose</th>
+                    <th>Lifetime</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>elderos_token</code></td>
+                    <td>JWT authentication token — keeps you logged in across pages.</td>
+                    <td>Until logout or token expiry (24h)</td>
+                </tr>
+                <tr>
+                    <td><code>elderos_user</code></td>
+                    <td>Cached account info (username, donator rank) — used to personalize the navbar.</td>
+                    <td>Until logout</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>3. Third-Party Cookies</h2>
+        <p>We do not currently use any third-party analytics, tracking, or advertising cookies. We do not use Google Analytics, Facebook Pixel, or similar services. If this changes in the future, we will update this policy and notify users.</p>
+
+        <h2>4. Stripe (Payment Processing)</h2>
+        <p>When you make a purchase through the Elderos launcher, Stripe may set its own cookies for fraud prevention and payment processing. These cookies are governed by <a href="https://stripe.com/privacy" target="_blank">Stripe's Privacy Policy</a> and are not controlled by us.</p>
+
+        <h2>5. Cloudflare</h2>
+        <p>Our website is served through Cloudflare's CDN, which may set a <code>__cf_bm</code> cookie for bot management and DDoS protection. This is a strictly necessary security cookie and cannot be disabled. See <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/" target="_blank">Cloudflare's cookie policy</a> for details.</p>
+
+        <h2>6. Managing Your Data</h2>
+        <p>You can clear all Elderos localStorage data at any time:</p>
+        <ul>
+            <li>Click "Log Out" in the navbar — this removes all stored auth data.</li>
+            <li>Open your browser's Developer Tools (F12) → Application → Local Storage → clear the relevant domain.</li>
+            <li>Use your browser's "Clear browsing data" feature.</li>
+        </ul>
+        <p>Clearing this data will log you out and reset any saved preferences.</p>
+
+        <h2>7. Changes to This Policy</h2>
+        <p>We may update this Cookie Policy as our technology evolves. Changes will be posted on this page with an updated date.</p>
+
+        <h2>8. Contact</h2>
+        <p>Questions about this Cookie Policy? Reach out via our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a> or <a href="/pages/contact.html">Contact page</a>.</p>
+
+        <p class="last-updated">This Cookie Policy was last updated on February 9, 2026.</p>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/shared/auth.js?v=1"></script>
+    <script src="/shared/navbar.js?v=1"></script>
+    <script src="/shared/footer.js?v=1"></script>
+</body>
+</html>

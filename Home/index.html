@@ -5,42 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elderos — OSRS Done Right</title>
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
     <style>
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-deep: #06060a;
-            --bg-panel: #0a0a0f;
-            --bg-card: #0e0e14;
-            --bg-card-hover: #121219;
-            --accent: #f97316;
-            --accent-dim: #c2590f;
-            --accent-glow: rgba(249, 115, 22, 0.25);
-            --accent-soft: rgba(249, 115, 22, 0.08);
-            --gold: #fbbf24;
-            --gold-dim: rgba(251, 191, 36, 0.15);
-            --text: #e8e8ed;
-            --text-dim: #7a7a88;
-            --text-muted: #4a4a55;
-            --border: rgba(255, 255, 255, 0.05);
-            --border-hover: rgba(255, 255, 255, 0.1);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: 'DM Sans', sans-serif;
-            background: var(--bg-deep);
-            color: var(--text);
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
         }
 
         /* ======================== */
@@ -103,116 +74,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 256px 256px;
-        }
-
-        /* ======================== */
-        /*  NAVIGATION              */
-        /* ======================== */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 0 clamp(20px, 5vw, 80px);
-            height: 72px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(6, 6, 10, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            transition: background 0.3s ease;
-        }
-
-        nav.scrolled {
-            background: rgba(6, 6, 10, 0.9);
-        }
-
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .nav-logo-img {
-            height: 36px;
-            width: auto;
-        }
-
-        .nav-logo-text {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: 0.12em;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-link {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text-dim);
-            text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.25s ease;
-            letter-spacing: 0.02em;
-        }
-
-        .nav-link:hover {
-            color: var(--text);
-            background: rgba(255, 255, 255, 0.04);
-        }
-
-        .nav-link.active {
-            color: var(--accent);
-        }
-
-        .nav-cta {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #fff;
-            text-decoration: none;
-            padding: 9px 22px;
-            border-radius: 8px;
-            background: var(--accent);
-            margin-left: 8px;
-            transition: all 0.25s ease;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        .nav-cta:hover {
-            background: #ea680c;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 25px var(--accent-glow);
-        }
-
-        .nav-hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .nav-hamburger span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--text-dim);
-            border-radius: 2px;
-            transition: all 0.3s ease;
         }
 
         /* ======================== */
@@ -519,88 +380,6 @@
         }
 
         /* ======================== */
-        /*  FOOTER                  */
-        /* ======================== */
-        footer {
-            position: relative;
-            z-index: 2;
-            padding: 40px clamp(20px, 5vw, 80px);
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .footer-left {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .footer-left .logo-text {
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-            color: var(--text-dim);
-            letter-spacing: 0.08em;
-        }
-
-        .footer-links {
-            display: flex;
-            align-items: center;
-            gap: 24px;
-        }
-
-        .footer-link {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.25s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--text-dim);
-        }
-
-        .footer-socials {
-            display: flex;
-            gap: 12px;
-        }
-
-        .social-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: all 0.25s ease;
-        }
-
-        .social-icon:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--border-hover);
-            color: var(--text);
-        }
-
-        .social-icon svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* ======================== */
         /*  ANIMATIONS              */
         /* ======================== */
         @keyframes fadeUp {
@@ -633,47 +412,7 @@
         /* ======================== */
         /*  MOBILE                  */
         /* ======================== */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 72px;
-            left: 0;
-            right: 0;
-            background: rgba(6, 6, 10, 0.97);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 24px 24px;
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-            transform: translateY(-10px);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .mobile-menu.open {
-            display: flex;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .mobile-menu .nav-link {
-            padding: 12px 16px;
-            font-size: 0.95rem;
-        }
-
-        .mobile-menu .nav-cta {
-            margin-left: 0;
-            margin-top: 8px;
-            text-align: center;
-            padding: 14px;
-        }
-
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .nav-hamburger { display: flex; }
-
             .features-grid {
                 grid-template-columns: 1fr;
                 gap: 14px;
@@ -689,25 +428,6 @@
 
             .stat-item {
                 min-width: 120px;
-            }
-
-            .cta-box {
-                padding: 40px 24px;
-            }
-
-            .footer-inner {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
-            }
-
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .footer-socials {
-                justify-content: center;
             }
         }
 
@@ -729,20 +449,6 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
-
-        /* ======================== */
-        /*  REDUCED MOTION          */
-        /* ======================== */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.15s !important;
-            }
-            .reveal {
-                opacity: 1;
-                transform: none;
-            }
-        }
     </style>
 </head>
 <body>
@@ -750,39 +456,8 @@
 <div class="ambient-bg"></div>
 <div class="grain"></div>
 
-<!-- ======================== -->
-<!--  NAVIGATION              -->
-<!-- ======================== -->
-<nav id="nav">
-    <a href="/" class="nav-logo">
-        <img src="assets/logo.png" alt="Elderos" class="nav-logo-img">
-        <span class="nav-logo-text">ELDEROS</span>
-    </a>
-
-    <div class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
-        <a href="https://hiscores.elderos.io" class="nav-link">Hiscores</a>
-        <a href="https://vote.elderos.io" class="nav-link">Vote</a>
-        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-        <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
-    </div>
-
-    <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-</nav>
-
-<div class="mobile-menu" id="mobileMenu">
-    <a href="#features" class="nav-link" onclick="toggleMenu()">Features</a>
-    <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
-    <a href="https://hiscores.elderos.io" class="nav-link">Hiscores</a>
-    <a href="https://vote.elderos.io" class="nav-link">Vote</a>
-    <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-    <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
-</div>
+<!-- Shared Navbar -->
+<div id="navbar"></div>
 
 <!-- ======================== -->
 <!--  HERO                    -->
@@ -799,7 +474,7 @@
     <p class="hero-subtitle">OSRS Done Right</p>
 
     <p class="hero-description">
-        A faithful recreation of Old School RuneScape with custom content, 
+        A faithful recreation of Old School RuneScape with custom content,
         an active economy, and a community that actually gives a damn.
     </p>
 
@@ -885,70 +560,20 @@
     </section>
 </section>
 
-<!-- ======================== -->
-<!--  FOOTER                  -->
-<!-- ======================== -->
-<footer>
-    <div class="footer-inner">
-        <div class="footer-left">
-            <span class="logo-text">ELDEROS</span>
-            <span>· © 2025</span>
-        </div>
+<!-- Shared Footer -->
+<div id="footer"></div>
 
-        <div class="footer-links">
-            <a href="https://play.elderos.io" class="footer-link">Play</a>
-            <a href="https://wiki.elderos.io" class="footer-link" target="_blank">Wiki</a>
-            <a href="https://hiscores.elderos.io" class="footer-link">Hiscores</a>
-            <a href="/terms" class="footer-link">Terms</a>
-            <a href="/privacy" class="footer-link">Privacy</a>
-        </div>
+<!-- Shared JS -->
+<script src="/shared/auth.js?v=1"></script>
+<script src="/shared/navbar.js?v=1"></script>
+<script src="/shared/footer.js?v=1"></script>
 
-        <div class="footer-socials">
-            <a href="https://discord.gg/MwkvVMFmfg" class="social-icon" target="_blank" aria-label="Discord">
-                <img src="assets/discord-icon.png" alt="Discord" style="width:16px;height:16px;opacity:0.7;">
-            </a>
-        </div>
-    </div>
-</footer>
-
-<!-- ======================== -->
-<!--  SCRIPTS                 -->
-<!-- ======================== -->
 <script>
-    // Navbar scroll effect
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-        nav.classList.toggle('scrolled', window.scrollY > 40);
-    });
-
-    // Mobile menu toggle
-    function toggleMenu() {
-        const menu = document.getElementById('mobileMenu');
-        const hamburger = document.getElementById('hamburger');
-        const isOpen = menu.classList.contains('open');
-
-        if (isOpen) {
-            menu.style.opacity = '0';
-            menu.style.transform = 'translateY(-10px)';
-            setTimeout(() => menu.classList.remove('open'), 300);
-        } else {
-            menu.classList.add('open');
-            requestAnimationFrame(() => {
-                menu.style.opacity = '1';
-                menu.style.transform = 'translateY(0)';
-            });
-        }
-
-        // Animate hamburger
-        hamburger.classList.toggle('active');
-    }
-
     // Scroll reveal
     const revealElements = document.querySelectorAll('.reveal');
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry, i) => {
             if (entry.isIntersecting) {
-                // Stagger siblings
                 const siblings = entry.target.parentElement.querySelectorAll('.reveal');
                 const index = Array.from(siblings).indexOf(entry.target);
                 setTimeout(() => {

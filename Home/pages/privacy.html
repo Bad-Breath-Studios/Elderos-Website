@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — Elderos</title>
+    <meta name="description" content="Elderos Privacy Policy — how we collect, use, and protect your data.">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=1">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="navbar"></div>
+
+    <main class="content-page">
+        <h1>Privacy Policy</h1>
+        <p class="page-subtitle">Last updated: February 9, 2026</p>
+
+        <p>Bad Breath Studios ("we", "us", "our") operates the Elderos game, launcher, website, and related services (collectively, "the Service"). This Privacy Policy explains what information we collect, how we use it, and your rights regarding your data.</p>
+
+        <h2>1. Information We Collect</h2>
+
+        <h3>Account Information</h3>
+        <p>When you create an account, we collect:</p>
+        <ul>
+            <li><strong>Username</strong> — Your chosen display name.</li>
+            <li><strong>Email address</strong> — Used for account recovery and important notifications.</li>
+            <li><strong>Password</strong> — Stored securely using BCrypt hashing. We never store or see your plain-text password.</li>
+        </ul>
+
+        <h3>Discord Information</h3>
+        <p>If you link your Discord account, we store your Discord user ID, username, and avatar hash. This is used for staff authentication, Discord-based features, and community integration.</p>
+
+        <h3>Gameplay Data</h3>
+        <p>We collect in-game data necessary to operate the Service, including:</p>
+        <ul>
+            <li>Character stats, skills, items, and progression.</li>
+            <li>Chat messages (for moderation purposes).</li>
+            <li>Login timestamps and IP addresses (for security and abuse prevention).</li>
+            <li>Game actions and logs (for bug investigation and enforcement).</li>
+        </ul>
+
+        <h3>Payment Information</h3>
+        <p>Payments are processed by <strong>Stripe</strong>. We do not store your credit card number, CVV, or full payment details on our servers. Stripe handles all payment data in compliance with PCI-DSS standards. We receive and store only:</p>
+        <ul>
+            <li>Transaction ID and amount.</li>
+            <li>Purchase history (what was bought and when).</li>
+            <li>Stripe customer ID (for managing subscriptions and refunds).</li>
+        </ul>
+
+        <h3>Technical Data</h3>
+        <p>When you use the Service, we may automatically collect:</p>
+        <ul>
+            <li>IP address and approximate geographic region.</li>
+            <li>Browser type and version (website visits).</li>
+            <li>Operating system and hardware identifiers (launcher/client).</li>
+            <li>Crash reports and error logs.</li>
+        </ul>
+
+        <h2>2. How We Use Your Information</h2>
+        <p>We use collected information to:</p>
+        <ul>
+            <li>Operate and maintain the Service.</li>
+            <li>Authenticate your identity and secure your account.</li>
+            <li>Process transactions and deliver purchased items.</li>
+            <li>Enforce our <a href="/pages/terms.html">Terms of Service</a> and moderate behavior.</li>
+            <li>Investigate bugs, abuse, and security incidents.</li>
+            <li>Display public leaderboards and hiscores (username, stats, and game mode only).</li>
+            <li>Send important account-related notifications.</li>
+            <li>Improve the Service based on usage patterns and feedback.</li>
+        </ul>
+
+        <h2>3. Information Sharing</h2>
+        <p>We do not sell your personal information. We may share data only in these circumstances:</p>
+        <ul>
+            <li><strong>Stripe</strong> — Payment processing as described above.</li>
+            <li><strong>Legal requirements</strong> — If required by law, court order, or governmental authority.</li>
+            <li><strong>Safety</strong> — To protect the rights, safety, or property of our users or the public.</li>
+            <li><strong>Public data</strong> — Usernames, game stats, and leaderboard rankings are publicly visible on the hiscores.</li>
+        </ul>
+
+        <h2>4. Data Storage & Security</h2>
+        <p>Your data is stored on secured servers. We implement industry-standard security measures including:</p>
+        <ul>
+            <li>BCrypt password hashing with salt.</li>
+            <li>JWT-based authentication with expiration.</li>
+            <li>HTTPS/TLS encryption for all data in transit.</li>
+            <li>Two-factor authentication (TOTP) available for all accounts.</li>
+            <li>Rate limiting and IP-based abuse prevention.</li>
+        </ul>
+        <p>While we take reasonable measures to protect your data, no system is 100% secure. You are responsible for keeping your login credentials confidential.</p>
+
+        <h2>5. Data Retention</h2>
+        <p>We retain your account data for as long as your account exists. If your account is banned, we retain associated data for enforcement purposes. Gameplay logs and chat messages are retained for moderation and may be purged periodically at our discretion.</p>
+
+        <h2>6. Your Rights</h2>
+        <p>Depending on your jurisdiction, you may have the right to:</p>
+        <ul>
+            <li><strong>Access</strong> — Request a copy of the personal data we hold about you.</li>
+            <li><strong>Correction</strong> — Request correction of inaccurate data.</li>
+            <li><strong>Deletion</strong> — Request deletion of your account and associated data.</li>
+            <li><strong>Portability</strong> — Request your data in a portable format.</li>
+            <li><strong>Objection</strong> — Object to certain types of data processing.</li>
+        </ul>
+        <p>To exercise any of these rights, contact us through our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a> or <a href="/pages/contact.html">Contact page</a>. We will respond within 30 days.</p>
+
+        <h2>7. Cookies & Local Storage</h2>
+        <p>The Elderos website uses <strong>localStorage</strong> (not traditional cookies) to store your authentication token and account preferences. This data stays on your device and is not sent to third parties. See our <a href="/pages/cookies.html">Cookie Policy</a> for full details.</p>
+
+        <h2>8. Children's Privacy</h2>
+        <p>The Service is not directed at children under 13. We do not knowingly collect personal information from children under 13. If we learn that we have collected data from a child under 13, we will take steps to delete it promptly.</p>
+
+        <h2>9. Third-Party Links</h2>
+        <p>The Service may contain links to third-party websites (e.g., Discord, Stripe, YouTube). We are not responsible for the privacy practices of those third parties. We encourage you to review their respective privacy policies.</p>
+
+        <h2>10. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy at any time. Changes will be posted on this page with an updated "Last updated" date. Continued use of the Service after changes are posted constitutes acceptance.</p>
+
+        <h2>11. Contact</h2>
+        <p>For questions or concerns about this Privacy Policy or your personal data, please contact us via our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a> or <a href="/pages/contact.html">Contact page</a>.</p>
+
+        <p class="last-updated">This Privacy Policy was last updated on February 9, 2026.</p>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/shared/auth.js?v=1"></script>
+    <script src="/shared/navbar.js?v=1"></script>
+    <script src="/shared/footer.js?v=1"></script>
+</body>
+</html>
