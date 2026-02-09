@@ -635,8 +635,8 @@ const PlayerView = {
         `;
     },
 
-    // Container field keys are namespaced: main_profiles.inventory, main_profiles.equipment, main_profiles.bank
-    CONTAINER_KEYS: new Set(['main_profiles.inventory', 'main_profiles.equipment', 'main_profiles.bank']),
+    // Container field keys are namespaced: economy_profiles.inventory, economy_profiles.equipment, economy_profiles.bank
+    CONTAINER_KEYS: new Set(['economy_profiles.inventory', 'economy_profiles.equipment', 'economy_profiles.bank']),
 
     _containerType(fieldKey) {
         // Extract column name from "table.column" key

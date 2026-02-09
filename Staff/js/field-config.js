@@ -179,7 +179,7 @@ const FieldConfig = {
         // Define tabs in specific order with icons and colors
         const tabConfig = [
             { table: 'accounts', label: 'Accounts', icon: '👤', color: 'purple' },
-            { table: 'main_profiles', label: 'Economy', icon: '💰', color: 'green' },
+            { table: 'economy_profiles', label: 'Economy', icon: '💰', color: 'green' },
             { table: 'pvp_profiles', label: 'PvP', icon: '⚔️', color: 'red' },
             { table: 'league_profiles', label: 'Leagues', icon: '🏆', color: 'purple' },
             { table: 'custom_profiles', label: 'Customs', icon: '🎮', color: 'cyan' }
