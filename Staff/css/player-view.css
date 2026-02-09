@@ -1,5 +1,6 @@
 /* ============================================================
    ELDEROS STAFF PANEL - PLAYER VIEW STYLES
+   Two-column desktop layout with sticky right panel
    ============================================================ */
 
 /* ======================== */
@@ -39,7 +40,7 @@
 
 /* Inner container with max-width */
 .player-view-container {
-    max-width: 860px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 24px 20px 80px;
 }
@@ -422,68 +423,40 @@
 }
 
 /* ======================== */
-/*  TABS                    */
+/*  TWO-COLUMN BODY GRID   */
 /* ======================== */
-.player-view-tabs {
-    display: flex;
-    gap: 4px;
-    margin-bottom: 20px;
-    padding: 4px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
+.player-view-body {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 20px;
+    align-items: start;
 }
 
-.player-view-tab {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-secondary);
+.player-view-left {
+    min-width: 0; /* prevent grid blowout */
+}
+
+.player-view-right {
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    /* Hide scrollbar but keep functionality */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.08) transparent;
+}
+
+.player-view-right::-webkit-scrollbar {
+    width: 4px;
+}
+
+.player-view-right::-webkit-scrollbar-track {
     background: transparent;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
 }
 
-.player-view-tab:hover {
-    color: var(--text-primary);
-    background: rgba(255,255,255,0.03);
-}
-
-.player-view-tab.active {
-    color: #fff;
-    background: var(--accent);
-    box-shadow: 0 2px 12px rgba(249, 115, 22, 0.2);
-}
-
-.player-view-tab svg {
-    width: 16px;
-    height: 16px;
-}
-
-.player-view-tab-count {
-    padding: 2px 7px;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    background: rgba(255,255,255,0.1);
-}
-
-/* ======================== */
-/*  TAB CONTENT             */
-/* ======================== */
-.player-view-tab-content {
-    display: none;
-}
-
-.player-view-tab-content.active {
-    display: block;
+.player-view-right::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
 }
 
 /* ======================== */
@@ -651,7 +624,7 @@
     font-weight: 500;
     color: var(--text-primary);
     text-align: right;
-    min-width: 280px;
+    min-width: 220px;
 }
 
 .player-view-data-value.mono {
@@ -689,9 +662,9 @@
     font-size: 0.84rem;
     font-family: var(--font-primary);
     color: var(--text-primary);
-    width: 280px;
-    min-width: 280px;
-    max-width: 280px;
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
     text-align: right;
     transition: all 0.2s ease;
 }
@@ -738,9 +711,9 @@ select.player-view-data-input option {
 
 /* Boolean toggle - wrap in container for alignment */
 .player-view-data-toggle-wrapper {
-    width: 280px;
-    min-width: 280px;
-    max-width: 280px;
+    width: 220px;
+    min-width: 220px;
+    max-width: 220px;
     display: flex;
     justify-content: flex-end;
 }
@@ -1022,84 +995,6 @@ body.player-view-edit-mode .player-view-data-row.readonly .player-view-data-inpu
 .player-view-badge-member { background: rgba(100,100,100,0.1); color: #888; border: 1px solid rgba(100,100,100,0.18); }
 
 /* ======================== */
-/*  RESPONSIVE              */
-/* ======================== */
-@media (max-width: 640px) {
-    .player-view-top-bar {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    .player-view-top-bar-right {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .player-view-header-top {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-    }
-
-    .player-view-status-badge {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .player-view-stats {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .player-view-stat:nth-child(2)::after {
-        display: none;
-    }
-
-    .player-view-stat:nth-child(1),
-    .player-view-stat:nth-child(2) {
-        border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .player-view-tabs {
-        flex-wrap: wrap;
-    }
-
-    .player-view-tab {
-        flex: 1 1 calc(50% - 2px);
-    }
-
-    .player-view-data-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-    }
-
-    .player-view-data-input {
-        width: 100%;
-        text-align: left;
-    }
-}
-
-/* ======================== */
-/*  SMALL SPINNER            */
-/* ======================== */
-
-.spinner-small {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spinner-small-spin 0.6s linear infinite;
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-@keyframes spinner-small-spin {
-    to { transform: rotate(360deg); }
-}
-
-/* ======================== */
 /*  PLAYER TAGS BAR         */
 /* ======================== */
 .player-tags-bar {
@@ -1212,152 +1107,99 @@ body.player-view-edit-mode .player-view-data-row.readonly .player-view-data-inpu
 }
 
 /* ======================== */
-/*  NOTES TAB               */
+/*  SMALL SPINNER            */
 /* ======================== */
-.player-notes-section {
-    padding: var(--spacing-lg);
+
+.spinner-small {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spinner-small-spin 0.6s linear infinite;
+    margin-right: 6px;
+    vertical-align: middle;
 }
 
-.player-notes-empty {
-    padding: 32px 16px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.85rem;
+@keyframes spinner-small-spin {
+    to { transform: rotate(360deg); }
 }
 
-/* Add Note Form */
-.player-note-add {
-    margin-bottom: 20px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border-subtle);
-    border-radius: 12px;
-    overflow: hidden;
+/* ======================== */
+/*  RESPONSIVE              */
+/* ======================== */
+
+/* Tablet/small desktop: single column */
+@media (max-width: 1024px) {
+    .player-view-body {
+        grid-template-columns: 1fr;
+    }
+
+    .player-view-right {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
 }
 
-.player-note-textarea {
-    width: 100%;
-    padding: 14px;
-    background: transparent;
-    border: none;
-    font-family: var(--font-primary);
-    font-size: 0.88rem;
-    color: var(--text-primary);
-    resize: vertical;
-    min-height: 70px;
-    box-sizing: border-box;
-}
+@media (max-width: 640px) {
+    .player-view-top-bar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
 
-.player-note-textarea:focus {
-    outline: none;
-}
+    .player-view-top-bar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
 
-.player-note-textarea::placeholder {
-    color: var(--text-muted);
-}
+    .player-view-header-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
 
-.player-note-add-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 14px;
-    border-top: 1px solid var(--border-subtle);
-    background: rgba(255, 255, 255, 0.02);
-}
+    .player-view-status-badge {
+        width: 100%;
+        justify-content: center;
+    }
 
-.player-note-charcount {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-}
+    .player-view-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
 
-/* Note Item */
-.player-note-item {
-    padding: 14px 16px;
-    border: 1px solid var(--border-subtle);
-    border-radius: 10px;
-    margin-bottom: 8px;
-    transition: border-color 0.15s ease;
-}
+    .player-view-stat:nth-child(2)::after {
+        display: none;
+    }
 
-.player-note-item:hover {
-    border-color: var(--border-default);
-}
+    .player-view-stat:nth-child(1),
+    .player-view-stat:nth-child(2) {
+        border-bottom: 1px solid var(--border-subtle);
+    }
 
-.player-note-item.pinned {
-    border-color: rgba(249, 115, 22, 0.25);
-    background: rgba(249, 115, 22, 0.03);
-}
+    .player-view-data-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
 
-.player-note-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
+    .player-view-data-value {
+        min-width: 0;
+    }
 
-.player-note-header-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+    .player-view-data-input {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        text-align: left;
+    }
 
-.player-note-pin-icon {
-    color: var(--accent);
-    flex-shrink: 0;
-}
-
-.player-note-author {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-primary);
-}
-
-.player-note-time {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-}
-
-.player-note-actions {
-    display: flex;
-    gap: 4px;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-}
-
-.player-note-item:hover .player-note-actions {
-    opacity: 1;
-}
-
-.player-note-action-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    border: none;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s ease;
-}
-
-.player-note-action-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-primary);
-}
-
-.player-note-action-btn.danger:hover {
-    background: rgba(239, 68, 68, 0.12);
-    color: var(--error);
-}
-
-.player-note-text {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    white-space: pre-wrap;
-    word-break: break-word;
+    .player-view-data-toggle-wrapper {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
 }
 
 /* ======================== */

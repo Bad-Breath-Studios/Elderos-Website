@@ -10,7 +10,7 @@
     <meta property="og:type" content="website">
     <link rel="icon" type="image/x-icon" href="assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/vote.css?v=1">
+    <link rel="stylesheet" href="css/vote.css?v=2">
 </head>
 <body>
     <div class="ambient-bg"></div>
@@ -53,14 +53,36 @@
     <!-- Login Overlay -->
     <div id="login-overlay">
         <div class="login-card">
-            <h2>Log In to Vote</h2>
-            <p class="login-sub">Use your Elderos game account</p>
-            <form id="login-form">
-                <input type="text" id="login-username" class="login-field" placeholder="Username" autocomplete="username">
-                <input type="password" id="login-password" class="login-field" placeholder="Password" autocomplete="current-password">
-                <button type="submit" class="login-btn">Log In</button>
-                <div id="login-error"></div>
-            </form>
+            <!-- Step 1: Credentials -->
+            <div id="login-step-credentials">
+                <h2>Log In to Vote</h2>
+                <p class="login-sub">Use your Elderos game account</p>
+                <form id="login-form">
+                    <input type="text" id="login-username" class="login-field" placeholder="Username" autocomplete="username">
+                    <input type="password" id="login-password" class="login-field" placeholder="Password" autocomplete="current-password">
+                    <button type="submit" class="login-btn">Log In</button>
+                    <div id="login-error"></div>
+                </form>
+            </div>
+
+            <!-- Step 2: 2FA Code -->
+            <div id="login-step-2fa" style="display:none">
+                <h2>Two-Factor Auth</h2>
+                <p class="login-sub">Enter the 6-digit code from your authenticator app</p>
+                <form id="twofa-form">
+                    <div class="twofa-inputs">
+                        <input type="text" maxlength="1" class="twofa-digit" data-index="0" inputmode="numeric" autocomplete="one-time-code">
+                        <input type="text" maxlength="1" class="twofa-digit" data-index="1" inputmode="numeric">
+                        <input type="text" maxlength="1" class="twofa-digit" data-index="2" inputmode="numeric">
+                        <input type="text" maxlength="1" class="twofa-digit" data-index="3" inputmode="numeric">
+                        <input type="text" maxlength="1" class="twofa-digit" data-index="4" inputmode="numeric">
+                        <input type="text" maxlength="1" class="twofa-digit" data-index="5" inputmode="numeric">
+                    </div>
+                    <button type="submit" class="login-btn" id="twofa-btn">Verify</button>
+                    <div id="twofa-error"></div>
+                </form>
+                <button class="login-back-btn" id="twofa-back">Back to login</button>
+            </div>
         </div>
     </div>
 
@@ -118,8 +140,8 @@
 
     <!-- JS -->
     <script src="js/config.js?v=1"></script>
-    <script src="js/auth.js?v=1"></script>
+    <script src="js/auth.js?v=2"></script>
     <script src="js/api.js?v=1"></script>
-    <script src="js/vote.js?v=1"></script>
+    <script src="js/vote.js?v=2"></script>
 </body>
 </html>

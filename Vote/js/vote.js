@@ -104,41 +104,139 @@ const Vote = {
     // === Login ===
 
     setupLoginForm() {
+        // Step 1: Credentials form
         const form = document.getElementById('login-form');
-        if (!form) return;
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const username = document.getElementById('login-username').value.trim();
+                const password = document.getElementById('login-password').value;
+                const errorEl = document.getElementById('login-error');
+                const btn = form.querySelector('button[type="submit"]');
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim();
-            const password = document.getElementById('login-password').value;
-            const errorEl = document.getElementById('login-error');
-            const btn = form.querySelector('button[type="submit"]');
-
-            if (!username || !password) {
-                errorEl.textContent = 'Please enter your username and password.';
-                errorEl.style.display = 'block';
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = 'Logging in...';
-            errorEl.style.display = 'none';
-
-            try {
-                const result = await Auth.login(username, password);
-                if (result.success) {
-                    window.location.reload();
-                } else {
-                    errorEl.textContent = result.message;
+                if (!username || !password) {
+                    errorEl.textContent = 'Please enter your username and password.';
                     errorEl.style.display = 'block';
+                    return;
                 }
-            } catch (err) {
-                errorEl.textContent = 'Connection failed. Please try again.';
-                errorEl.style.display = 'block';
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Log In';
-            }
+
+                btn.disabled = true;
+                btn.textContent = 'Logging in...';
+                errorEl.style.display = 'none';
+
+                try {
+                    const result = await Auth.login(username, password);
+                    if (result.success) {
+                        window.location.reload();
+                    } else if (result.requires2FA) {
+                        this.show2FAStep();
+                    } else {
+                        errorEl.textContent = result.message;
+                        errorEl.style.display = 'block';
+                    }
+                } catch (err) {
+                    errorEl.textContent = 'Connection failed. Please try again.';
+                    errorEl.style.display = 'block';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Log In';
+                }
+            });
+        }
+
+        // Step 2: 2FA form
+        const tfaForm = document.getElementById('twofa-form');
+        if (tfaForm) {
+            tfaForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const digits = tfaForm.querySelectorAll('.twofa-digit');
+                const code = Array.from(digits).map(d => d.value).join('');
+                const errorEl = document.getElementById('twofa-error');
+                const btn = document.getElementById('twofa-btn');
+
+                if (code.length !== 6) {
+                    errorEl.textContent = 'Please enter all 6 digits.';
+                    errorEl.style.display = 'block';
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.textContent = 'Verifying...';
+                errorEl.style.display = 'none';
+
+                try {
+                    const result = await Auth.verify2FA(code);
+                    if (result.success) {
+                        window.location.reload();
+                    } else {
+                        errorEl.textContent = result.message;
+                        errorEl.style.display = 'block';
+                        digits.forEach(d => d.value = '');
+                        digits[0].focus();
+                    }
+                } catch (err) {
+                    errorEl.textContent = 'Connection failed. Please try again.';
+                    errorEl.style.display = 'block';
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = 'Verify';
+                }
+            });
+
+            // Auto-advance and paste support for 2FA digit inputs
+            this.setup2FAInputs();
+        }
+
+        // Back button
+        const backBtn = document.getElementById('twofa-back');
+        if (backBtn) {
+            backBtn.addEventListener('click', () => this.showCredentialsStep());
+        }
+    },
+
+    show2FAStep() {
+        document.getElementById('login-step-credentials').style.display = 'none';
+        document.getElementById('login-step-2fa').style.display = 'block';
+        const firstDigit = document.querySelector('.twofa-digit[data-index="0"]');
+        if (firstDigit) firstDigit.focus();
+    },
+
+    showCredentialsStep() {
+        document.getElementById('login-step-2fa').style.display = 'none';
+        document.getElementById('login-step-credentials').style.display = 'block';
+        document.getElementById('twofa-error').style.display = 'none';
+        document.querySelectorAll('.twofa-digit').forEach(d => d.value = '');
+        Auth._tempToken = null;
+    },
+
+    setup2FAInputs() {
+        const digits = document.querySelectorAll('.twofa-digit');
+        digits.forEach((input, i) => {
+            input.addEventListener('input', (e) => {
+                const val = e.target.value.replace(/\D/g, '');
+                e.target.value = val.slice(0, 1);
+                if (val && i < 5) digits[i + 1].focus();
+                // Auto-submit when all 6 filled
+                if (i === 5 && val) {
+                    const code = Array.from(digits).map(d => d.value).join('');
+                    if (code.length === 6) document.getElementById('twofa-form').requestSubmit();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !e.target.value && i > 0) {
+                    digits[i - 1].focus();
+                }
+            });
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const paste = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 6);
+                paste.split('').forEach((ch, j) => {
+                    if (digits[j]) digits[j].value = ch;
+                });
+                const nextEmpty = paste.length < 6 ? paste.length : 5;
+                digits[nextEmpty].focus();
+                if (paste.length === 6) document.getElementById('twofa-form').requestSubmit();
+            });
         });
     },
 

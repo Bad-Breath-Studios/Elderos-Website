@@ -376,7 +376,7 @@ nav {
     cursor: not-allowed;
 }
 
-#login-error {
+#login-error, #twofa-error {
     display: none;
     margin-top: 12px;
     padding: 8px 12px;
@@ -385,6 +385,51 @@ nav {
     border-radius: var(--radius-sm);
     color: var(--red);
     font-size: 0.8rem;
+}
+
+/* === 2FA Digit Inputs === */
+.twofa-inputs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.twofa-digit {
+    width: 44px;
+    height: 52px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s ease;
+    caret-color: var(--accent);
+}
+
+.twofa-digit:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.login-back-btn {
+    display: block;
+    margin-top: 12px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.2s ease;
+}
+
+.login-back-btn:hover {
+    color: var(--text);
 }
 
 /* === Claim Banner === */

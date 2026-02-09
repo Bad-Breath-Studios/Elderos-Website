@@ -88,21 +88,30 @@ Auth-gated staff portal. Three-step login (credentials + 2FA + Discord session k
 ### Vote (`Vote/`)
 Placeholder — voting page to be implemented.
 
-## Deployment
+## Deployment (Git-based)
 
-Each page is zipped independently and uploaded to its subdomain via cPanel:
+The website repo is at `https://github.com/Bad-Breath-Studios/Elderos-Website.git` and is connected to cPanel via Git Version Control. Deployment is handled by `.cpanel.yml` which copies each subfolder to its subdomain directory:
 
-```powershell
-# Example: Hiscores
-Set-Location 'Elderos-Website/Hiscores'
-Get-ChildItem -Force -Exclude '.git','*.zip' | Compress-Archive -DestinationPath '.\hiscores.zip' -Force
+| Subfolder | Server Path | Subdomain |
+|-----------|-------------|-----------|
+| `Home/` | `/home/eldessdm/public_html/` | elderos.io |
+| `Hiscores/` | `/home/eldessdm/hiscores.elderos.io/` | hiscores.elderos.io |
+| `Play/` | `/home/eldessdm/play.elderos.io/` | play.elderos.io |
+| `Staff/` | `/home/eldessdm/staff.elderos.io/` | staff.elderos.io |
+| `Vote/` | `/home/eldessdm/vote.elderos.io/` | vote.elderos.io |
 
-# Example: Staff
-Set-Location 'Elderos-Website/Staff'
-Get-ChildItem -Force -Exclude 'staff.zip' | Compress-Archive -DestinationPath '.\staff.zip' -Force
+**Workflow after making changes:**
+```bash
+git add -A
+git commit -m "description of changes"
+git push
 ```
+Then manually trigger deploy in cPanel → Git Version Control → "Update from Remote" + "Deploy HEAD Commit".
 
-The zip root must contain the page files directly (not a nested folder).
+**Important:**
+- Do NOT create zip files — the old zip/upload workflow is deprecated
+- Do NOT modify `.cpanel.yml` unless adding a new subdomain
+- Cache busting (`?v=N`) on CSS/JS references is still needed — Cloudflare CDN caches aggressively
 
 ## Assets
 
