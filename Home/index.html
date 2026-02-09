@@ -194,6 +194,13 @@
             transform: translateY(0) scale(0.98);
         }
 
+        .btn-disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            pointer-events: none;
+            filter: grayscale(0.3);
+        }
+
         .btn-secondary {
             display: inline-flex;
             align-items: center;
@@ -479,10 +486,10 @@
     </p>
 
     <div class="hero-actions">
-        <a href="https://play.elderos.io" class="btn-primary">
+        <span class="btn-primary btn-disabled" title="Coming soon">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Play Now
-        </a>
+        </span>
         <a href="https://discord.gg/MwkvVMFmfg" class="btn-secondary" target="_blank">
             <img src="assets/discord-icon.png" alt="" class="btn-icon" style="width:18px;height:18px;">
             Join Discord
@@ -566,7 +573,7 @@
 <!-- Shared JS -->
 <script src="/shared/auth.js?v=1"></script>
 <script src="/shared/navbar.js?v=2"></script>
-<script src="/shared/footer.js?v=1"></script>
+<script src="/shared/footer.js?v=2"></script>
 
 <script>
     // Scroll reveal

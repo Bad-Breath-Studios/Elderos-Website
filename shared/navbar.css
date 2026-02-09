@@ -143,32 +143,6 @@
     transform: translateX(-50%) scaleX(1);
 }
 
-/* === Play Now CTA === */
-.nav-cta {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #fff;
-    text-decoration: none;
-    padding: 9px 22px;
-    border-radius: 8px;
-    background: var(--accent);
-    margin-left: 8px;
-    transition: all 0.25s ease;
-    box-shadow: 0 0 20px var(--accent-glow);
-    white-space: nowrap;
-}
-
-.nav-cta:hover {
-    background: #ea680c;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 25px var(--accent-glow);
-}
-
-.nav-cta.active {
-    background: #ea680c;
-    box-shadow: 0 0 25px var(--accent-glow);
-}
-
 /* === Auth Section (pinned right) === */
 .nav-auth {
     position: absolute;
@@ -592,14 +566,6 @@
 
 .nav-mobile-menu .nav-link.active {
     color: var(--accent);
-}
-
-.nav-mobile-menu .nav-cta {
-    margin-left: 0;
-    margin-top: 8px;
-    text-align: center;
-    padding: 14px;
-    display: block;
 }
 
 .nav-mobile-auth {

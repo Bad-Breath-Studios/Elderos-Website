@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us — Elderos</title>
-    <meta name="description" content="Get in touch with the Elderos team — support, feedback, and business inquiries.">
+    <meta name="description" content="Get in touch with the Elderos team through Discord — support, feedback, and suggestions.">
     <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/shared/shared.css?v=1">
@@ -17,70 +17,84 @@
             background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
             pointer-events: none;
         }
-        .contact-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin: 32px 0;
-        }
-        .contact-card {
+        .discord-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 24px;
+            border-radius: var(--radius-lg);
+            padding: 32px;
             text-align: center;
-            transition: border-color 0.2s ease, transform 0.2s ease;
+            margin: 32px 0;
+            transition: border-color 0.2s ease;
         }
-        .contact-card:hover {
-            border-color: var(--accent-glow);
-            transform: translateY(-2px);
-        }
-        .contact-card-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 14px;
+        .discord-card:hover { border-color: var(--accent-glow); }
+        .discord-card-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 16px;
             background: var(--accent-soft);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .contact-card-icon svg {
-            width: 22px;
-            height: 22px;
-            fill: var(--accent);
-        }
-        .contact-card-icon img {
-            width: 24px;
-            height: 24px;
+        .discord-card-icon img {
+            width: 28px;
+            height: 28px;
             object-fit: contain;
         }
-        .contact-card h3 {
+        .discord-card h3 {
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--text);
             margin-bottom: 8px;
         }
-        .contact-card p {
-            font-size: 0.85rem;
-            line-height: 1.6;
+        .discord-card p {
+            font-size: 0.9rem;
+            line-height: 1.65;
             color: var(--text-dim);
-            margin-bottom: 14px;
+            max-width: 480px;
+            margin: 0 auto 18px;
         }
-        .contact-card a.contact-link {
+        .discord-card a.discord-btn {
             display: inline-block;
-            padding: 8px 20px;
+            padding: 10px 28px;
             background: var(--accent);
             color: #000;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.9rem;
             border-radius: var(--radius-sm);
             text-decoration: none;
             transition: background 0.2s ease;
         }
-        .contact-card a.contact-link:hover { background: var(--gold); }
-        @media (max-width: 600px) {
-            .contact-cards { grid-template-columns: 1fr; }
+        .discord-card a.discord-btn:hover { background: var(--gold); }
+        .channels-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .channel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            transition: border-color 0.2s ease;
+        }
+        .channel-card:hover { border-color: var(--border-hover); }
+        .channel-card h3 {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+        .channel-card p {
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: var(--text-dim);
+            margin: 0;
+        }
+        @media (max-width: 768px) {
+            .channels-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -90,27 +104,32 @@
 
     <main class="content-page">
         <h1>Contact Us</h1>
-        <p class="page-subtitle">We'd love to hear from you.</p>
+        <p class="page-subtitle">All support and communication happens through Discord.</p>
 
-        <p>Whether you have a question, need support, or want to share feedback, here are the best ways to reach us.</p>
-
-        <div class="contact-cards">
-            <div class="contact-card">
-                <div class="contact-card-icon">
-                    <img src="/assets/discord-icon.png" alt="Discord">
-                </div>
-                <h3>Discord</h3>
-                <p>The fastest way to get help. Open a support ticket or chat with the community.</p>
-                <a href="https://discord.gg/MwkvVMFmfg" target="_blank" class="contact-link">Join Discord</a>
+        <div class="discord-card">
+            <div class="discord-card-icon">
+                <img src="/assets/discord-icon.png" alt="Discord">
             </div>
+            <h3>Join Our Discord</h3>
+            <p>Discord is our home base. Whether you need help, want to share feedback, or just want to hang out with the community — everything happens here.</p>
+            <a href="https://discord.gg/MwkvVMFmfg" target="_blank" class="discord-btn">Join Discord</a>
+        </div>
 
-            <div class="contact-card">
-                <div class="contact-card-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 13.5l-12-8.5v13.5c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2v-13.5l-12 8.5zm12-11.5h-24c-1.1 0-2 .9-2 2l12 8.5 12-8.5c0-1.1-.9-2-2-2z"/></svg>
-                </div>
-                <h3>Email</h3>
-                <p>For business inquiries, partnerships, or private matters.</p>
-                <a href="mailto:support@elderos.io" class="contact-link">support@elderos.io</a>
+        <h2>How to Reach Us</h2>
+        <p>Our Discord server has dedicated channels for different types of communication:</p>
+
+        <div class="channels-grid">
+            <div class="channel-card">
+                <h3>Suggestions</h3>
+                <p>Got an idea? Post it in our dedicated suggestions thread. The community votes on submissions, and the dev team reviews and approves or denies each one.</p>
+            </div>
+            <div class="channel-card">
+                <h3>Feedback</h3>
+                <p>Share your thoughts on recent updates, balance changes, or anything else about the game in our feedback channel. We read everything.</p>
+            </div>
+            <div class="channel-card">
+                <h3>Support Tickets</h3>
+                <p>Need help with your account, a payment issue, or want to appeal a punishment? Open a support ticket for private, one-on-one assistance from staff.</p>
             </div>
         </div>
 
@@ -123,18 +142,9 @@
             <li><strong>Transaction ID</strong> — For payment-related inquiries, include the ID from your receipt email.</li>
         </ul>
 
-        <h2>Response Times</h2>
-        <p>We aim to respond to all inquiries within:</p>
-        <ul>
-            <li><strong>Discord</strong> — Within 24 hours for support tickets.</li>
-            <li><strong>Email</strong> — Within 48 hours for general inquiries.</li>
-        </ul>
-        <p>Response times may be longer on weekends and holidays.</p>
-
         <h2>Other Resources</h2>
         <ul>
             <li><a href="/pages/faq.html">FAQ</a> — Check if your question has already been answered.</li>
-            <li><a href="/pages/report-bug.html">Report a Bug</a> — Found a bug? Let us know.</li>
             <li><a href="https://wiki.elderos.io" target="_blank">Wiki</a> — Game guides and documentation.</li>
         </ul>
 
@@ -145,6 +155,6 @@
 
     <script src="/shared/auth.js?v=1"></script>
     <script src="/shared/navbar.js?v=2"></script>
-    <script src="/shared/footer.js?v=1"></script>
+    <script src="/shared/footer.js?v=2"></script>
 </body>
 </html>

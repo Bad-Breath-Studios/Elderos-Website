@@ -49,18 +49,16 @@
                         <div class="footer-col-title">Support</div>
                         <a href="https://elderos.io/pages/faq.html">FAQ</a>
                         <a href="https://elderos.io/pages/contact.html">Contact Us</a>
-                        <a href="https://elderos.io/pages/report-bug.html">Report a Bug</a>
                     </div>
                     <div class="footer-col">
                         <div class="footer-col-title">About</div>
                         <a href="https://elderos.io/pages/about.html">Our Story</a>
-                        <a href="https://elderos.io/pages/changelog.html">Changelog</a>
                     </div>
                 </div>
 
                 <!-- Copyright Bar -->
                 <div class="footer-copyright">
-                    <span class="footer-copyright-text">ELDEROS &middot; &copy; 2026 Bad Breath Studios</span>
+                    <span class="footer-copyright-text">ELDEROS &middot; &copy; 2026 Elderos</span>
                     <div class="footer-legal-links">
                         <a href="https://elderos.io/pages/terms.html">Terms</a>
                         <a href="https://elderos.io/pages/privacy.html">Privacy</a>

@@ -93,10 +93,8 @@
             <nav class="shared-nav" id="shared-nav">
                 <div class="nav-group">
                     <div class="nav-left">
-                        <a href="https://elderos.io#features" class="nav-link${activeClass('features')}">Features</a>
                         <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                         <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
-                        <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                     </div>
 
                     <div class="nav-center">
@@ -107,8 +105,8 @@
                     </div>
 
                     <div class="nav-right-links">
+                        <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                         <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-                        <a href="https://play.elderos.io" class="nav-cta${activeClass('play')}">Play Now</a>
                     </div>
                 </div>
 
@@ -122,12 +120,10 @@
             </nav>
 
             <div class="nav-mobile-menu" id="nav-mobile-menu">
-                <a href="https://elderos.io#features" class="nav-link">Features</a>
                 <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                 <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
                 <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                 <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-                <a href="https://play.elderos.io" class="nav-cta${activeClass('play')}">Play Now</a>
                 ${mobileAuthHTML}
             </div>
 
