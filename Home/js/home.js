@@ -65,7 +65,7 @@
             for (const post of posts) {
                 const card = document.createElement('a');
                 card.className = 'news-card reveal';
-                card.href = `/news/?post=${post.id}`;
+                card.href = `https://news.elderos.io/?post=${post.id}`;
 
                 const category = (post.category || 'update').toUpperCase();
                 const badgeClass = CATEGORY_COLORS[category] || 'update';

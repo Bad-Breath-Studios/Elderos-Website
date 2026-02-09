@@ -14,7 +14,7 @@
         if (host.includes('vote')) return 'vote';
         if (host.includes('play')) return 'play';
         if (host.includes('staff')) return 'staff';
-        if (path.startsWith('/news')) return 'news';
+        if (host.includes('news')) return 'news';
         // Home page or content pages under /pages/
         if (path === '/' || path === '/index.html' || path.startsWith('/pages/')) return 'home';
         return 'home';
@@ -96,7 +96,7 @@
                     <div class="nav-left">
                         <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                         <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
-                        <a href="https://elderos.io/news/" class="nav-link${activeClass('news')}">News</a>
+                        <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                     </div>
 
                     <div class="nav-center">
@@ -124,7 +124,7 @@
             <div class="nav-mobile-menu" id="nav-mobile-menu">
                 <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                 <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
-                <a href="https://elderos.io/news/" class="nav-link${activeClass('news')}">News</a>
+                <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                 <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                 <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
                 ${mobileAuthHTML}

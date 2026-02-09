@@ -129,7 +129,7 @@
         const card = document.createElement('div');
         card.className = 'news-post-card';
         card.addEventListener('click', () => {
-            history.pushState({ postId: post.id }, '', `/news/?post=${post.id}`);
+            history.pushState({ postId: post.id }, '', '/?post=' + post.id);
             showPostView(post.id);
         });
 
@@ -303,7 +303,7 @@
         if (backLink) {
             backLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                history.pushState({}, '', '/news/');
+                history.pushState({}, '', '/');
                 showListView();
             });
         }
