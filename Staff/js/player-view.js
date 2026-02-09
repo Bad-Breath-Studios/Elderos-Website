@@ -107,6 +107,7 @@ const PlayerView = {
             this.header = response.header;
             this.sections = response.sections || [];
             this.permissions = response.staffPermissions || [];
+            console.log('[PlayerView] Sections from API:', this.sections.map(s => ({ key: s.key, title: s.title, scope: s.scope, worldType: s.worldType, fieldCount: (s.fields || []).length, groupCount: (s.groups || []).length })));
 
             // Reset state
             this.editMode = false;

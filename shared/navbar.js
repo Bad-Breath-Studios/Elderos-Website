@@ -101,6 +101,7 @@
                     <div class="nav-left">
                         <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                         <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
+                        <a href="https://adventurers.elderos.io" class="nav-link${activeClass('adventurers')}">Adventurers</a>
                         <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                     </div>
 
@@ -129,6 +130,7 @@
             <div class="nav-mobile-menu" id="nav-mobile-menu">
                 <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                 <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
+                <a href="https://adventurers.elderos.io" class="nav-link${activeClass('adventurers')}">Adventurers</a>
                 <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                 <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                 <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
