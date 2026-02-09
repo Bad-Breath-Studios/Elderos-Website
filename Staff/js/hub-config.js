@@ -32,11 +32,11 @@ const HubConfig = {
             schemaId: 'hub-config',
             warningText: 'Some changes may require a Hub restart to take effect. Sensitive fields are masked.',
             loadFn: async () => {
-                const data = await API.ashpire.getHubConfig();
+                const data = await API.config.getHubConfig();
                 return { yaml: data.yaml, fileHash: data.fileHash };
             },
             saveFn: async (yaml, basedOnHash) => {
-                const result = await API.ashpire.saveHubConfig(yaml, basedOnHash);
+                const result = await API.config.saveHubConfig(yaml, basedOnHash);
                 return { message: result.message, fileHash: result.fileHash };
             },
             onDirtyChange: (isDirty) => {

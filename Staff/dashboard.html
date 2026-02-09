@@ -216,6 +216,23 @@
                         </svg>
                         <span class="nav-item-label">Vote Config</span>
                     </a>
+                    <a href="#hub-config" class="nav-item" data-page="hub-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span class="nav-item-label">Hub Config</span>
+                    </a>
+                    <a href="#worlds-config" class="nav-item" data-page="worlds-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span class="nav-item-label">Worlds Config</span>
+                    </a>
                 </div>
 
                 <!-- Ashpire (Owner account only) -->
@@ -241,23 +258,6 @@
                             <line x1="17" y1="16" x2="23" y2="16"/>
                         </svg>
                         <span class="nav-item-label">Controls</span>
-                    </a>
-                    <a href="#hub-config" class="nav-item" data-page="hub-config">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                        </svg>
-                        <span class="nav-item-label">Hub Config</span>
-                    </a>
-                    <a href="#worlds-config" class="nav-item" data-page="worlds-config">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="2" y1="12" x2="22" y2="12"/>
-                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                        </svg>
-                        <span class="nav-item-label">Worlds Config</span>
                     </a>
                 </div>
             </nav>
@@ -744,7 +744,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script src="js/config.js?v=25"></script>
     <script src="js/utils.js?v=18"></script>
-    <script src="js/api.js?v=43"></script>
+    <script src="js/api.js?v=44"></script>
     <script src="js/auth.js?v=25"></script>
     <script src="js/session-manager.js?v=25"></script>
     <script src="js/router.js?v=37"></script>
@@ -772,9 +772,9 @@
     <script src="js/store-config.js?v=2"></script>
     <script src="js/ashpire-revenue.js?v=1"></script>
     <script src="js/ashpire-controls.js?v=5"></script>
-    <script src="js/hub-config.js?v=1"></script>
+    <script src="js/hub-config.js?v=2"></script>
     <script src="js/vote-config.js?v=1"></script>
-    <script src="js/worlds-config.js?v=1"></script>
+    <script src="js/worlds-config.js?v=2"></script>
     <script src="js/animations.js?v=18"></script>
     <script>
         // Initialize dashboard
@@ -955,6 +955,8 @@
                 showNavItem('store-config', Auth.hasPermission(CONFIG.PERMISSIONS.MANAGE_STORE));
                 showNavItem('system-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_SYSTEM_LOGS));
                 showNavItem('vote-config', isDev);
+                showNavItem('hub-config', isDev);
+                showNavItem('worlds-config', isDev);
 
                 // Ashpire
                 showSection('nav-section-ashpire', Auth.isAshpire());

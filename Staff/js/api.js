@@ -702,6 +702,30 @@ const API = {
             const body = { yaml };
             if (basedOnHash) body.basedOnHash = basedOnHash;
             return API.post('/config/vote', body);
+        },
+
+        // --- Hub Config (Developer+) ---
+
+        async getHubConfig() {
+            return API.get('/config/hub');
+        },
+
+        async saveHubConfig(yaml, basedOnHash = null) {
+            const body = { yaml };
+            if (basedOnHash) body.basedOnHash = basedOnHash;
+            return API.post('/config/hub', body);
+        },
+
+        // --- Worlds Config (Developer+) ---
+
+        async getWorldsConfig() {
+            return API.get('/config/worlds');
+        },
+
+        async saveWorldsConfig(yaml, basedOnHash = null) {
+            const body = { yaml };
+            if (basedOnHash) body.basedOnHash = basedOnHash;
+            return API.post('/config/worlds', body);
         }
     },
 

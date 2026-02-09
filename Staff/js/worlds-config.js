@@ -32,11 +32,11 @@ const WorldsConfig = {
             schemaId: 'worlds-config',
             warningText: 'Changes are hot-reloaded within 30 seconds. Agent tokens are masked for security.',
             loadFn: async () => {
-                const data = await API.ashpire.getWorldsConfig();
+                const data = await API.config.getWorldsConfig();
                 return { yaml: data.yaml, fileHash: data.fileHash };
             },
             saveFn: async (yaml, basedOnHash) => {
-                const result = await API.ashpire.saveWorldsConfig(yaml, basedOnHash);
+                const result = await API.config.saveWorldsConfig(yaml, basedOnHash);
                 return { message: result.message, fileHash: result.fileHash };
             },
             onDirtyChange: (isDirty) => {
