@@ -117,6 +117,28 @@
     font-size: 0.82rem;
 }
 
+/* Investigate section divider */
+.pv-investigate-divider {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 0 6px;
+    margin-top: 4px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.pv-investigate-btn {
+    color: var(--text-muted) !important;
+}
+
+.pv-investigate-btn:hover {
+    color: var(--accent) !important;
+    border-color: rgba(249, 115, 22, 0.2) !important;
+    background: rgba(249, 115, 22, 0.05) !important;
+}
+
 /* ======================== */
 /*  NOTES PANEL             */
 /* ======================== */

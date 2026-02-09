@@ -19,17 +19,19 @@ const Router = {
      * Initialize router
      */
     init() {
-        // Handle initial route from hash
+        // Handle initial route from hash (strip query params for page matching)
         const hash = window.location.hash.slice(1);
-        if (hash && this.pages.includes(hash)) {
-            this.navigate(hash, false);
+        const page = hash.split('?')[0];
+        if (page && this.pages.includes(page)) {
+            this.navigate(page, false);
         }
 
         // Listen for hash changes
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash.slice(1);
-            if (hash && this.pages.includes(hash)) {
-                this.navigate(hash, false);
+            const page = hash.split('?')[0];
+            if (page && this.pages.includes(page)) {
+                this.navigate(page, false);
             }
         });
 
@@ -240,6 +242,32 @@ const Router = {
      */
     getCurrentPage() {
         return this.currentPage;
+    },
+
+    /**
+     * Navigate to a page with query parameters (e.g. for pre-filling filters)
+     * @param {string} page - Page name
+     * @param {Object} params - Key-value pairs for query string
+     */
+    navigateWithParams(page, params) {
+        if (!this.pages.includes(page)) {
+            console.warn(`Unknown page: ${page}`);
+            return;
+        }
+
+        const query = Object.entries(params)
+            .filter(([, v]) => v !== undefined && v !== null && v !== '')
+            .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+            .join('&');
+
+        // Set hash with query params — the page's onPageLoad will parse them
+        window.location.hash = query ? `#${page}?${query}` : `#${page}`;
+
+        // If already on this page, the hashchange won't fire for same-page navigation
+        // so manually trigger navigate
+        if (this.currentPage === page) {
+            this.navigate(page, false);
+        }
     },
 
     /**

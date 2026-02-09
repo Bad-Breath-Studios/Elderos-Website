@@ -17,8 +17,20 @@ const Bans = {
     onPageLoad() {
         this._page = 1;
         this._filters = {};
+        this._parseUrlFilters();
         this.render();
         this.load();
+    },
+
+    _parseUrlFilters() {
+        const hash = window.location.hash.slice(1);
+        const queryIdx = hash.indexOf('?');
+        if (queryIdx === -1) return;
+        try {
+            const params = new URLSearchParams(hash.substring(queryIdx));
+            if (params.has('search')) this._filters.search = params.get('search');
+            if (params.has('tab')) this._activeTab = params.get('tab');
+        } catch (e) { /* ignore */ }
     },
 
     onPageLeave() {},
