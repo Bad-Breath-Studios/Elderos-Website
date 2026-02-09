@@ -21,7 +21,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/global.css?v=20">
-    <link rel="stylesheet" href="css/dashboard.css?v=18">
+    <link rel="stylesheet" href="css/dashboard.css?v=19">
     <link rel="stylesheet" href="css/table.css?v=18">
     <link rel="stylesheet" href="css/search.css?v=19">
     <link rel="stylesheet" href="css/popup.css?v=18">
@@ -869,6 +869,12 @@
                 // Role badge
                 const roleEl = document.getElementById('userRole');
                 roleEl.innerHTML = Utils.getRoleBadge(user.role);
+
+                // Rank-based pill styling
+                const userPill = document.getElementById('userPill');
+                if (userPill && user.role) {
+                    userPill.dataset.rank = user.role.toLowerCase();
+                }
 
                 // Avatar
                 const avatarUrl = Auth.getAvatarUrl();

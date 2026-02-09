@@ -118,14 +118,33 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-md);
-    padding: var(--spacing-sm);
-    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.user-pill::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .user-pill:hover {
-    background-color: var(--bg-card-hover);
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--border-default);
+}
+
+.user-pill:hover::before {
+    opacity: 1;
 }
 
 .user-avatar {
@@ -138,6 +157,9 @@
     justify-content: center;
     overflow: hidden;
     border: 2px solid var(--border-default);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .user-avatar img {
@@ -150,6 +172,7 @@
     font-size: var(--text-lg);
     font-weight: var(--font-semibold);
     color: var(--text-secondary);
+    transition: color 0.3s ease;
 }
 
 .user-info {
@@ -164,6 +187,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color 0.3s ease;
 }
 
 .user-role {
@@ -188,6 +212,125 @@
 .logout-btn svg {
     width: 20px;
     height: 20px;
+}
+
+/* ---- Rank-based User Pill Styles ---- */
+
+/* OWNER — Red with animated pulse glow + shimmer */
+.user-pill[data-rank="owner"] {
+    border-color: rgba(239, 68, 68, 0.3);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(220, 38, 38, 0.04));
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.1), inset 0 1px 0 rgba(239, 68, 68, 0.08);
+    animation: ownerPulse 3s ease-in-out infinite;
+}
+.user-pill[data-rank="owner"]::before {
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.06), transparent);
+    animation: rankShimmer 4s ease-in-out infinite;
+    opacity: 1;
+}
+.user-pill[data-rank="owner"]:hover {
+    border-color: rgba(239, 68, 68, 0.5);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(239, 68, 68, 0.12);
+}
+.user-pill[data-rank="owner"] .user-avatar {
+    border-color: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+.user-pill[data-rank="owner"] .user-avatar-initial { color: #ef4444; }
+.user-pill[data-rank="owner"] .user-name { color: #fca5a5; }
+
+@keyframes ownerPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(239, 68, 68, 0.1), inset 0 1px 0 rgba(239, 68, 68, 0.08); }
+    50% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(239, 68, 68, 0.12); }
+}
+
+/* DEVELOPER — Purple with smooth gradient shift */
+.user-pill[data-rank="developer"] {
+    border-color: rgba(139, 92, 246, 0.3);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(124, 58, 237, 0.04));
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(139, 92, 246, 0.08);
+    animation: devGlow 4s ease-in-out infinite;
+}
+.user-pill[data-rank="developer"]::before {
+    background: linear-gradient(120deg, transparent 30%, rgba(139, 92, 246, 0.06) 50%, transparent 70%);
+    animation: rankShimmer 5s ease-in-out infinite;
+    opacity: 1;
+}
+.user-pill[data-rank="developer"]:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), inset 0 1px 0 rgba(139, 92, 246, 0.12);
+}
+.user-pill[data-rank="developer"] .user-avatar {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+.user-pill[data-rank="developer"] .user-avatar-initial { color: #8b5cf6; }
+.user-pill[data-rank="developer"] .user-name { color: #c4b5fd; }
+
+@keyframes devGlow {
+    0%, 100% { box-shadow: 0 0 12px rgba(139, 92, 246, 0.1), inset 0 1px 0 rgba(139, 92, 246, 0.08); }
+    50% { box-shadow: 0 0 18px rgba(139, 92, 246, 0.18), inset 0 1px 0 rgba(139, 92, 246, 0.1); }
+}
+
+/* ADMINISTRATOR — Blue with steady glow */
+.user-pill[data-rank="administrator"] {
+    border-color: rgba(59, 130, 246, 0.3);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(37, 99, 235, 0.04));
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.1), inset 0 1px 0 rgba(59, 130, 246, 0.08);
+}
+.user-pill[data-rank="administrator"]::before {
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.05), transparent);
+    animation: rankShimmer 6s ease-in-out infinite;
+    opacity: 1;
+}
+.user-pill[data-rank="administrator"]:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(59, 130, 246, 0.12);
+}
+.user-pill[data-rank="administrator"] .user-avatar {
+    border-color: #3b82f6;
+    box-shadow: 0 0 6px rgba(59, 130, 246, 0.25);
+}
+.user-pill[data-rank="administrator"] .user-avatar-initial { color: #3b82f6; }
+.user-pill[data-rank="administrator"] .user-name { color: #93c5fd; }
+
+/* MODERATOR — Green with subtle pulse */
+.user-pill[data-rank="moderator"] {
+    border-color: rgba(34, 197, 94, 0.25);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.06), rgba(22, 163, 74, 0.03));
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.08), inset 0 1px 0 rgba(34, 197, 94, 0.06);
+}
+.user-pill[data-rank="moderator"]:hover {
+    border-color: rgba(34, 197, 94, 0.45);
+    box-shadow: 0 0 14px rgba(34, 197, 94, 0.15), inset 0 1px 0 rgba(34, 197, 94, 0.1);
+}
+.user-pill[data-rank="moderator"] .user-avatar {
+    border-color: #22c55e;
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.2);
+}
+.user-pill[data-rank="moderator"] .user-avatar-initial { color: #22c55e; }
+.user-pill[data-rank="moderator"] .user-name { color: #86efac; }
+
+/* SUPPORT — Cyan with clean border accent */
+.user-pill[data-rank="support"] {
+    border-color: rgba(6, 182, 212, 0.25);
+    background: linear-gradient(135deg, rgba(6, 182, 212, 0.06), rgba(8, 145, 178, 0.03));
+    box-shadow: inset 0 1px 0 rgba(6, 182, 212, 0.06);
+}
+.user-pill[data-rank="support"]:hover {
+    border-color: rgba(6, 182, 212, 0.4);
+    box-shadow: 0 0 12px rgba(6, 182, 212, 0.12), inset 0 1px 0 rgba(6, 182, 212, 0.08);
+}
+.user-pill[data-rank="support"] .user-avatar {
+    border-color: #06b6d4;
+}
+.user-pill[data-rank="support"] .user-avatar-initial { color: #06b6d4; }
+.user-pill[data-rank="support"] .user-name { color: #67e8f9; }
+
+/* Shared shimmer animation */
+@keyframes rankShimmer {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
 }
 
 /* ==================== MAIN CONTENT ==================== */
