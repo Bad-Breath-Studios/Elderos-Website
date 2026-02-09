@@ -1,0 +1,125 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - SESSION MANAGER STYLES
+   Warning overlay for session timeout
+   ============================================================ */
+
+/* ==================== SESSION WARNING OVERLAY ==================== */
+.session-warning-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.session-warning-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ==================== WARNING CARD ==================== */
+.session-warning-card {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--warning);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.15);
+    width: 100%;
+    max-width: 420px;
+    padding: var(--spacing-xl);
+    text-align: center;
+    transform: scale(0.95) translateY(20px);
+    transition: transform var(--transition-base);
+}
+
+.session-warning-overlay.active .session-warning-card {
+    transform: scale(1) translateY(0);
+}
+
+/* ==================== WARNING ICON ==================== */
+.session-warning-icon {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto var(--spacing-lg);
+    background-color: var(--warning-muted);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: session-pulse 2s ease-in-out infinite;
+}
+
+.session-warning-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--warning);
+}
+
+@keyframes session-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.85; }
+}
+
+/* ==================== WARNING TEXT ==================== */
+.session-warning-title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--warning);
+    margin-bottom: var(--spacing-sm);
+}
+
+.session-warning-message {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+.session-warning-countdown {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ==================== WARNING ACTIONS ==================== */
+.session-warning-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.session-warning-actions .btn {
+    min-width: 140px;
+}
+
+/* Draft indicator */
+.session-warning-drafts {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: rgba(245, 158, 11, 0.1);
+    border-radius: var(--radius-md);
+    font-size: var(--text-xs);
+    color: var(--warning);
+}
+
+/* ==================== DRAFT RESTORE TOAST ==================== */
+.draft-restore-toast {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.draft-restore-toast .btn {
+    flex-shrink: 0;
+}

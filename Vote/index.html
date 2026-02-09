@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elderos — Vote</title>
+    <meta name="description" content="Vote for Elderos on top-list sites, earn rewards, track your streak, and compete on the weekly leaderboard.">
+    <meta property="og:title" content="Elderos Vote">
+    <meta property="og:description" content="Vote for Elderos on top-list sites, earn rewards, track your streak, and compete on the weekly leaderboard.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/x-icon" href="assets/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/vote.css?v=1">
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div class="top-loader" id="top-loader"></div>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <a href="https://elderos.io" class="nav-logo">
+            <img src="assets/logo.png?v=2" alt="Elderos" class="nav-logo-img">
+            <span class="nav-logo-text">ELDEROS</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="https://elderos.io#features" class="nav-link">Features</a>
+            <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+            <a href="https://hiscores.elderos.io" class="nav-link">Hiscores</a>
+            <a href="#" class="nav-link active">Vote</a>
+            <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+            <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
+        </div>
+
+        <div id="user-info"></div>
+
+        <div class="nav-hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="https://elderos.io#features" class="nav-link">Features</a>
+        <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+        <a href="https://hiscores.elderos.io" class="nav-link">Hiscores</a>
+        <a href="#" class="nav-link active">Vote</a>
+        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+        <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
+    </div>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>Log In to Vote</h2>
+            <p class="login-sub">Use your Elderos game account</p>
+            <form id="login-form">
+                <input type="text" id="login-username" class="login-field" placeholder="Username" autocomplete="username">
+                <input type="password" id="login-password" class="login-field" placeholder="Password" autocomplete="current-password">
+                <button type="submit" class="login-btn">Log In</button>
+                <div id="login-error"></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="page-wrapper">
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Elderos <span class="accent">Vote</span></h1>
+            <p class="sub">Vote daily, earn rewards, and climb the leaderboard</p>
+        </section>
+
+        <!-- Error Banner -->
+        <div id="error-banner"></div>
+
+        <!-- Claim Banner -->
+        <div id="claim-banner"></div>
+
+        <!-- Status Banner (streak, stats) -->
+        <div id="status-banner"></div>
+
+        <!-- Vote Sites Grid -->
+        <div id="vote-sites">
+            <div class="auth-message">Loading...</div>
+        </div>
+
+        <!-- Daily Progress -->
+        <div id="daily-progress"></div>
+
+        <!-- Streak Roadmap -->
+        <div id="streak-roadmap"></div>
+
+        <!-- Two-Column: Rewards + Leaderboard -->
+        <div class="two-column">
+            <div class="panel" id="rewards-panel">
+                <h3>Rewards</h3>
+                <div class="auth-message">Loading rewards...</div>
+            </div>
+            <div class="panel">
+                <h3>Weekly Leaderboard</h3>
+                <div id="leaderboard">
+                    <div class="lb-empty">Loading leaderboard...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donator Rank Progress -->
+        <div id="rank-progress"></div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 Elderos. All rights reserved. | <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord</a></p>
+        </footer>
+
+    </div>
+
+    <!-- JS -->
+    <script src="js/config.js?v=1"></script>
+    <script src="js/auth.js?v=1"></script>
+    <script src="js/api.js?v=1"></script>
+    <script src="js/vote.js?v=1"></script>
+</body>
+</html>

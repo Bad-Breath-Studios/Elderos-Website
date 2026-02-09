@@ -1,0 +1,187 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - PLAYER LOGS STYLES
+   ============================================================ */
+
+.player-logs-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Filters */
+.player-logs-filters {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.player-logs-filter-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.player-logs-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.player-logs-filter-group label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.player-logs-select,
+.player-logs-input {
+    background: var(--bg-default);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    min-width: 140px;
+}
+
+.player-logs-input-small {
+    min-width: 60px;
+    max-width: 80px;
+}
+
+.player-logs-select:focus,
+.player-logs-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.player-logs-filter-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.player-logs-filter-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.player-logs-filter-btn:hover {
+    filter: brightness(1.1);
+}
+
+.player-logs-filter-clear {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.player-logs-filter-clear:hover {
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+}
+
+/* Table */
+.player-logs-table-wrapper {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.player-logs-data-table {
+    width: 100%;
+}
+
+.player-logs-data-table .log-details-cell {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Activity badges */
+.activity-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.activity-badge.success { background: rgba(46, 160, 67, 0.15); color: #3fb950; }
+.activity-badge.info { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+.activity-badge.warning { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+.activity-badge.danger { background: rgba(248, 81, 73, 0.15); color: #f85149; }
+.activity-badge.neutral { background: rgba(139, 148, 158, 0.15); color: #8b949e; }
+
+/* Loading & Empty */
+.player-logs-loading,
+.player-logs-empty {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.player-logs-empty-text {
+    font-size: 14px;
+}
+
+/* Pagination */
+.player-logs-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-default);
+}
+
+.player-logs-page-info {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.player-logs-page-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.player-logs-page-btn {
+    background: var(--bg-default);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.player-logs-page-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.player-logs-page-btn:not(:disabled):hover {
+    border-color: var(--accent);
+}
+
+.player-logs-page-label {
+    font-size: 13px;
+    color: var(--text-muted);
+}

@@ -1,0 +1,194 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - ITEM SEARCH & HISCORES STYLES
+   ============================================================ */
+
+/* ==================== ITEM FILTER BAR ==================== */
+.item-filter-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+}
+
+.item-selected-info {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    font-style: italic;
+}
+
+.item-selected-info.has-item {
+    color: #eab308;
+    font-style: normal;
+    font-weight: var(--font-medium);
+}
+
+.item-filter-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.item-filter-group label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+}
+
+.item-filter-input {
+    width: 80px;
+    padding: 4px 8px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.item-filter-input:focus {
+    outline: none;
+    border-color: var(--info);
+}
+
+.item-filter-select {
+    padding: 4px 8px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.item-filter-select:focus {
+    outline: none;
+    border-color: var(--info);
+}
+
+/* ==================== ITEM RESULTS TABLE ==================== */
+.item-qty {
+    font-weight: var(--font-semibold);
+    color: #eab308;
+    font-variant-numeric: tabular-nums;
+}
+
+.badge-inventory { background-color: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.badge-equipment { background-color: rgba(234, 179, 8, 0.15); color: #eab308; }
+.badge-bank { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.badge-mode { background-color: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+
+/* ==================== HISCORES BUILDER ==================== */
+.hiscores-builder {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+}
+
+.hiscores-builder-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.hiscore-select {
+    padding: 6px 10px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.hiscore-select:focus {
+    outline: none;
+    border-color: var(--info);
+}
+
+.hiscore-value-group {
+    align-items: center;
+    gap: 4px;
+}
+
+.hiscore-input {
+    width: 60px;
+    padding: 6px 8px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    text-align: center;
+}
+
+.hiscore-input:focus {
+    outline: none;
+    border-color: var(--info);
+}
+
+.hiscore-range-sep {
+    color: var(--text-tertiary);
+    font-size: 13px;
+}
+
+.hiscore-add-btn {
+    padding: 6px 14px;
+    border: 1px solid #14b8a6;
+    border-radius: var(--radius-sm);
+    background: rgba(20, 184, 166, 0.15);
+    color: #14b8a6;
+    font-size: 13px;
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.hiscore-add-btn:hover {
+    background: rgba(20, 184, 166, 0.25);
+}
+
+.hiscore-conditions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--spacing-sm);
+}
+
+.hiscore-empty {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-style: italic;
+    padding: 4px 0;
+}
+
+.hiscore-tag {
+    border-color: rgba(20, 184, 166, 0.3) !important;
+    background-color: rgba(20, 184, 166, 0.08) !important;
+}
+
+/* ==================== HISCORES RESULTS ==================== */
+.skill-level {
+    font-weight: var(--font-semibold);
+    color: #14b8a6;
+}
+
+.skill-xp {
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+.total-level {
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}

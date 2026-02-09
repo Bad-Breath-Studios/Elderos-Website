@@ -1,0 +1,257 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - WORLDS OVERVIEW
+   ============================================================ */
+
+/* Page Header */
+.worlds-page-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.worlds-refresh-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.worlds-refresh-label {
+    color: var(--text-tertiary);
+    font-size: 13px;
+}
+
+.worlds-refresh-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.worlds-refresh-btn:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    border-color: var(--border-strong);
+}
+
+/* Grid */
+.worlds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--spacing-lg);
+    padding-bottom: var(--spacing-2xl);
+}
+
+/* World Card */
+.worlds-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.worlds-card:hover {
+    border-color: var(--border-default);
+    box-shadow: var(--shadow-md);
+}
+
+/* Card Header */
+.worlds-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+}
+
+.worlds-card-title h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 6px 0;
+}
+
+.worlds-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.worlds-card-region {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+/* Flag icon (shared by worlds + widgets) */
+.worlds-flag-icon {
+    width: 16px;
+    height: 12px;
+    object-fit: cover;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+/* Type Badge */
+.world-type-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.world-type-badge.eco,
+.world-type-badge.economy {
+    background: var(--success-muted);
+    color: var(--success);
+}
+
+.world-type-badge.pvp {
+    background: var(--error-muted);
+    color: var(--error);
+}
+
+.world-type-badge.league,
+.world-type-badge.leagues {
+    background: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.world-type-badge.custom,
+.world-type-badge.customs {
+    background: var(--info-muted);
+    color: var(--info);
+}
+
+/* Stats Row */
+.worlds-card-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-sm) 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--spacing-sm);
+}
+
+.world-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: default;
+}
+
+.world-stat-item svg {
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+}
+
+.world-stat-value {
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Uptime */
+.worlds-card-uptime {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+}
+
+/* Action Buttons */
+.worlds-card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.world-action-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+}
+
+.world-action-btn:hover:not(:disabled) {
+    border-color: var(--border-strong);
+    color: var(--text-primary);
+}
+
+.world-action-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.world-action-btn.loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Button color accents */
+.world-action-btn.start:hover:not(:disabled) {
+    background: var(--success-muted);
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.world-action-btn.stop:hover:not(:disabled) {
+    background: var(--error-muted);
+    border-color: var(--error);
+    color: var(--error);
+}
+
+.world-action-btn.restart:hover:not(:disabled) {
+    background: var(--warning-muted);
+    border-color: var(--warning);
+    color: var(--warning);
+}
+
+.world-action-btn.update:hover:not(:disabled) {
+    background: var(--info-muted);
+    border-color: var(--info);
+    color: var(--info);
+}
+
+/* Status Pill — reuses global status-pill from widgets.css */
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .worlds-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .worlds-card-stats {
+        flex-wrap: wrap;
+        gap: var(--spacing-md);
+    }
+
+    .worlds-card-actions {
+        flex-wrap: wrap;
+    }
+
+    .world-action-btn {
+        flex: 1 1 calc(50% - 4px);
+    }
+}

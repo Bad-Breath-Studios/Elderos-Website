@@ -1,0 +1,453 @@
+/* ============================================================
+   STORE CONFIG EDITOR PAGE
+   Visual mode styles + mode toggle
+   ============================================================ */
+
+.store-config-page {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: calc(100vh - 140px);
+}
+
+/* Mode Toggle Bar */
+.sc-mode-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.sc-mode-toggle {
+    display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.sc-mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border: none;
+    background: transparent;
+    color: #808080;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sc-mode-btn:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sc-mode-btn.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.sc-mode-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.05);
+    color: #c0c0c0;
+}
+
+/* Code container fills space */
+#sc-code-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+#sc-code-container .config-editor-page {
+    flex: 1;
+}
+
+/* Visual Editor Container */
+#sc-visual-container {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.sc-visual-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 24px;
+}
+
+.sc-visual-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #808080;
+}
+
+/* Section Cards */
+.sc-section {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+}
+
+.sc-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.sc-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e8e8;
+}
+
+.sc-section-title svg {
+    color: #808080;
+}
+
+.sc-count {
+    font-weight: 400;
+    color: #808080;
+    font-size: 12px;
+}
+
+.sc-section-badge {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.sc-section-body {
+    padding: 18px;
+}
+
+.sc-empty {
+    color: #4a4a4a;
+    font-size: 13px;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Form Grid */
+.sc-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.sc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sc-field.sc-full {
+    grid-column: 1 / -1;
+}
+
+.sc-field label {
+    font-size: 11px;
+    font-weight: 500;
+    color: #808080;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sc-input, .sc-textarea, .sc-select {
+    padding: 8px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #e8e8e8;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.sc-input:focus, .sc-textarea:focus, .sc-select:focus {
+    border-color: rgba(59, 130, 246, 0.5);
+}
+
+.sc-input.sc-mono, .sc-textarea.sc-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+}
+
+.sc-textarea {
+    resize: vertical;
+    min-height: 40px;
+}
+
+.sc-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.sc-select option {
+    background: #1a1a1a;
+    color: #e8e8e8;
+}
+
+/* Color Field */
+.sc-color-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sc-color-picker {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+    background: transparent;
+}
+
+.sc-color-text {
+    flex: 1;
+}
+
+/* Toggle Switch */
+.sc-toggle {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.sc-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.sc-toggle-slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    transition: all 0.2s;
+}
+
+.sc-toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 2px;
+    top: 2px;
+    background: #808080;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.sc-toggle input:checked + .sc-toggle-slider {
+    background: rgba(59, 130, 246, 0.3);
+}
+
+.sc-toggle input:checked + .sc-toggle-slider::before {
+    transform: translateX(18px);
+    background: #60a5fa;
+}
+
+/* Banner Cards */
+.sc-banner-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sc-banner-card {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.sc-banner-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sc-banner-index {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4a4a4a;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.sc-banner-title {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: #c0c0c0;
+}
+
+.sc-banner-card-body {
+    padding: 14px;
+}
+
+/* Product Cards */
+.sc-product-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sc-product-card {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.sc-product-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.sc-product-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.sc-product-card-header:hover {
+    filter: brightness(1.1);
+}
+
+.sc-product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sc-product-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: #e8e8e8;
+}
+
+.sc-product-id {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #808080;
+}
+
+.sc-product-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sc-product-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffb400;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.sc-product-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.sc-product-badge-hot { background: rgba(239, 68, 68, 0.3); color: #f87171; }
+.sc-product-badge-new { background: rgba(34, 197, 94, 0.3); color: #4ade80; }
+.sc-product-badge-sale { background: rgba(255, 180, 0, 0.3); color: #ffb400; }
+.sc-product-badge-best { background: rgba(59, 130, 246, 0.3); color: #60a5fa; }
+.sc-product-badge-limited { background: rgba(168, 85, 247, 0.3); color: #c084fc; }
+
+.sc-product-featured {
+    color: #ffb400;
+    font-size: 16px;
+}
+
+.sc-product-card-body {
+    padding: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sc-product-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Icon Button */
+.sc-icon-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.03);
+    color: #808080;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sc-icon-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #c0c0c0;
+}
+
+.sc-remove-banner, .sc-remove-product {
+    color: #808080;
+}
+
+.sc-remove-banner:hover, .sc-remove-product:hover {
+    color: #f87171;
+    border-color: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.08);
+}
+
+@media (max-width: 768px) {
+    .sc-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .sc-mode-bar {
+        justify-content: center;
+    }
+}

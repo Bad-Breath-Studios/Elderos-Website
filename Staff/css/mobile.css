@@ -1,0 +1,345 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - MOBILE RESPONSIVE OVERRIDES
+   ============================================================ */
+
+/* ==================== TOUCH OPTIMIZATIONS ==================== */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase touch targets */
+    .btn,
+    .nav-item,
+    .tab,
+    .popup-tab,
+    .action-btn,
+    .quick-filter-btn {
+        min-height: 44px;
+    }
+
+    /* Disable hover effects on touch devices */
+    .btn:hover,
+    .nav-item:hover,
+    .card:hover,
+    .stat-card:hover,
+    .linked-account-item:hover,
+    .data-table tbody tr:hover {
+        transform: none;
+    }
+
+    /* Add active states instead */
+    .btn:active {
+        transform: scale(0.98);
+    }
+
+    .nav-item:active,
+    .tab:active,
+    .action-btn:active {
+        background-color: var(--bg-card-hover);
+    }
+}
+
+/* ==================== SMALL PHONES (375px) ==================== */
+@media (max-width: 375px) {
+    :root {
+        --spacing-lg: 20px;
+        --spacing-xl: 24px;
+        --spacing-2xl: 32px;
+    }
+
+    body {
+        font-size: 14px;
+    }
+
+    .login-card {
+        padding: var(--spacing-md);
+    }
+
+    .login-logo {
+        width: 56px;
+        height: 56px;
+    }
+
+    .login-title {
+        font-size: var(--text-lg);
+    }
+
+    .code-input {
+        width: 36px;
+        height: 44px;
+        font-size: var(--text-lg);
+    }
+
+    .code-input-container {
+        gap: 4px;
+    }
+
+    .page-title {
+        font-size: var(--text-base);
+    }
+
+    .stat-card {
+        padding: var(--spacing-sm);
+    }
+
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .stat-value {
+        font-size: var(--text-lg);
+    }
+
+    .table-header,
+    .table-footer {
+        padding: var(--spacing-sm);
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--text-xs);
+    }
+
+    .pagination-btn {
+        width: 28px;
+        height: 28px;
+        font-size: var(--text-xs);
+    }
+}
+
+/* ==================== STANDARD PHONES (390px - 428px) ==================== */
+@media (min-width: 376px) and (max-width: 480px) {
+    .page-content {
+        padding: var(--spacing-md);
+    }
+
+    .stats-grid {
+        gap: var(--spacing-sm);
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-sm);
+    }
+
+    .section-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* ==================== TABLETS (768px) ==================== */
+@media (min-width: 481px) and (max-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Show sidebar as overlay on tablets */
+    .sidebar {
+        width: 280px;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* ==================== LANDSCAPE PHONES ==================== */
+@media (max-height: 500px) and (orientation: landscape) {
+    .login-page {
+        padding: var(--spacing-sm);
+        align-items: flex-start;
+    }
+
+    .login-card {
+        padding: var(--spacing-md);
+    }
+
+    .login-header {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .login-logo {
+        width: 48px;
+        height: 48px;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .step-indicator {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .form-group {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .form-input {
+        height: 40px;
+    }
+
+    .login-btn {
+        height: 40px;
+        margin-top: var(--spacing-sm);
+    }
+
+    .login-footer {
+        margin-top: var(--spacing-md);
+        padding-top: var(--spacing-md);
+    }
+
+    /* Modal adjustments */
+    .modal {
+        flex-direction: row;
+        max-height: 100vh;
+    }
+
+    .modal-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+}
+
+/* ==================== SAFE AREA INSETS (iPhone X+) ==================== */
+@supports (padding: max(0px)) {
+    .login-page {
+        padding-left: max(var(--spacing-md), env(safe-area-inset-left));
+        padding-right: max(var(--spacing-md), env(safe-area-inset-right));
+        padding-bottom: max(var(--spacing-md), env(safe-area-inset-bottom));
+    }
+
+    .sidebar {
+        padding-left: max(0px, env(safe-area-inset-left));
+        padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+
+    .main-header {
+        padding-right: max(var(--spacing-xl), env(safe-area-inset-right));
+    }
+
+    .page-content {
+        padding-left: max(var(--spacing-md), env(safe-area-inset-left));
+        padding-right: max(var(--spacing-md), env(safe-area-inset-right));
+    }
+
+    .modal-footer {
+        padding-bottom: max(var(--spacing-lg), env(safe-area-inset-bottom));
+    }
+}
+
+/* ==================== PULL-TO-REFRESH SPACE ==================== */
+@media (max-width: 768px) {
+    .page-content {
+        /* Prevent overscroll bounce on iOS */
+        overscroll-behavior-y: contain;
+    }
+}
+
+/* ==================== TEXT SIZE ADJUSTMENTS ==================== */
+@media (max-width: 768px) {
+    /* Prevent iOS font size inflation */
+    html {
+        -webkit-text-size-adjust: 100%;
+    }
+
+    /* Ensure inputs don't zoom on focus (iOS) */
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+}
+
+/* ==================== DARK MODE SYSTEM PREFERENCE ==================== */
+@media (prefers-color-scheme: light) {
+    /* We're always dark, but this ensures consistency */
+    :root {
+        color-scheme: dark;
+    }
+}
+
+/* ==================== HIGH CONTRAST MODE ==================== */
+@media (prefers-contrast: high) {
+    :root {
+        --border-subtle: rgba(255, 255, 255, 0.15);
+        --border-default: rgba(255, 255, 255, 0.25);
+        --border-strong: rgba(255, 255, 255, 0.35);
+        --text-secondary: rgba(255, 255, 255, 0.85);
+        --text-tertiary: rgba(255, 255, 255, 0.7);
+    }
+
+    .btn {
+        border: 2px solid currentColor;
+    }
+
+    .form-input {
+        border-width: 2px;
+    }
+
+    .badge {
+        border: 1px solid currentColor;
+    }
+}
+
+/* ==================== REDUCED DATA MODE ==================== */
+@media (prefers-reduced-data: reduce) {
+    /* Disable non-essential images */
+    .player-avatar img,
+    .user-avatar img {
+        display: none;
+    }
+
+    .player-avatar,
+    .user-avatar {
+        background-color: var(--bg-tertiary);
+    }
+
+    /* Show initials instead */
+    .player-avatar-initial,
+    .user-avatar-initial,
+    .avatar-initial {
+        display: flex !important;
+    }
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+    .sidebar,
+    .main-header,
+    .modal-backdrop,
+    .btn,
+    .pagination,
+    .search-container,
+    .nav-item {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .page-content {
+        padding: 0;
+        max-width: 100%;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .data-table {
+        border: 1px solid #000;
+    }
+
+    .data-table th,
+    .data-table td {
+        border: 1px solid #000;
+        color: black;
+        background: white;
+    }
+}

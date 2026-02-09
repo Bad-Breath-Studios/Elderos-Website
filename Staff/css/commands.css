@@ -1,0 +1,733 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - GAME COMMANDS
+   ============================================================ */
+
+/* Three-column layout */
+.commands-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr 260px;
+    gap: var(--spacing-lg);
+    min-height: 0;
+    padding-bottom: var(--spacing-2xl);
+}
+
+/* === Left Sidebar === */
+
+.commands-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.commands-sidebar-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+}
+
+.commands-sidebar-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Quick Actions */
+.cmd-quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.cmd-quick-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 8px 10px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+
+.cmd-quick-btn:hover {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.cmd-quick-btn svg {
+    flex-shrink: 0;
+    color: var(--text-tertiary);
+}
+
+.cmd-quick-btn:hover svg {
+    color: var(--accent);
+}
+
+/* Recent Commands */
+.cmd-recent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.cmd-recent-empty {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 0;
+}
+
+.cmd-recent-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.15s ease;
+    text-align: left;
+}
+
+.cmd-recent-item:hover {
+    background: var(--bg-elevated);
+}
+
+.cmd-recent-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.cmd-recent-type {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* === Center Panel === */
+
+.commands-main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    min-width: 0;
+}
+
+/* Toolbar */
+.cmd-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.cmd-world-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.cmd-world-selector label {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+}
+
+.cmd-select {
+    padding: 7px 12px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    min-width: 160px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.cmd-select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.cmd-select option {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    padding: 8px 12px;
+}
+
+.cmd-search-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.cmd-search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.cmd-search {
+    width: 100%;
+    padding: 7px 12px 7px 34px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.cmd-search:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.cmd-search::placeholder {
+    color: var(--text-muted);
+}
+
+/* Command Browser */
+.cmd-browser {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+/* Category Accordion */
+.cmd-category {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.cmd-category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px var(--spacing-md);
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s ease;
+}
+
+.cmd-category-header:hover {
+    background: var(--bg-elevated);
+}
+
+.cmd-category-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.cmd-category-chevron {
+    color: var(--text-tertiary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.cmd-category.open .cmd-category-chevron {
+    transform: rotate(90deg);
+}
+
+.cmd-category-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.cmd-category-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-tertiary);
+}
+
+/* Category body hidden by default */
+.cmd-category-body {
+    display: none;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.cmd-category.open .cmd-category-body {
+    display: block;
+}
+
+/* Command Item */
+.cmd-item {
+    padding: 10px var(--spacing-md);
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background 0.15s ease;
+}
+
+.cmd-item:last-child {
+    border-bottom: none;
+}
+
+.cmd-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.cmd-item.highlighted {
+    background: var(--accent-muted);
+    transition: background 0.3s ease;
+}
+
+.cmd-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cmd-item-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.cmd-item-icon {
+    font-size: 16px;
+}
+
+.cmd-item-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.cmd-item-desc {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+    padding-left: 28px;
+}
+
+.cmd-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Danger badge */
+.cmd-danger-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    background: var(--error-muted);
+    color: var(--error);
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Execute / Expand buttons */
+.cmd-execute-btn,
+.cmd-expand-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.15s ease;
+}
+
+.cmd-execute-btn:hover {
+    background: var(--accent-muted);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.cmd-expand-btn:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+.cmd-execute-btn.with-params {
+    margin-top: var(--spacing-sm);
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* Param Form */
+.cmd-param-form {
+    display: none;
+    padding: var(--spacing-md) 0 var(--spacing-sm) 28px;
+}
+
+.cmd-param-form.visible {
+    display: block;
+}
+
+.cmd-param-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.cmd-param-label {
+    font-size: 12px;
+    color: var(--text-secondary);
+    min-width: 80px;
+}
+
+.cmd-param-label .required {
+    color: var(--error);
+}
+
+.cmd-param-input {
+    flex: 1;
+    padding: 6px 10px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 13px;
+    font-family: inherit;
+}
+
+.cmd-param-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.cmd-param-input[type="checkbox"] {
+    flex: unset;
+    width: 16px;
+    height: 16px;
+}
+
+/* No results */
+.cmd-no-results {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.cmd-no-results-text {
+    color: var(--text-tertiary);
+    font-size: 14px;
+}
+
+/* === Right Panel — Command Log === */
+
+.commands-log {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 180px);
+}
+
+.commands-log-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px var(--spacing-md);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.commands-log-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+}
+
+.cmd-log-clear {
+    padding: 2px 8px;
+    background: transparent;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    color: var(--text-tertiary);
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.cmd-log-clear:hover {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+}
+
+.cmd-log-entries {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm);
+}
+
+.cmd-log-empty {
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-md);
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.cmd-log-entry {
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 4px;
+    transition: background 0.15s ease;
+}
+
+.cmd-log-entry:hover {
+    background: var(--bg-elevated);
+}
+
+.cmd-log-entry-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.cmd-log-time {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+}
+
+.cmd-log-cmd {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-primary);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cmd-log-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.cmd-log-status.success {
+    background: var(--success);
+    box-shadow: 0 0 6px var(--success);
+}
+
+.cmd-log-status.failed {
+    background: var(--error);
+    box-shadow: 0 0 6px var(--error);
+}
+
+.cmd-log-status.pending {
+    background: var(--warning);
+    box-shadow: 0 0 6px var(--warning);
+    animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.cmd-log-entry-detail {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: 2px;
+    padding-left: 0;
+}
+
+.cmd-log-target {
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+.cmd-log-message {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* === Danger Confirmation Modal === */
+
+.danger-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.danger-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--error);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 0 40px rgba(239, 68, 68, 0.2);
+}
+
+.danger-modal-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.danger-modal-header svg {
+    color: var(--error);
+}
+
+.danger-modal-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--error);
+    margin: 0;
+}
+
+.danger-modal p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 var(--spacing-sm) 0;
+    line-height: 1.5;
+}
+
+.danger-confirm-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: var(--spacing-md);
+    box-sizing: border-box;
+}
+
+.danger-confirm-input:focus {
+    outline: none;
+    border-color: var(--error);
+}
+
+.danger-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+}
+
+.danger-cancel-btn {
+    padding: 8px 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.danger-cancel-btn:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+.danger-execute-btn {
+    padding: 8px 16px;
+    background: var(--error-muted);
+    border: 1px solid var(--error);
+    border-radius: var(--radius-md);
+    color: var(--error);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.danger-execute-btn:hover:not(:disabled) {
+    background: var(--error);
+    color: white;
+}
+
+.danger-execute-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 1024px) {
+    .commands-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .commands-sidebar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .commands-log {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .commands-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .cmd-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cmd-world-selector {
+        width: 100%;
+    }
+
+    .cmd-select {
+        flex: 1;
+    }
+}

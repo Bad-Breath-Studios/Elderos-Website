@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Elderos Staff Management Panel">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Dashboard - Elderos Staff</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- CodeMirror 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/monokai.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/global.css?v=20">
+    <link rel="stylesheet" href="css/dashboard.css?v=18">
+    <link rel="stylesheet" href="css/table.css?v=18">
+    <link rel="stylesheet" href="css/search.css?v=19">
+    <link rel="stylesheet" href="css/popup.css?v=18">
+    <link rel="stylesheet" href="css/news.css?v=19">
+    <link rel="stylesheet" href="css/player-view.css?v=22">
+    <link rel="stylesheet" href="css/field-config.css?v=20">
+    <link rel="stylesheet" href="css/widgets.css?v=2">
+    <link rel="stylesheet" href="css/session-manager.css?v=25">
+    <link rel="stylesheet" href="css/worlds.css?v=4">
+    <link rel="stylesheet" href="css/commands.css?v=2">
+    <link rel="stylesheet" href="css/staff-logs.css?v=2">
+    <link rel="stylesheet" href="css/punishments.css?v=2">
+    <link rel="stylesheet" href="css/bans.css?v=1">
+    <link rel="stylesheet" href="css/mutes.css?v=1">
+    <link rel="stylesheet" href="css/timeouts.css?v=1">
+    <link rel="stylesheet" href="css/player-logs.css?v=1">
+    <link rel="stylesheet" href="css/chat-logs.css?v=4">
+    <link rel="stylesheet" href="css/system-logs.css?v=1">
+    <link rel="stylesheet" href="css/ashpire-controls.css?v=5">
+    <link rel="stylesheet" href="css/config-editor.css?v=1">
+    <link rel="stylesheet" href="css/store-config.css?v=2">
+    <link rel="stylesheet" href="css/ashpire-revenue.css?v=1">
+    <link rel="stylesheet" href="css/telemetry.css?v=3">
+    <link rel="stylesheet" href="css/item-search.css?v=1">
+    <link rel="stylesheet" href="css/hub-config.css?v=1">
+    <link rel="stylesheet" href="css/mobile.css?v=18">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar Overlay (mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <img src="assets/logo.png" alt="Elderos" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'color: var(--accent); font-size: 24px; font-weight: 700;\'>ELDEROS</span>';">
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <!-- Main (always visible) -->
+                <div class="nav-section" id="nav-section-main">
+                    <div class="nav-section-title">Main</div>
+                    <a href="#dashboard" class="nav-item active" data-page="dashboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                        <span class="nav-item-label">Dashboard</span>
+                    </a>
+                    <a href="#players" class="nav-item" data-page="players">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        <span class="nav-item-label">Players</span>
+                    </a>
+                </div>
+
+                <!-- Moderation -->
+                <div class="nav-section" id="nav-section-moderation" style="display: none;">
+                    <div class="nav-section-title">Moderation</div>
+                    <a href="#reports" class="nav-item" data-page="reports">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                            <line x1="4" y1="22" x2="4" y2="15"/>
+                        </svg>
+                        <span class="nav-item-label">Reports</span>
+                        <span class="nav-item-badge" id="reportsCount" style="display: none;">0</span>
+                    </a>
+                    <a href="#bans" class="nav-item" data-page="bans">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                        </svg>
+                        <span class="nav-item-label">Bans</span>
+                    </a>
+                    <a href="#mutes" class="nav-item" data-page="mutes">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <line x1="23" y1="9" x2="17" y2="15"/>
+                            <line x1="17" y1="9" x2="23" y2="15"/>
+                        </svg>
+                        <span class="nav-item-label">Mutes</span>
+                    </a>
+                    <a href="#timeouts" class="nav-item" data-page="timeouts">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                            <line x1="1" y1="1" x2="23" y2="23"/>
+                        </svg>
+                        <span class="nav-item-label">Timeouts</span>
+                    </a>
+                </div>
+
+                <!-- Logs -->
+                <div class="nav-section" id="nav-section-logs" style="display: none;">
+                    <div class="nav-section-title">Logs</div>
+                    <a href="#staff-logs" class="nav-item" data-page="staff-logs">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10 9 9 9 8 9"/>
+                        </svg>
+                        <span class="nav-item-label">Staff Logs</span>
+                    </a>
+                    <a href="#player-logs" class="nav-item" data-page="player-logs">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="8.5" cy="7" r="4"/>
+                            <path d="M17 11h4M19 9v4"/>
+                        </svg>
+                        <span class="nav-item-label">Player Logs</span>
+                    </a>
+                    <a href="#chat-logs" class="nav-item" data-page="chat-logs">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                        <span class="nav-item-label">Chat Logs</span>
+                    </a>
+                </div>
+
+                <!-- Content -->
+                <div class="nav-section" id="nav-section-content" style="display: none;">
+                    <div class="nav-section-title">Content</div>
+                    <a href="#news" class="nav-item" data-page="news">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
+                        </svg>
+                        <span class="nav-item-label">News</span>
+                    </a>
+                </div>
+
+                <!-- Worlds -->
+                <div class="nav-section" id="nav-section-worlds" style="display: none;">
+                    <div class="nav-section-title">Worlds</div>
+                    <a href="#worlds-overview" class="nav-item" data-page="worlds-overview">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span class="nav-item-label">Overview</span>
+                    </a>
+                    <a href="#worlds-commands" class="nav-item" data-page="worlds-commands">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="4 17 10 11 4 5"/>
+                            <line x1="12" y1="19" x2="20" y2="19"/>
+                        </svg>
+                        <span class="nav-item-label">Commands</span>
+                    </a>
+                </div>
+
+                <!-- System (Developer/Owner only) -->
+                <div class="nav-section" id="nav-section-system" style="display: none;">
+                    <div class="nav-section-title">System</div>
+                    <a href="#field-config" class="nav-item" data-page="field-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                        <span class="nav-item-label">Field Config</span>
+                    </a>
+                    <a href="#store-config" class="nav-item" data-page="store-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 2L3 7v13a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-3-5z"/>
+                            <line x1="3" y1="7" x2="21" y2="7"/>
+                            <path d="M16 11a4 4 0 0 1-8 0"/>
+                        </svg>
+                        <span class="nav-item-label">Store Config</span>
+                    </a>
+                    <a href="#system-logs" class="nav-item" data-page="system-logs">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                        <span class="nav-item-label">System Logs</span>
+                    </a>
+                </div>
+
+                <!-- Ashpire (Owner account only) -->
+                <div class="nav-section" id="nav-section-ashpire" style="display: none;">
+                    <div class="nav-section-title">Ashpire</div>
+                    <a href="#ashpire-revenue" class="nav-item" data-page="ashpire-revenue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            <polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                        <span class="nav-item-label">Revenue</span>
+                    </a>
+                    <a href="#ashpire-controls" class="nav-item" data-page="ashpire-controls">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="4" y1="21" x2="4" y2="14"/>
+                            <line x1="4" y1="10" x2="4" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="12"/>
+                            <line x1="12" y1="8" x2="12" y2="3"/>
+                            <line x1="20" y1="21" x2="20" y2="16"/>
+                            <line x1="20" y1="12" x2="20" y2="3"/>
+                            <line x1="1" y1="14" x2="7" y2="14"/>
+                            <line x1="9" y1="8" x2="15" y2="8"/>
+                            <line x1="17" y1="16" x2="23" y2="16"/>
+                        </svg>
+                        <span class="nav-item-label">Controls</span>
+                    </a>
+                    <a href="#hub-config" class="nav-item" data-page="hub-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        <span class="nav-item-label">Hub Config</span>
+                    </a>
+                    <a href="#worlds-config" class="nav-item" data-page="worlds-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        <span class="nav-item-label">Worlds Config</span>
+                    </a>
+                </div>
+            </nav>
+
+            <!-- User Section -->
+            <div class="sidebar-user">
+                <div class="user-pill" id="userPill">
+                    <div class="user-avatar" id="userAvatar">
+                        <span class="user-avatar-initial" id="userInitial">?</span>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Loading...</div>
+                        <div class="user-role" id="userRole"></div>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn" title="Logout">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="online-counter">
+                        <div class="online-dot"></div>
+                        <span class="online-count" id="onlineCount">0</span>
+                        <span class="online-label">online</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <div class="page" id="page-dashboard">
+                    <div id="widgets-container"></div>
+                </div>
+
+                <!-- Players Page -->
+                <div class="page hidden" id="page-players">
+                    <!-- Search Section -->
+                    <div class="section">
+                        <div class="player-search-wrapper" style="position: relative;">
+                            <!-- Search Bar -->
+                            <div class="search-container" id="playerSearch">
+                                <!-- Mode Selector -->
+                                <button class="search-mode-btn" id="searchModeBtn" type="button">
+                                    <div class="search-mode-icon blue" id="searchModeIcon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="12" cy="7" r="4"/>
+                                        </svg>
+                                    </div>
+                                    <span class="search-mode-label" id="searchModeLabel">Player</span>
+                                    <svg class="search-mode-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </button>
+
+                                <!-- Mode Dropdown (hidden by default) -->
+                                <div class="search-mode-dropdown" id="searchModeDropdown" style="display: none; position: absolute; top: 100%; left: 0; z-index: 1000; min-width: 280px; background: var(--bg-elevated); border: 1px solid var(--border-default); border-radius: 8px; margin-top: 4px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                                    <div class="search-mode-option active" data-mode="PLAYER">
+                                        <div class="mode-option-icon blue">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                                <circle cx="12" cy="7" r="4"/>
+                                            </svg>
+                                        </div>
+                                        <div class="mode-option-info">
+                                            <div class="mode-option-name">Player</div>
+                                            <div class="mode-option-desc">Search by username</div>
+                                        </div>
+                                        <span class="mode-option-shortcut">Tab</span>
+                                    </div>
+                                    <div class="search-mode-option" data-mode="IP" data-permission="VIEW_IP">
+                                        <div class="mode-option-icon purple">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="mode-option-info">
+                                            <div class="mode-option-name">IP Address</div>
+                                            <div class="mode-option-desc">Find players by IP</div>
+                                        </div>
+                                        <span class="mode-option-shortcut">ip:</span>
+                                    </div>
+                                    <div class="search-mode-option" data-mode="UID">
+                                        <div class="mode-option-icon orange">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                            </svg>
+                                        </div>
+                                        <div class="mode-option-info">
+                                            <div class="mode-option-name">Player ID</div>
+                                            <div class="mode-option-desc">Direct lookup by ID</div>
+                                        </div>
+                                        <span class="mode-option-shortcut">uid:</span>
+                                    </div>
+                                    <div class="search-mode-option" data-mode="QUERY" data-permission="QUERY_PLAYERS">
+                                        <div class="mode-option-icon green">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                            </svg>
+                                        </div>
+                                        <div class="mode-option-info">
+                                            <div class="mode-option-name">Query</div>
+                                            <div class="mode-option-desc">Filter by attributes</div>
+                                        </div>
+                                        <span class="mode-option-shortcut">q:</span>
+                                    </div>
+                                    <div class="search-mode-option" data-mode="ITEM" data-permission="SEARCH_ITEMS">
+                                        <div class="mode-option-icon yellow">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                                            </svg>
+                                        </div>
+                                        <div class="mode-option-info">
+                                            <div class="mode-option-name">Item Search</div>
+                                            <div class="mode-option-desc">Find items across all players</div>
+                                        </div>
+                                    </div>
+                                    <div class="search-mode-option" data-mode="HISCORES" data-permission="SEARCH_HISCORES">
+                                        <div class="mode-option-icon teal">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                                <line x1="6" y1="20" x2="6" y2="14"/>
+                                            </svg>
+                                        </div>
+                                        <div class="mode-option-info">
+                                            <div class="mode-option-name">Hiscores</div>
+                                            <div class="mode-option-desc">Search by skill levels</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Search Input -->
+                                <div class="search-input-wrapper">
+                                    <input type="text"
+                                           class="search-input"
+                                           id="searchInput"
+                                           placeholder="Search by player name..."
+                                           autocomplete="off"
+                                           spellcheck="false">
+                                    <button class="search-clear-btn" id="searchClearBtn" type="button">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18"/>
+                                            <line x1="6" y1="6" x2="18" y2="18"/>
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <!-- Search Button -->
+                                <button class="search-submit-btn" id="searchSubmitBtn" type="button">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="11" cy="11" r="8"/>
+                                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                                    </svg>
+                                    <span>Search</span>
+                                </button>
+                            </div>
+
+                            <!-- Query Autocomplete (hidden, only for Query mode) -->
+                            <div id="queryAutocomplete" class="query-autocomplete"></div>
+
+                            <!-- Filter Tags (hidden by default, only for Query mode) -->
+                            <div class="filter-tags-container" id="filterTagsContainer">
+                                <span class="filter-tags-label">Filters:</span>
+                                <div class="filter-tags" id="filterTags"></div>
+                                <button class="filter-clear-all" id="filterClearAll" type="button">Clear all</button>
+                            </div>
+
+                            <!-- Item Filter Bar (hidden by default, only for ITEM mode) -->
+                            <div class="item-filter-bar" id="itemFilterBar" style="display: none;">
+                                <span class="item-selected-info" id="itemSelectedInfo">No item selected</span>
+                                <div class="item-filter-group">
+                                    <label for="itemMinQty">Min Qty:</label>
+                                    <input type="number" id="itemMinQty" value="1" min="1" class="item-filter-input">
+                                </div>
+                                <div class="item-filter-group">
+                                    <label for="itemLocation">Location:</label>
+                                    <select id="itemLocation" class="item-filter-select">
+                                        <option value="all">All</option>
+                                        <option value="inventory">Inventory</option>
+                                        <option value="equipment">Equipment</option>
+                                        <option value="bank">Bank</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Hiscores Condition Builder (hidden by default) -->
+                            <div class="hiscores-builder" id="hiscoresBuilder" style="display: none;">
+                                <div class="hiscores-builder-row">
+                                    <select id="hiscoreSkill" class="hiscore-select">
+                                        <option value="0">Attack</option>
+                                        <option value="1">Defence</option>
+                                        <option value="2">Strength</option>
+                                        <option value="3">Hitpoints</option>
+                                        <option value="4">Ranged</option>
+                                        <option value="5">Prayer</option>
+                                        <option value="6">Magic</option>
+                                        <option value="7">Cooking</option>
+                                        <option value="8">Woodcutting</option>
+                                        <option value="9">Fletching</option>
+                                        <option value="10">Fishing</option>
+                                        <option value="11">Firemaking</option>
+                                        <option value="12">Crafting</option>
+                                        <option value="13">Smithing</option>
+                                        <option value="14">Mining</option>
+                                        <option value="15">Herblore</option>
+                                        <option value="16">Agility</option>
+                                        <option value="17">Thieving</option>
+                                        <option value="18">Slayer</option>
+                                        <option value="19">Farming</option>
+                                        <option value="20">Runecrafting</option>
+                                        <option value="21">Hunter</option>
+                                        <option value="22">Construction</option>
+                                    </select>
+                                    <select id="hiscoreOp" class="hiscore-select" onchange="Search.onHiscoreOpChange()">
+                                        <option value=">=">>=</option>
+                                        <option value="=">=</option>
+                                        <option value="<="><=</option>
+                                        <option value=">">></option>
+                                        <option value="<"><</option>
+                                        <option value="!=">!=</option>
+                                        <option value="between">Between</option>
+                                    </select>
+                                    <div id="hiscoreSingleValue" class="hiscore-value-group" style="display: flex;">
+                                        <input type="number" id="hiscoreValue" value="99" min="1" max="99" class="hiscore-input">
+                                    </div>
+                                    <div id="hiscoreRangeValue" class="hiscore-value-group" style="display: none;">
+                                        <input type="number" id="hiscoreMinValue" value="1" min="1" max="99" class="hiscore-input" placeholder="Min">
+                                        <span class="hiscore-range-sep">-</span>
+                                        <input type="number" id="hiscoreMaxValue" value="99" min="1" max="99" class="hiscore-input" placeholder="Max">
+                                    </div>
+                                    <button class="hiscore-add-btn" type="button" onclick="Search.addHiscoreCondition()">Add</button>
+                                </div>
+                                <div class="hiscore-conditions" id="hiscoreConditions">
+                                    <span class="hiscore-empty">No conditions added yet</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="section">
+                        <div class="table-container" id="playersTable">
+                            <div class="table-header">
+                                <div class="table-title">Players</div>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <!-- Header populated dynamically by Players.js -->
+                                        </tr>
+                                    </thead>
+                                    <tbody id="playersTableBody">
+                                        <!-- Rows populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer">
+                                <div class="table-info">
+                                    Showing <strong>0</strong> of <strong>0</strong> players
+                                </div>
+                                <div class="pagination" id="playersPagination">
+                                    <!-- Pagination populated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item Search Results (hidden by default) -->
+                        <div class="table-container" id="itemSearchResults" style="display: none;">
+                            <div class="table-header">
+                                <div class="table-title" id="itemSearchTitle">Item Search Results</div>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr id="itemSearchHead">
+                                            <!-- Header populated by ItemSearch -->
+                                        </tr>
+                                    </thead>
+                                    <tbody id="itemSearchBody">
+                                        <!-- Rows populated by ItemSearch -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer">
+                                <div class="table-info" id="itemSearchInfo">
+                                    No results
+                                </div>
+                                <div class="pagination" id="itemSearchPagination">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hiscores Search Results (hidden by default) -->
+                        <div class="table-container" id="hiscoreSearchResults" style="display: none;">
+                            <div class="table-header">
+                                <div class="table-title" id="hiscoreSearchTitle">Hiscores Results</div>
+                            </div>
+                            <div class="table-wrapper">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr id="hiscoreSearchHead">
+                                            <!-- Header populated by ItemSearch -->
+                                        </tr>
+                                    </thead>
+                                    <tbody id="hiscoreSearchBody">
+                                        <!-- Rows populated by ItemSearch -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-footer">
+                                <div class="table-info" id="hiscoreSearchInfo">
+                                    No results
+                                </div>
+                                <div class="pagination" id="hiscoreSearchPagination">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div class="page hidden" id="page-reports">
+                    <div class="content-panel">
+                        <div class="panel-body">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                                    <line x1="4" y1="22" x2="4" y2="15"/>
+                                </svg>
+                                <div class="empty-state-title">No open reports</div>
+                                <div class="empty-state-text">Player reports will appear here</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Logs Page -->
+                <div class="page hidden" id="page-staff-logs">
+                    <!-- Content populated by staff-logs.js -->
+                </div>
+
+                <!-- News Page -->
+                <div class="page hidden" id="page-news">
+                    <div class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">News Management</h2>
+                            <div class="section-actions" id="newsActions">
+                                <button class="btn btn-primary" id="createNewsBtn" style="display: none;">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <line x1="12" y1="5" x2="12" y2="19"/>
+                                        <line x1="5" y1="12" x2="19" y2="12"/>
+                                    </svg>
+                                    Create Post
+                                </button>
+                            </div>
+                        </div>
+                        <div class="news-list" id="newsList">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
+                                </svg>
+                                <div class="empty-state-title">No news posts</div>
+                                <div class="empty-state-text">Create your first news post</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Field Config Page (Developer/Owner only) -->
+                <div class="page hidden" id="page-field-config">
+                    <!-- Content populated by field-config.js -->
+                </div>
+
+                <!-- Worlds Overview Page -->
+                <div class="page hidden" id="page-worlds-overview"></div>
+
+                <!-- Game Commands Page -->
+                <div class="page hidden" id="page-worlds-commands"></div>
+
+                <!-- Bans Page -->
+                <div class="page hidden" id="page-bans"></div>
+
+                <!-- Mutes Page -->
+                <div class="page hidden" id="page-mutes"></div>
+
+                <!-- Timeouts Page -->
+                <div class="page hidden" id="page-timeouts"></div>
+
+                <!-- Player Logs Page -->
+                <div class="page hidden" id="page-player-logs"></div>
+
+                <!-- Chat Logs Page -->
+                <div class="page hidden" id="page-chat-logs"></div>
+
+                <!-- System Logs Page -->
+                <div class="page hidden" id="page-system-logs"></div>
+
+                <!-- Store Config Page (Ashpire) -->
+                <div class="page hidden" id="page-store-config"></div>
+
+                <!-- Hub Config Page (Ashpire) -->
+                <div class="page hidden" id="page-hub-config"></div>
+
+                <!-- Worlds Config Page (Ashpire) -->
+                <div class="page hidden" id="page-worlds-config"></div>
+
+                <!-- Revenue Dashboard Page (Ashpire) -->
+                <div class="page hidden" id="page-ashpire-revenue"></div>
+
+                <!-- Ashpire Controls Page -->
+                <div class="page hidden" id="page-ashpire-controls"></div>
+
+                <!-- Footer -->
+                <footer class="dashboard-footer">
+                    <p>© Elderos 2026 - By Ashpire</p>
+                </footer>
+            </div>
+        </main>
+    </div>
+
+    <!-- Player View (Full Page) -->
+    <div id="player-view-container" class="hidden">
+        <!-- Content populated dynamically by PlayerView.js -->
+    </div>
+
+    <!-- Player Popup Modal (for action modals: ban, mute, kick, etc.) -->
+    <div class="modal-backdrop" id="playerPopup">
+        <div class="modal player-popup modal-lg">
+            <!-- Content populated dynamically -->
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Global error handler to catch any JS errors
+        window.onerror = function(msg, url, line, col, error) {
+            console.error('[GLOBAL ERROR]', msg, 'at', url, 'line', line, error);
+            return false;
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('[UNHANDLED PROMISE REJECTION]', event.reason);
+        });
+        console.log('[Boot] Error handlers registered');
+    </script>
+    <script src="js/lib/chart.umd.min.js"></script>
+    <script src="js/lib/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- CodeMirror 5 + YAML mode + js-yaml -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/yaml/yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="js/config.js?v=25"></script>
+    <script src="js/utils.js?v=18"></script>
+    <script src="js/api.js?v=41"></script>
+    <script src="js/auth.js?v=25"></script>
+    <script src="js/session-manager.js?v=25"></script>
+    <script src="js/router.js?v=36"></script>
+    <script src="js/search.js?v=19"></script>
+    <script src="js/players.js?v=26"></script>
+    <script src="js/item-search.js?v=1"></script>
+    <script src="js/popup.js?v=27"></script>
+    <script src="js/player-view.js?v=27"></script>
+    <script src="js/news.js?v=26"></script>
+    <script src="js/field-config.js?v=25"></script>
+    <script src="js/widgets.js?v=4"></script>
+    <script src="js/telemetry.js?v=3"></script>
+    <script src="js/worlds.js?v=5"></script>
+    <script src="js/commands.js?v=1"></script>
+    <script src="js/staff-logs.js?v=2"></script>
+    <script src="js/bans.js?v=2"></script>
+    <script src="js/mutes.js?v=2"></script>
+    <script src="js/timeouts.js?v=2"></script>
+    <script src="js/player-logs.js?v=1"></script>
+    <script src="js/chat-logs.js?v=4"></script>
+    <script src="js/system-logs.js?v=1"></script>
+    <script src="js/config-schemas.js?v=2"></script>
+    <script src="js/config-editor.js?v=2"></script>
+    <script src="js/store-config.js?v=2"></script>
+    <script src="js/ashpire-revenue.js?v=1"></script>
+    <script src="js/ashpire-controls.js?v=5"></script>
+    <script src="js/hub-config.js?v=1"></script>
+    <script src="js/worlds-config.js?v=1"></script>
+    <script src="js/animations.js?v=18"></script>
+    <script>
+        // Initialize dashboard
+        (async function() {
+            'use strict';
+            console.log('[Dashboard] Script started');
+
+            // Check authentication
+            console.log('[Dashboard] Checking auth...');
+            const isValid = await Auth.requireAuth();
+            console.log('[Dashboard] Auth result:', isValid);
+            if (!isValid) {
+                console.log('[Dashboard] Auth failed, returning early');
+                return;
+            }
+
+            // Initialize session manager (idle timeout + draft protection)
+            SessionManager.init();
+
+            // Initialize modules
+            console.log('[Dashboard] Initializing modules...');
+            Router.init();
+            console.log('[Dashboard] Router initialized');
+            Search.init();
+            console.log('[Dashboard] Search initialized');
+            Players.init();
+            console.log('[Dashboard] Players initialized');
+            Popup.init();
+            console.log('[Dashboard] Popup initialized');
+            PlayerView.init();
+            console.log('[Dashboard] PlayerView initialized');
+            News.init();
+            console.log('[Dashboard] News initialized');
+            FieldConfig.init();
+            console.log('[Dashboard] FieldConfig initialized');
+            Widgets.init();
+            console.log('[Dashboard] Widgets initialized');
+            Telemetry.init();
+            console.log('[Dashboard] Telemetry initialized');
+            Worlds.init();
+            console.log('[Dashboard] Worlds initialized');
+            Commands.init();
+            console.log('[Dashboard] Commands initialized');
+            StaffLogs.init();
+            console.log('[Dashboard] StaffLogs initialized');
+            Bans.init();
+            console.log('[Dashboard] Bans initialized');
+            Mutes.init();
+            console.log('[Dashboard] Mutes initialized');
+            Timeouts.init();
+            console.log('[Dashboard] Timeouts initialized');
+            PlayerLogs.init();
+            console.log('[Dashboard] PlayerLogs initialized');
+            ChatLogs.init();
+            console.log('[Dashboard] ChatLogs initialized');
+            SystemLogs.init();
+            console.log('[Dashboard] SystemLogs initialized');
+            StoreConfig.init();
+            console.log('[Dashboard] StoreConfig initialized');
+            AshpireRevenue.init();
+            console.log('[Dashboard] AshpireRevenue initialized');
+            AshpireControls.init();
+            console.log('[Dashboard] AshpireControls initialized');
+            HubConfig.init();
+            console.log('[Dashboard] HubConfig initialized');
+            WorldsConfig.init();
+            console.log('[Dashboard] WorldsConfig initialized');
+            Animations.init();
+            console.log('[Dashboard] Animations initialized');
+
+            // Generate stub pages for future phases
+            generateStubPages();
+
+            // Setup user info
+            setupUserInfo();
+
+            // Setup event listeners
+            setupEventListeners();
+
+            // Load initial dashboard via widgets
+            Widgets.onPageLoad();
+
+            function setupUserInfo() {
+                const user = Auth.getUser();
+                if (!user) return;
+
+                // Username
+                document.getElementById('userName').textContent = user.username;
+
+                // Role badge
+                const roleEl = document.getElementById('userRole');
+                roleEl.innerHTML = Utils.getRoleBadge(user.role);
+
+                // Avatar
+                const avatarUrl = Auth.getAvatarUrl();
+                const avatarEl = document.getElementById('userAvatar');
+                const initialEl = document.getElementById('userInitial');
+
+                if (avatarUrl) {
+                    const img = document.createElement('img');
+                    img.src = avatarUrl;
+                    img.alt = user.username;
+                    img.onerror = () => {
+                        img.remove();
+                        initialEl.style.display = '';
+                    };
+                    initialEl.style.display = 'none';
+                    avatarEl.appendChild(img);
+                } else {
+                    initialEl.textContent = user.username.charAt(0).toUpperCase();
+                }
+
+                // News create button visibility
+                if (Auth.hasPermission(CONFIG.PERMISSIONS.NEWS_CREATE)) {
+                    document.getElementById('createNewsBtn').style.display = '';
+                }
+
+                // Setup sidebar navigation visibility based on permissions
+                setupNavVisibility();
+            }
+
+            function generateStubPages() {
+                // All stub pages now have real implementations (Phase 8)
+                console.log('[Dashboard] All pages implemented');
+            }
+
+            function setupNavVisibility() {
+                const user = Auth.getUser();
+                if (!user) return;
+
+                function showSection(id, condition) {
+                    const el = document.getElementById(id);
+                    if (el && condition) el.style.display = '';
+                }
+
+                function showNavItem(page, condition) {
+                    const el = document.querySelector(`.nav-item[data-page="${page}"]`);
+                    if (el) el.style.display = condition ? '' : 'none';
+                }
+
+                // Main — always visible, but gate individual items
+                showNavItem('players', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_PLAYERS));
+
+                // Moderation
+                const hasMod = Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_REPORTS) ||
+                               Auth.canManageBans() || Auth.canManageMutes() ||
+                               Auth.hasPermission(CONFIG.PERMISSIONS.MANAGE_TIMEOUTS);
+                showSection('nav-section-moderation', hasMod);
+                showNavItem('reports', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_REPORTS));
+                showNavItem('bans', Auth.canManageBans());
+                showNavItem('mutes', Auth.canManageMutes());
+                showNavItem('timeouts', Auth.hasPermission(CONFIG.PERMISSIONS.MANAGE_TIMEOUTS));
+
+                // Logs
+                const hasLogs = Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_LOGS) ||
+                                Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_PLAYER_LOGS) ||
+                                Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_CHAT_LOGS);
+                showSection('nav-section-logs', hasLogs);
+                showNavItem('staff-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_LOGS));
+                showNavItem('player-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_PLAYER_LOGS));
+                showNavItem('chat-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_CHAT_LOGS));
+
+                // Content
+                showSection('nav-section-content', Auth.hasPermission(CONFIG.PERMISSIONS.NEWS_CREATE));
+
+                // Worlds
+                const hasWorlds = Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_WORLDS) ||
+                                  Auth.hasPermission(CONFIG.PERMISSIONS.EXECUTE_COMMANDS);
+                showSection('nav-section-worlds', hasWorlds);
+                showNavItem('worlds-overview', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_WORLDS));
+                showNavItem('worlds-commands', Auth.hasPermission(CONFIG.PERMISSIONS.EXECUTE_COMMANDS));
+
+                // System (Developer+ role)
+                const isDev = user.role === 'DEVELOPER' || user.role === 'OWNER';
+                showSection('nav-section-system', isDev);
+                showNavItem('store-config', Auth.hasPermission(CONFIG.PERMISSIONS.MANAGE_STORE));
+                showNavItem('system-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_SYSTEM_LOGS));
+
+                // Ashpire
+                showSection('nav-section-ashpire', Auth.isAshpire());
+
+                console.log('[Dashboard] Nav visibility configured');
+            }
+
+            function setupEventListeners() {
+                // Mobile menu
+                document.getElementById('mobileMenuBtn').addEventListener('click', toggleSidebar);
+                document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    Auth.logout();
+                });
+
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = item.dataset.page;
+                        if (page) {
+                            Router.navigate(page);
+                            closeSidebar();
+                        }
+                    });
+                });
+            }
+
+            function toggleSidebar() {
+                document.getElementById('sidebar').classList.toggle('open');
+                document.getElementById('sidebarOverlay').classList.toggle('show');
+            }
+
+            function closeSidebar() {
+                document.getElementById('sidebar').classList.remove('open');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+
+        })();
+    </script>
+</body>
+</html>

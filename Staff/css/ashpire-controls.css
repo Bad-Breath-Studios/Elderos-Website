@@ -1,0 +1,460 @@
+/* ============================================================
+   ASHPIRE CONTROLS PAGE
+   ============================================================ */
+
+.ashpire-controls-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+/* Warning Banner */
+.ashpire-warning-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(255, 180, 0, 0.08);
+    border: 1px solid rgba(255, 180, 0, 0.25);
+    border-radius: 10px;
+    color: #ffb400;
+}
+
+.ashpire-warning-banner svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.ashpire-warning-banner strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.ashpire-warning-banner p {
+    font-size: 13px;
+    color: rgba(255, 180, 0, 0.8);
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Toggle Row */
+.ashpire-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    gap: 24px;
+}
+
+.ashpire-toggle-info {
+    flex: 1;
+}
+
+.ashpire-toggle-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e8e8;
+    margin-bottom: 4px;
+}
+
+.ashpire-toggle-desc {
+    font-size: 13px;
+    color: #808080;
+    line-height: 1.4;
+}
+
+/* Rank selector row — label + dropdown on one line, description below */
+.ashpire-rank-row {
+    padding: 16px 0;
+}
+
+.ashpire-rank-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 6px;
+}
+
+.ashpire-rank-header .ashpire-select {
+    max-width: 260px;
+}
+
+.ashpire-toggle-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Toggle Switch */
+.ashpire-toggle {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.ashpire-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.ashpire-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #2a2a2a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 26px;
+    transition: all 0.25s ease;
+}
+
+.ashpire-toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background: #808080;
+    border-radius: 50%;
+    transition: all 0.25s ease;
+}
+
+.ashpire-toggle input:checked + .ashpire-toggle-slider {
+    background: rgba(244, 14, 0, 0.2);
+    border-color: rgba(244, 14, 0, 0.4);
+}
+
+.ashpire-toggle input:checked + .ashpire-toggle-slider::before {
+    transform: translateX(22px);
+    background: #f40e00;
+}
+
+.ashpire-toggle input:focus + .ashpire-toggle-slider {
+    box-shadow: 0 0 0 2px rgba(244, 14, 0, 0.2);
+}
+
+/* Select Dropdown */
+.ashpire-select {
+    appearance: none;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #e8e8e8;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 32px 8px 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    min-width: 200px;
+    flex-shrink: 0;
+}
+
+.ashpire-select:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ashpire-select:focus {
+    outline: none;
+    border-color: rgba(244, 14, 0, 0.4);
+    box-shadow: 0 0 0 2px rgba(244, 14, 0, 0.15);
+}
+
+.ashpire-select:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ashpire-select option {
+    background: #1a1a1a;
+    color: #e8e8e8;
+}
+
+/* In-Panel Status Footer */
+.ashpire-panel-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 10px 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 13px;
+    color: #808080;
+}
+
+.ashpire-panel-status.lockdown-active {
+    color: #f87171;
+}
+
+.ashpire-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4a4a4a;
+    flex-shrink: 0;
+    transition: background 0.25s ease;
+}
+
+.ashpire-status-dot.active {
+    background: #f40e00;
+    box-shadow: 0 0 8px rgba(244, 14, 0, 0.4);
+}
+
+.ashpire-status-dot.lockdown {
+    background: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+/* Update Agent button in worlds page */
+.world-action-btn.update-agent {
+    background: rgba(147, 51, 234, 0.1);
+    color: #a78bfa;
+    border-color: rgba(147, 51, 234, 0.3);
+}
+
+.world-action-btn.update-agent:hover:not(:disabled) {
+    background: rgba(147, 51, 234, 0.2);
+    border-color: rgba(147, 51, 234, 0.5);
+}
+
+/* ============================================================
+   COLLAPSIBLE SECTIONS
+   ============================================================ */
+
+.ashpire-section {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+}
+
+.ashpire-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    user-select: none;
+}
+
+.ashpire-section-header:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.ashpire-section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #e8e8e8;
+    margin: 0;
+}
+
+.ashpire-section-title svg {
+    color: #808080;
+}
+
+.ashpire-section-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ashpire-section-chevron {
+    color: #808080;
+    transition: transform 0.2s ease;
+}
+
+.ashpire-section-header.collapsed .ashpire-section-chevron {
+    transform: rotate(-90deg);
+}
+
+.ashpire-section-body {
+    padding: 0 20px 20px;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+}
+
+.ashpire-section-body.collapsed {
+    max-height: 0;
+    padding: 0 20px;
+}
+
+/* Refresh Button */
+.ashpire-refresh-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #808080;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ashpire-refresh-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #c0c0c0;
+}
+
+.ashpire-refresh-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ashpire-refresh-btn.spinning svg {
+    animation: ashpire-spin 0.8s linear infinite;
+}
+
+@keyframes ashpire-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Loading & Empty States */
+.ashpire-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #808080;
+    font-size: 13px;
+}
+
+.ashpire-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #808080;
+    font-size: 13px;
+}
+
+/* ============================================================
+   STAFF SESSIONS TABLE
+   ============================================================ */
+
+.ashpire-sessions-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ashpire-sessions-table th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: #808080;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ashpire-sessions-table td {
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #c0c0c0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.ashpire-sessions-table tr:last-child td {
+    border-bottom: none;
+}
+
+.ashpire-session-user {
+    font-weight: 500;
+    color: #e8e8e8;
+}
+
+.ashpire-session-you {
+    font-size: 11px;
+    color: #60a5fa;
+    font-weight: 400;
+}
+
+.ashpire-session-time {
+    font-variant-numeric: tabular-nums;
+}
+
+.ashpire-session-ip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #808080;
+}
+
+.ashpire-role-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ashpire-role-badge.role-owner {
+    background: rgba(244, 14, 0, 0.12);
+    color: #f40e00;
+}
+
+.ashpire-role-badge.role-developer {
+    background: rgba(147, 51, 234, 0.12);
+    color: #a78bfa;
+}
+
+.ashpire-role-badge.role-administrator {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+}
+
+.ashpire-role-badge.role-moderator {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+}
+
+.ashpire-role-badge.role-support {
+    background: rgba(255, 180, 0, 0.12);
+    color: #ffb400;
+}
+
+/* Kick Button (replaces old Revoke) */
+.ashpire-session-kick-btn {
+    padding: 4px 12px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    background: rgba(239, 68, 68, 0.06);
+    color: #f87171;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.ashpire-session-kick-btn:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.ashpire-session-kick-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+

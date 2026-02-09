@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elderos Hiscores</title>
+    <meta name="description" content="Elderos OSRS hiscores — view skill rankings, player stats, and leaderboards.">
+    <meta property="og:title" content="Elderos Hiscores">
+    <meta property="og:description" content="Elderos OSRS hiscores — view skill rankings, player stats, and leaderboards.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/hiscores.css?v=7">
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div class="top-loader" id="top-loader"></div>
+
+    <!-- Navigation -->
+    <nav id="nav">
+        <a href="https://elderos.io" class="nav-logo">
+            <img src="assets/logo.png?v=2" alt="Elderos" class="nav-logo-img">
+            <span class="nav-logo-text">ELDEROS</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="https://elderos.io#features" class="nav-link">Features</a>
+            <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+            <a href="#" class="nav-link active">Hiscores</a>
+            <a href="https://vote.elderos.io" class="nav-link">Vote</a>
+            <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+            <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
+        </div>
+
+        <div class="nav-hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="https://elderos.io#features" class="nav-link">Features</a>
+        <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+        <a href="#" class="nav-link active">Hiscores</a>
+        <a href="https://vote.elderos.io" class="nav-link">Vote</a>
+        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+        <a href="https://play.elderos.io" class="nav-cta">Play Now</a>
+    </div>
+
+    <div class="page-wrapper">
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1>Elderos <span class="accent">Hiscores</span></h1>
+            <p class="sub">Tracking <span class="count" id="player-count">—</span> adventurers across Gielinor</p>
+        </section>
+
+        <!-- Mobile search (tablet/mobile only) -->
+        <div class="mobile-search" style="max-width:1400px;margin:0 auto 12px;padding:0 12px;">
+            <input type="text" class="search-input" id="m-search-input" placeholder="Search player...">
+            <button class="search-btn" id="m-search-btn">Search</button>
+        </div>
+
+        <!-- Main Content (leaderboard view) -->
+        <div id="main-content">
+            <!-- Main Grid -->
+            <div class="main-grid">
+
+                <!-- Left Sidebar -->
+                <aside class="sidebar" id="sidebar">
+                    <!-- Populated by JS -->
+                </aside>
+
+                <!-- Center Content -->
+                <section class="content-panel">
+
+                    <!-- Mode Tabs -->
+                    <div class="mode-tabs" id="mode-tabs">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Donator Filter -->
+                    <div class="filter-row" id="donator-chips">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Leaderboard Table -->
+                    <div class="table-wrapper">
+                        <div class="table-container">
+                            <table class="hiscores-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:60px">Rank</th>
+                                        <th>Player</th>
+                                        <th class="col-grade" style="width:70px">Grade</th>
+                                        <th class="col-level" style="width:80px;text-align:right">Level</th>
+                                        <th style="width:120px;text-align:right">Experience</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="pagination" id="pagination">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Player Profile (inline, hidden by default) -->
+                    <div id="profile-content" class="profile-content" style="display:none"></div>
+
+                </section>
+
+                <!-- Right Panel -->
+                <aside class="right-panel">
+
+                    <!-- Player Search -->
+                    <div class="panel-card">
+                        <div class="card-title">Player Lookup</div>
+                        <div class="search-group">
+                            <input type="text" class="search-input" id="search-input" placeholder="Enter username...">
+                            <button class="search-btn" id="search-btn">Go</button>
+                        </div>
+                    </div>
+
+                    <!-- Jump to Rank -->
+                    <div class="panel-card">
+                        <div class="card-title">Jump to Rank</div>
+                        <div class="search-group">
+                            <input type="number" class="search-input" id="jump-input" placeholder="Rank #" min="1">
+                            <button class="search-btn" id="jump-btn">Go</button>
+                        </div>
+                    </div>
+
+                    <!-- Compare -->
+                    <div class="panel-card compare-card">
+                        <div class="card-title">Compare Players</div>
+                        <button class="search-btn compare-full-btn" id="compare-btn">Compare</button>
+                        <div class="compare-note">Side-by-side skill comparison — coming soon.</div>
+                    </div>
+
+                </aside>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="js/hiscores.js?v=7"></script>
+    <script>
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const menu = document.getElementById('mobileMenu');
+            const isOpen = menu.classList.contains('open');
+            if (isOpen) {
+                menu.style.opacity = '0';
+                menu.style.transform = 'translateY(-10px)';
+                setTimeout(() => menu.classList.remove('open'), 300);
+            } else {
+                menu.classList.add('open');
+                requestAnimationFrame(() => {
+                    menu.style.opacity = '1';
+                    menu.style.transform = 'translateY(0)';
+                });
+            }
+            this.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

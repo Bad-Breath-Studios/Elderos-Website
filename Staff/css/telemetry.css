@@ -1,0 +1,250 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - TELEMETRY CHARTS
+   ============================================================ */
+
+/* Detail panel that expands below a world card */
+.telemetry-detail {
+    grid-column: 1 / -1;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: var(--spacing-lg);
+    margin-top: var(--spacing-sm);
+    animation: telemetry-slide-in 0.2s ease-out;
+}
+
+@keyframes telemetry-slide-in {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Range pill bar */
+.telemetry-range-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: var(--spacing-md);
+    padding: 3px;
+    background: var(--bg-default);
+    border-radius: 6px;
+    width: fit-content;
+    position: relative;
+    transition: opacity 0.2s ease;
+}
+
+.telemetry-range-bar.refreshing::after {
+    content: '';
+    position: absolute;
+    right: -28px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: telemetry-spin 0.6s linear infinite;
+}
+
+.telemetry-range-pill {
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    font-weight: var(--font-medium);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.telemetry-range-pill:hover {
+    color: var(--text-primary);
+    background: var(--bg-subtle);
+}
+
+.telemetry-range-pill.active {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* Chart grid */
+.telemetry-chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (max-width: 1024px) {
+    .telemetry-chart-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Individual chart card */
+.telemetry-chart-card {
+    background: var(--bg-default);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: var(--spacing-md);
+    transition: all 0.25s ease;
+}
+
+/* Expanded chart: full width + taller */
+.telemetry-chart-card.expanded {
+    grid-column: 1 / -1;
+    border-color: var(--accent);
+}
+
+.telemetry-chart-card.expanded .telemetry-chart-wrapper {
+    height: 400px;
+}
+
+.telemetry-chart-card.expanded .telemetry-expand-btn svg {
+    transform: rotate(180deg);
+}
+
+/* Hidden cards when another is expanded */
+.telemetry-chart-card.hidden {
+    display: none;
+}
+
+.telemetry-chart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-sm);
+}
+
+.telemetry-chart-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.telemetry-chart-title {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+/* Expand button */
+.telemetry-expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.telemetry-expand-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-subtle);
+}
+
+.telemetry-expand-btn svg {
+    transition: transform 0.2s ease;
+}
+
+.telemetry-chart-stats {
+    display: flex;
+    gap: var(--spacing-md);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+}
+
+.telemetry-stat-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.telemetry-stat-label .value {
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.telemetry-chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    transition: height 0.25s ease;
+}
+
+.telemetry-chart-wrapper canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Sparkline for widget */
+.telemetry-sparkline {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+.telemetry-sparkline svg {
+    display: block;
+}
+
+/* Status colors for thresholds */
+.telemetry-status-green { color: var(--green-500, #22c55e); }
+.telemetry-status-yellow { color: var(--yellow-500, #eab308); }
+.telemetry-status-red { color: var(--accent); }
+
+/* Click hint on world cards */
+.worlds-card.expandable {
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+}
+
+.worlds-card.expandable:hover {
+    border-color: var(--border-hover, var(--border-default));
+}
+
+.worlds-card.expanded {
+    border-color: var(--accent);
+}
+
+/* Loading state */
+.telemetry-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: var(--spacing-xl);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}
+
+/* Spinner */
+.telemetry-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: telemetry-spin 0.6s linear infinite;
+}
+
+@keyframes telemetry-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* No data state */
+.telemetry-no-data {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+}

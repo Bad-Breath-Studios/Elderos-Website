@@ -1,0 +1,208 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - SYSTEM LOGS STYLES
+   ============================================================ */
+
+.system-logs-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Filters */
+.system-logs-filters {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.system-logs-filter-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.system-logs-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.system-logs-filter-group label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.system-logs-select,
+.system-logs-input {
+    background: var(--bg-default);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    min-width: 140px;
+}
+
+.system-logs-select:focus,
+.system-logs-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.system-logs-filter-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.system-logs-filter-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.system-logs-filter-btn:hover {
+    filter: brightness(1.1);
+}
+
+.system-logs-filter-clear {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.system-logs-filter-clear:hover {
+    color: var(--text-primary);
+    border-color: var(--text-muted);
+}
+
+/* Table */
+.system-logs-table-wrapper {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.system-logs-data-table {
+    width: 100%;
+}
+
+.system-logs-data-table .system-message-cell {
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.system-logs-data-table .system-details-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Level badges */
+.level-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.5px;
+}
+
+.level-badge.info { background: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+.level-badge.warn { background: rgba(210, 153, 34, 0.15); color: #d29922; }
+.level-badge.error { background: rgba(248, 81, 73, 0.15); color: #f85149; }
+
+/* Source badge */
+.source-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(139, 148, 158, 0.12);
+    color: #8b949e;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Row highlights */
+.system-log-row.row-error {
+    background: rgba(248, 81, 73, 0.04);
+}
+
+.system-log-row.row-warn {
+    background: rgba(210, 153, 34, 0.04);
+}
+
+/* Loading & Empty */
+.system-logs-loading,
+.system-logs-empty {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.system-logs-empty-text {
+    font-size: 14px;
+}
+
+/* Pagination */
+.system-logs-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-default);
+}
+
+.system-logs-page-info {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.system-logs-page-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.system-logs-page-btn {
+    background: var(--bg-default);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.system-logs-page-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.system-logs-page-btn:not(:disabled):hover {
+    border-color: var(--accent);
+}
+
+.system-logs-page-label {
+    font-size: 13px;
+    color: var(--text-muted);
+}

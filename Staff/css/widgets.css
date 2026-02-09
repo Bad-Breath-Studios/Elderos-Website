@@ -1,0 +1,517 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - WIDGET STYLES
+   ============================================================ */
+
+/* ==================== WIDGET CONTAINER ==================== */
+#widgets-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-xl);
+}
+
+/* ==================== ROLE PREVIEW BAR (Ashpire only) ==================== */
+.widget-preview-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: rgba(139, 92, 246, 0.08);
+    border: 1px dashed rgba(139, 92, 246, 0.3);
+    border-radius: var(--radius-md);
+    color: #a78bfa;
+    font-size: var(--text-sm);
+}
+
+.widget-preview-bar svg {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.preview-label {
+    font-weight: var(--font-medium);
+    white-space: nowrap;
+}
+
+.preview-select {
+    padding: 4px 8px;
+    background-color: rgba(139, 92, 246, 0.12);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: var(--radius-sm);
+    color: #c4b5fd;
+    font-size: var(--text-sm);
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+}
+
+.preview-select:focus {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15);
+}
+
+.preview-select option {
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+}
+
+.preview-badge {
+    margin-left: auto;
+    padding: 2px 8px;
+    background-color: rgba(139, 92, 246, 0.2);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-bold);
+    color: #a78bfa;
+    letter-spacing: 1px;
+}
+
+/* ==================== WIDGET BASE ==================== */
+.widget {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--transition-base);
+}
+
+.widget:hover {
+    border-color: var(--border-default);
+}
+
+.widget-full {
+    width: 100%;
+}
+
+.widget-half {
+    width: calc(50% - var(--spacing-sm));
+}
+
+/* ==================== WIDGET HEADER ==================== */
+.widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.widget-title {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.widget-refresh {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--text-muted);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.widget-refresh.active {
+    opacity: 1;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+/* ==================== WIDGET BODY ==================== */
+.widget-body {
+    padding: var(--spacing-lg);
+}
+
+.widget-loading {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    padding: var(--spacing-lg);
+}
+
+.widget-error {
+    text-align: center;
+    color: var(--error);
+    font-size: var(--text-sm);
+    padding: var(--spacing-lg);
+}
+
+/* ==================== OVERVIEW STAT CARDS (inside widget) ==================== */
+.widget-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.widget-stat-card {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    transition: border-color var(--transition-fast);
+}
+
+.widget-stat-card:hover {
+    border-color: var(--border-default);
+}
+
+.widget-stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.widget-stat-icon svg {
+    width: 22px;
+    height: 22px;
+}
+
+.widget-stat-icon.blue {
+    background-color: var(--info-muted);
+    color: var(--info);
+}
+
+.widget-stat-icon.green {
+    background-color: var(--success-muted);
+    color: var(--success);
+}
+
+.widget-stat-icon.orange {
+    background-color: var(--accent-muted);
+    color: var(--accent);
+}
+
+.widget-stat-icon.red {
+    background-color: var(--error-muted);
+    color: var(--error);
+}
+
+.widget-stat-icon.purple {
+    background-color: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+}
+
+.widget-stat-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.widget-stat-label {
+    font-size: var(--text-sm);
+    color: var(--text-tertiary);
+    margin-bottom: 2px;
+}
+
+.widget-stat-value {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+/* ==================== WORLD STATUS CARDS ==================== */
+.widget-worlds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.world-card {
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    transition: border-color var(--transition-fast);
+}
+
+.world-card:hover {
+    border-color: var(--border-default);
+}
+
+.world-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+}
+
+.world-card-name {
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.world-card-meta {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* Status pills */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+}
+
+.status-pill.running {
+    background-color: var(--success-muted);
+    color: var(--success);
+}
+
+.status-pill.running .status-pill-dot {
+    background-color: var(--success);
+}
+
+.status-pill.offline {
+    background-color: var(--error-muted);
+    color: var(--error);
+}
+
+.status-pill.offline .status-pill-dot {
+    background-color: var(--error);
+}
+
+.status-pill.updating {
+    background-color: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+}
+
+.status-pill.updating .status-pill-dot {
+    background-color: #eab308;
+}
+
+.status-pill.unreachable {
+    background-color: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+}
+
+.status-pill.unreachable .status-pill-dot {
+    background-color: #9ca3af;
+}
+
+.world-card-stats-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-sm) 0;
+}
+
+.world-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+}
+
+.world-stat-item svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.world-stat-val {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+}
+
+.world-card-uptime {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ==================== SERVICE STATUS TABLE ==================== */
+.widget-services-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.widget-services-table th {
+    text-align: left;
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.widget-services-table td {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.widget-services-table tr:last-child td {
+    border-bottom: none;
+}
+
+.widget-services-table tr:hover td {
+    background-color: var(--bg-elevated);
+}
+
+.svc-color-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    margin-right: var(--spacing-xs);
+}
+
+.svc-name {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.svc-state {
+    font-weight: var(--font-semibold);
+}
+
+.svc-state.online {
+    color: var(--success);
+}
+
+.svc-state.offline {
+    color: var(--text-muted);
+}
+
+.svc-state.connecting,
+.svc-state.disconnecting {
+    color: #eab308;
+}
+
+.svc-traffic {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--text-secondary);
+}
+
+/* ==================== SYSTEM HEALTH (Ashpire) ==================== */
+.widget-health-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.health-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--spacing-sm);
+    background-color: var(--bg-elevated);
+    border-radius: var(--radius-md);
+}
+
+.health-item-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.health-item-value {
+    font-size: var(--text-sm);
+    font-weight: var(--font-semibold);
+    color: var(--text-primary);
+}
+
+.health-item-value.error {
+    color: var(--error);
+}
+
+.health-item-value.ok {
+    color: var(--success);
+}
+
+/* ==================== RECENT ACTIVITY TABLE ==================== */
+.widget-activity-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.widget-activity-table th {
+    text-align: left;
+    font-size: var(--text-xs);
+    font-weight: var(--font-semibold);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.widget-activity-table td {
+    font-size: var(--text-sm);
+    color: var(--text-primary);
+    padding: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.widget-activity-table tr:last-child td {
+    border-bottom: none;
+}
+
+.widget-empty {
+    text-align: center;
+    padding: var(--spacing-lg);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+/* ==================== MOBILE RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .widget-half {
+        width: 100%;
+    }
+
+    .widget-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .widget-worlds-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .widget-services-table th:nth-child(4),
+    .widget-services-table td:nth-child(4),
+    .widget-services-table th:nth-child(5),
+    .widget-services-table td:nth-child(5) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .widget-stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .widget-body {
+        padding: var(--spacing-md);
+    }
+
+    .widget-header {
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+}
