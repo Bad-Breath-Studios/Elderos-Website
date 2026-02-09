@@ -14,7 +14,7 @@ const ItemData = (() => {
     let _items = null;      // items map from manifest
     let _meta = null;       // meta block
     let _loading = null;    // loading promise (dedup)
-    let _searchIndex = null; // [{id, nameLower}]
+    let _searchIndex = null; // [{id, nameLower, noted}]
 
     const SIZES = {
         sm: { w: 24, h: 21, scale: 24 / 36 },
@@ -22,13 +22,37 @@ const ItemData = (() => {
         lg: { w: 48, h: 43, scale: 48 / 36 }
     };
 
+    // Smaller scale for the base item inside a noted composite
+    const NOTED_INNER_RATIO = 0.55;
+
     function _buildSearchIndex() {
         if (!_items) return;
         _searchIndex = [];
         for (const id of Object.keys(_items)) {
             const entry = _items[id];
-            _searchIndex.push({ id: parseInt(id), nameLower: entry.n.toLowerCase() });
+            _searchIndex.push({ id: parseInt(id), nameLower: entry.n.toLowerCase(), noted: !!entry.nt });
         }
+    }
+
+    function _preloadSpriteSheet() {
+        if (!_meta) return;
+        const img = new Image();
+        img.src = '/shared/sprites/items-0.png';
+    }
+
+    /** Resolve a noted item's base entry (follows the ln chain) */
+    function _resolveBase(entry) {
+        if (!entry || !entry.nt || !entry.ln) return null;
+        const base = _items[String(entry.ln)];
+        // Don't follow chains deeper than 1
+        return (base && !base.nt) ? base : null;
+    }
+
+    /** Apply sprite background to an element for a normal (non-noted) entry */
+    function _applySpriteStyle(el, entry, size) {
+        el.style.backgroundImage = `url('/shared/sprites/items-${entry.s}.png')`;
+        el.style.backgroundPosition = `-${entry.x * size.scale}px -${entry.y * size.scale}px`;
+        el.style.backgroundSize = `${_meta.cols * _meta.spriteWidth * size.scale}px auto`;
     }
 
     return {
@@ -47,6 +71,7 @@ const ItemData = (() => {
                     _meta = json.meta;
                     _items = json.items;
                     _buildSearchIndex();
+                    _preloadSpriteSheet();
                     console.log(`[ItemData] Loaded ${_meta.totalItems} items`);
                 })
                 .catch(err => {
@@ -62,14 +87,33 @@ const ItemData = (() => {
             return _data !== null;
         },
 
+        /** Check if an item is a noted variant */
+        isNoted(itemId) {
+            if (!_items) return false;
+            const entry = _items[String(itemId)];
+            return entry ? !!entry.nt : false;
+        },
+
         /** Get item entry by ID */
         get(itemId) {
             if (!_items) return null;
             const entry = _items[String(itemId)];
             if (!entry) return null;
+            if (entry.nt) {
+                return {
+                    id: itemId,
+                    name: entry.n,
+                    noted: true,
+                    baseItemId: entry.ln,
+                    tradeable: entry.tr,
+                    stackable: entry.st,
+                    value: entry.v
+                };
+            }
             return {
                 id: itemId,
                 name: entry.n,
+                noted: false,
                 sheet: entry.s,
                 x: entry.x,
                 y: entry.y,
@@ -93,6 +137,7 @@ const ItemData = (() => {
 
         /**
          * Create a <div> element with the item's sprite as background.
+         * For noted items, renders a composite: note background + base item scaled down.
          * @param {number} itemId
          * @param {Object} [options]
          * @param {string} [options.size='md'] - 'sm' (24x21), 'md' (36x32), 'lg' (48x43)
@@ -102,29 +147,48 @@ const ItemData = (() => {
             const size = SIZES[options.size] || SIZES.md;
             const el = document.createElement('div');
             el.className = 'item-icon';
+            el.style.width = size.w + 'px';
+            el.style.height = size.h + 'px';
 
             if (!_items) {
                 el.classList.add('item-icon--missing');
-                el.style.width = size.w + 'px';
-                el.style.height = size.h + 'px';
                 return el;
             }
 
             const entry = _items[String(itemId)];
             if (!entry) {
                 el.classList.add('item-icon--missing');
-                el.style.width = size.w + 'px';
-                el.style.height = size.h + 'px';
                 return el;
             }
 
-            el.style.width = size.w + 'px';
-            el.style.height = size.h + 'px';
-            el.style.backgroundImage = `url('/shared/sprites/items-${entry.s}.png')`;
-            el.style.backgroundPosition = `-${entry.x * size.scale}px -${entry.y * size.scale}px`;
-            el.style.backgroundSize = `${_meta.cols * _meta.spriteWidth * size.scale}px auto`;
-            el.title = entry.n;
+            // Noted item — composite icon
+            if (entry.nt) {
+                const base = _resolveBase(entry);
+                if (!base) {
+                    el.classList.add('item-icon--missing');
+                    return el;
+                }
 
+                el.classList.add('item-icon--noted');
+                el.title = entry.n + ' (noted)';
+
+                // Inner sprite: base item scaled down
+                const inner = document.createElement('div');
+                inner.className = 'item-icon-noted-inner';
+                const innerScale = size.scale * NOTED_INNER_RATIO;
+                inner.style.backgroundImage = `url('/shared/sprites/items-${base.s}.png')`;
+                inner.style.backgroundPosition = `-${base.x * innerScale}px -${base.y * innerScale}px`;
+                inner.style.backgroundSize = `${_meta.cols * _meta.spriteWidth * innerScale}px auto`;
+                inner.style.width = Math.round(size.w * NOTED_INNER_RATIO) + 'px';
+                inner.style.height = Math.round(size.h * NOTED_INNER_RATIO) + 'px';
+
+                el.appendChild(inner);
+                return el;
+            }
+
+            // Normal item
+            _applySpriteStyle(el, entry, size);
+            el.title = entry.n;
             return el;
         },
 
@@ -137,28 +201,44 @@ const ItemData = (() => {
          */
         applyIcon(element, itemId, options = {}) {
             const size = SIZES[options.size] || SIZES.md;
+            element.style.width = size.w + 'px';
+            element.style.height = size.h + 'px';
 
             if (!_items) {
                 element.classList.add('item-icon', 'item-icon--missing');
-                element.style.width = size.w + 'px';
-                element.style.height = size.h + 'px';
                 return;
             }
 
             const entry = _items[String(itemId)];
             if (!entry) {
                 element.classList.add('item-icon', 'item-icon--missing');
-                element.style.width = size.w + 'px';
-                element.style.height = size.h + 'px';
                 return;
             }
 
             element.classList.add('item-icon');
-            element.style.width = size.w + 'px';
-            element.style.height = size.h + 'px';
-            element.style.backgroundImage = `url('/shared/sprites/items-${entry.s}.png')`;
-            element.style.backgroundPosition = `-${entry.x * size.scale}px -${entry.y * size.scale}px`;
-            element.style.backgroundSize = `${_meta.cols * _meta.spriteWidth * size.scale}px auto`;
+
+            if (entry.nt) {
+                const base = _resolveBase(entry);
+                if (!base) {
+                    element.classList.add('item-icon--missing');
+                    return;
+                }
+                element.classList.add('item-icon--noted');
+                element.title = entry.n + ' (noted)';
+
+                const inner = document.createElement('div');
+                inner.className = 'item-icon-noted-inner';
+                const innerScale = size.scale * NOTED_INNER_RATIO;
+                inner.style.backgroundImage = `url('/shared/sprites/items-${base.s}.png')`;
+                inner.style.backgroundPosition = `-${base.x * innerScale}px -${base.y * innerScale}px`;
+                inner.style.backgroundSize = `${_meta.cols * _meta.spriteWidth * innerScale}px auto`;
+                inner.style.width = Math.round(size.w * NOTED_INNER_RATIO) + 'px';
+                inner.style.height = Math.round(size.h * NOTED_INNER_RATIO) + 'px';
+                element.appendChild(inner);
+                return;
+            }
+
+            _applySpriteStyle(element, entry, size);
             element.title = entry.n;
         },
 

@@ -30,6 +30,17 @@ const Widgets = {
             render: (el, data) => this._renderOverview(el, data)
         });
 
+        // === ASHPIRE ONLY ===
+        this._register({
+            id: 'revenue-summary',
+            title: 'Revenue',
+            size: 'full',
+            minRole: 6,
+            visible: () => Auth.isAshpire(),
+            fetch: () => this._getCachedRevenue(),
+            render: (el, data) => this._renderRevenueSummary(el, data)
+        });
+
         // === MODERATOR+ (role level >= 2) ===
         this._register({
             id: 'moderation-summary',
@@ -59,17 +70,6 @@ const Widgets = {
             visible: () => Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_REPORTS),
             fetch: () => this._getCachedDashboard(),
             render: (el, data) => this._renderOpenReports(el, data)
-        });
-
-        // === OWNER+ (role level >= 5) ===
-        this._register({
-            id: 'revenue-summary',
-            title: 'Revenue',
-            size: 'full',
-            minRole: 5,
-            visible: () => Auth.hasRoleLevel(5),
-            fetch: () => this._getCachedRevenue(),
-            render: (el, data) => this._renderRevenueSummary(el, data)
         });
 
         // === DEVELOPER+ (VIEW_WORLDS permission) ===

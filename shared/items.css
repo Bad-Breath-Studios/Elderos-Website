@@ -13,3 +13,21 @@
     width: 36px;
     height: 32px;
 }
+
+/* Noted item composite: papyrus-colored background with base item scaled down inside */
+.item-icon--noted {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #8b7748 0%, #a08c5e 40%, #c4b07a 100%);
+    border-radius: 2px;
+    box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+.item-icon-noted-inner {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    background-repeat: no-repeat;
+    flex-shrink: 0;
+}

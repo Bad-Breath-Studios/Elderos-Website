@@ -105,6 +105,7 @@ const Search = {
     selectedItem: null,    // {id, name} — currently selected item
     itemMinQty: 1,
     itemLocation: 'all',
+    hideNoted: false,
 
     // HISCORES mode state
     hiscoreConditions: [], // [{skillId, op, value, minValue, maxValue, label}]
@@ -948,6 +949,12 @@ const Search = {
     renderItemAutocomplete(suggestions) {
         if (!this.elements.autocomplete) return;
 
+        // Filter out noted items if toggle is on
+        const hasItemData = typeof ItemData !== 'undefined' && ItemData.isLoaded();
+        if (this.hideNoted && hasItemData) {
+            suggestions = suggestions.filter(item => !ItemData.isNoted(item.id));
+        }
+
         const html = `
             <div class="autocomplete-section">
                 <div class="autocomplete-section-title">Items</div>
@@ -1041,6 +1048,15 @@ const Search = {
                     this.itemLocation = locSelect.value;
                 });
                 locSelect.dataset.initialized = 'true';
+            }
+
+            const hideNotedCb = bar.querySelector('#itemHideNoted');
+            if (hideNotedCb && !hideNotedCb.dataset.initialized) {
+                hideNotedCb.checked = this.hideNoted;
+                hideNotedCb.addEventListener('change', () => {
+                    this.hideNoted = hideNotedCb.checked;
+                });
+                hideNotedCb.dataset.initialized = 'true';
             }
 
             // Show selected item info with icon
