@@ -28,13 +28,17 @@ const PlayerView = {
         'Content Creator', 'Bug Abuser', 'Trusted Trader', 'Restricted'
     ],
 
-    // Sensitive fields that require a reason
+    // Sensitive fields that require a reason (both prefixed and unprefixed forms)
     SENSITIVE_FIELDS: new Set([
-        'staff_rank', 'donator_rank', 'total_spent', 'eldercoin_balance', 'username'
+        'staff_rank', 'donator_rank', 'total_spent', 'eldercoin_balance', 'username',
+        'accounts.staff_rank', 'accounts.donator_rank', 'accounts.total_spent', 'accounts.eldercoin_balance', 'accounts.username'
     ]),
 
     // Hidden derived fields (replaced by punishment panel)
-    HIDDEN_FIELDS: new Set(['is_banned', 'is_muted']),
+    HIDDEN_FIELDS: new Set(['is_banned', 'is_muted', 'accounts.is_banned', 'accounts.is_muted']),
+
+    // Hidden sections (replaced by right column panels)
+    HIDDEN_SECTIONS: new Set(['punishments']),
 
     // Elements (cached after render)
     elements: {},
@@ -549,6 +553,7 @@ const PlayerView = {
         }
 
         return this.sections
+            .filter(section => !this.HIDDEN_SECTIONS.has(section.key))
             .filter(section => this.shouldShowSection(section))
             .map(section => this.renderSection(section))
             .join('');
