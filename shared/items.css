@@ -1,0 +1,15 @@
+.item-icon {
+    display: inline-block;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    flex-shrink: 0;
+    background-repeat: no-repeat;
+}
+
+.item-icon--missing {
+    background: var(--bg-input, #1a1a2e);
+    border: 1px dashed var(--border, #333);
+    border-radius: 4px;
+    width: 36px;
+    height: 32px;
+}

@@ -955,6 +955,7 @@ const Search = {
                     ${suggestions.map((item, i) => `
                         <div class="autocomplete-item item-suggest" data-item-id="${item.id}" data-item-name="${Utils.escapeHtml(item.name)}" data-index="${i}">
                             <div class="autocomplete-item-main">
+                                <div class="item-icon-slot" data-icon-id="${item.id}"></div>
                                 <span class="autocomplete-field">${Utils.escapeHtml(item.name)}</span>
                                 <span class="autocomplete-type number">ID: ${item.id}</span>
                             </div>
@@ -967,6 +968,18 @@ const Search = {
         this.elements.autocomplete.style.display = 'block';
         this.isAutocompleteOpen = true;
         this.autocompleteIndex = -1;
+
+        // Insert item icons if ItemData is loaded
+        if (typeof ItemData !== 'undefined' && ItemData.isLoaded()) {
+            this.elements.autocomplete.querySelectorAll('.item-icon-slot').forEach(slot => {
+                const id = parseInt(slot.dataset.iconId);
+                const icon = ItemData.createIcon(id, { size: 'sm' });
+                slot.replaceWith(icon);
+            });
+        } else {
+            // Remove empty slots if data not loaded
+            this.elements.autocomplete.querySelectorAll('.item-icon-slot').forEach(slot => slot.remove());
+        }
 
         // Add click handlers for item suggestions
         this.elements.autocomplete.querySelectorAll('.item-suggest').forEach(el => {
@@ -1030,12 +1043,21 @@ const Search = {
                 locSelect.dataset.initialized = 'true';
             }
 
-            // Show selected item info
+            // Show selected item info with icon
             const selectedInfo = bar.querySelector('#itemSelectedInfo');
             if (selectedInfo) {
-                selectedInfo.textContent = this.selectedItem
-                    ? `${this.selectedItem.name} (ID: ${this.selectedItem.id})`
-                    : 'No item selected';
+                if (this.selectedItem) {
+                    selectedInfo.innerHTML = '';
+                    if (typeof ItemData !== 'undefined' && ItemData.isLoaded()) {
+                        const icon = ItemData.createIcon(this.selectedItem.id, { size: 'sm' });
+                        selectedInfo.appendChild(icon);
+                    }
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = `${this.selectedItem.name} (ID: ${this.selectedItem.id})`;
+                    selectedInfo.appendChild(textSpan);
+                } else {
+                    selectedInfo.textContent = 'No item selected';
+                }
                 selectedInfo.classList.toggle('has-item', !!this.selectedItem);
             }
         } else {

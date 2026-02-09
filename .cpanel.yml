@@ -10,3 +10,4 @@ deployment:
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/hiscores.elderos.io/shared/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/play.elderos.io/shared/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/vote.elderos.io/shared/
+    - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/staff.elderos.io/shared/

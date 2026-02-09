@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="css/global.css?v=20">
     <link rel="stylesheet" href="css/dashboard.css?v=19">
     <link rel="stylesheet" href="css/table.css?v=18">
-    <link rel="stylesheet" href="css/search.css?v=19">
+    <link rel="stylesheet" href="css/search.css?v=20">
     <link rel="stylesheet" href="css/popup.css?v=18">
     <link rel="stylesheet" href="css/news.css?v=19">
     <link rel="stylesheet" href="css/player-view.css?v=25">
@@ -46,8 +46,9 @@
     <link rel="stylesheet" href="css/store-config.css?v=2">
     <link rel="stylesheet" href="css/ashpire-revenue.css?v=1">
     <link rel="stylesheet" href="css/telemetry.css?v=3">
-    <link rel="stylesheet" href="css/item-search.css?v=1">
+    <link rel="stylesheet" href="css/item-search.css?v=2">
     <link rel="stylesheet" href="css/hub-config.css?v=1">
+    <link rel="stylesheet" href="/shared/items.css?v=1">
     <link rel="stylesheet" href="css/mobile.css?v=18">
 </head>
 <body>
@@ -742,13 +743,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/yaml/yaml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="/shared/items.js?v=1"></script>
     <script src="js/config.js?v=25"></script>
     <script src="js/utils.js?v=18"></script>
     <script src="js/api.js?v=44"></script>
     <script src="js/auth.js?v=25"></script>
     <script src="js/session-manager.js?v=25"></script>
     <script src="js/router.js?v=38"></script>
-    <script src="js/search.js?v=19"></script>
+    <script src="js/search.js?v=20"></script>
     <script src="js/players.js?v=26"></script>
     <script src="js/item-search.js?v=1"></script>
     <script src="js/popup.js?v=28"></script>
@@ -793,6 +795,9 @@
 
             // Initialize session manager (idle timeout + draft protection)
             SessionManager.init();
+
+            // Preload item sprite data (non-blocking)
+            if (typeof ItemData !== 'undefined') ItemData.load();
 
             // Initialize modules
             console.log('[Dashboard] Initializing modules...');

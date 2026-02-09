@@ -21,6 +21,9 @@
 }
 
 .item-selected-info.has-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     color: #eab308;
     font-style: normal;
     font-weight: var(--font-medium);
