@@ -553,17 +553,19 @@ const PlayerView = {
             return '<div style="padding: 40px; text-align: center; color: var(--text-muted);">No data available</div>';
         }
 
-        return this.sections
+        const filtered = this.sections
             .filter(section => !this.HIDDEN_SECTIONS.has(section.key))
-            .filter(section => this.shouldShowSection(section))
-            .map(section => this.renderSection(section))
-            .join('');
+            .filter(section => this.shouldShowSection(section));
+        console.log('[PlayerView] Rendering sections:', filtered.map(s => s.key), 'from', this.sections.map(s => s.key), 'worldType:', this.currentWorldType);
+        return filtered.map(section => this.renderSection(section)).join('');
     },
 
     shouldShowSection(section) {
         if (section.scope === 'account') return true;
         if (section.worldType) {
-            return section.worldType === this.currentWorldType;
+            const match = section.worldType === this.currentWorldType;
+            if (!match) console.warn('[PlayerView] Section filtered out:', section.key, 'worldType:', section.worldType, '!==', this.currentWorldType);
+            return match;
         }
         return true;
     },

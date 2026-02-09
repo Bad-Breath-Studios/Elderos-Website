@@ -741,6 +741,13 @@ body {
     text-align: center;
 }
 
+.profile-nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
 .profile-back {
     display: inline-flex;
     align-items: center;
@@ -754,12 +761,29 @@ body {
     font-size: 0.82rem;
     cursor: pointer;
     transition: all 0.15s;
-    margin-bottom: 20px;
 }
 .profile-back:hover {
     background: rgba(255, 255, 255, 0.07);
     color: var(--text);
     border-color: var(--border-hover);
+}
+
+.profile-view-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: rgba(249, 115, 22, 0.08);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: all 0.15s;
+}
+.profile-view-link:hover {
+    background: rgba(249, 115, 22, 0.15);
+    border-color: rgba(249, 115, 22, 0.35);
 }
 
 .profile-identity {
