@@ -1,0 +1,191 @@
+/* ============================================================
+   ELDEROS STAFF PANEL - PLAYERS PAGE STYLES
+   Create Player modal and button
+   ============================================================ */
+
+/* Create Player button in table header */
+.create-player-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    font-size: 13px;
+    padding: 8px 16px;
+}
+
+.table-header {
+    display: flex;
+    align-items: center;
+}
+
+/* Create Player overlay */
+.players-create-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.15s ease;
+}
+
+/* Modal card */
+.players-create-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-xl, 16px);
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.2s ease;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Header */
+.players-create-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 0;
+}
+
+.players-create-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.players-create-close {
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: var(--radius-sm, 6px);
+    transition: color 0.15s;
+}
+
+.players-create-close:hover {
+    color: var(--text-primary);
+}
+
+/* Body */
+.players-create-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Field group */
+.players-create-field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+}
+
+.players-create-field input[type="text"],
+.players-create-field input[type="email"],
+.players-create-field input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+
+.players-create-field input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.players-create-hint {
+    display: block;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+}
+
+/* Password row */
+.players-create-password-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.players-create-password-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.players-create-password-wrapper input {
+    width: 100%;
+    padding-right: 36px;
+}
+
+.players-create-toggle-pw {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 2px;
+}
+
+.players-create-toggle-pw:hover {
+    color: var(--text-primary);
+}
+
+.players-create-generate {
+    white-space: nowrap;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+}
+
+/* Error message */
+.players-create-error {
+    padding: 10px 12px;
+    background: rgba(244, 14, 0, 0.1);
+    border: 1px solid rgba(244, 14, 0, 0.25);
+    border-radius: var(--radius-md, 8px);
+    color: #ff6b6b;
+    font-size: 13px;
+}
+
+/* Footer */
+.players-create-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 0 24px 20px;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .players-create-modal {
+        margin: 16px;
+        max-width: none;
+    }
+}

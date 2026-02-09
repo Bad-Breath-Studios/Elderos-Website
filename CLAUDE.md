@@ -7,6 +7,7 @@ Centralized folder for all public-facing Elderos web pages. Each subfolder is an
 ```
 Elderos-Website/
 ├── Home/           → elderos.io          — Landing page
+├── News/           → news.elderos.io     — News & updates page
 ├── Play/           → play.elderos.io     — Launcher download page
 ├── Hiscores/       → hiscores.elderos.io — Public hiscores leaderboard
 ├── Staff/          → staff.elderos.io    — Staff management portal (auth-gated)
@@ -95,6 +96,7 @@ The website repo is at `https://github.com/Bad-Breath-Studios/Elderos-Website.gi
 | Subfolder | Server Path | Subdomain |
 |-----------|-------------|-----------|
 | `Home/` | `/home/eldessdm/public_html/` | elderos.io |
+| `News/` | `/home/eldessdm/news.elderos.io/` | news.elderos.io |
 | `Hiscores/` | `/home/eldessdm/hiscores.elderos.io/` | hiscores.elderos.io |
 | `Play/` | `/home/eldessdm/play.elderos.io/` | play.elderos.io |
 | `Staff/` | `/home/eldessdm/staff.elderos.io/` | staff.elderos.io |

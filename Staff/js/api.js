@@ -279,6 +279,16 @@ const API = {
          */
         async forceLogout(playerId, reason) {
             return API.post(`/players/${playerId}/force-logout`, { reason });
+        },
+
+        /**
+         * Create a new player account (Admin+)
+         * @param {string} username - 3-12 chars, alphanumeric + underscore + space
+         * @param {string} email - Valid email address
+         * @param {string} password - Min 6 characters
+         */
+        async create(username, email, password) {
+            return API.post('/players/create', { username, email, password });
         }
     },
 

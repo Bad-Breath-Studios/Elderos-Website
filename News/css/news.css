@@ -228,9 +228,55 @@ body {
     overflow: hidden;
 }
 
+.news-post-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .news-post-card-author {
     font-size: 0.78rem;
     color: var(--text-muted);
+}
+
+/* === Inline Like Button (card) === */
+.news-like-btn-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.78rem;
+    transition: all 0.2s ease;
+}
+
+.news-like-btn-inline:hover {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.08);
+}
+
+.news-like-btn-inline.liked {
+    color: #f87171;
+}
+
+.news-like-btn-inline .news-like-icon {
+    width: 15px;
+    height: 15px;
+    transition: transform 0.2s ease;
+}
+
+.news-like-btn-inline:hover .news-like-icon {
+    transform: scale(1.15);
+}
+
+.news-like-btn-inline .news-like-count {
+    font-weight: 500;
+    min-width: 0;
 }
 
 /* === Loading / Empty States === */
@@ -446,6 +492,76 @@ body {
     height: 1px;
     background: var(--border);
     margin: 32px 0;
+}
+
+/* === Article Actions (like section below content) === */
+.news-article-actions {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.news-article-like-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.news-like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.news-like-btn:hover {
+    border-color: rgba(248, 113, 113, 0.4);
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.06);
+}
+
+.news-like-btn.liked {
+    border-color: rgba(248, 113, 113, 0.4);
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.1);
+}
+
+.news-like-btn .news-like-icon {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.25s ease;
+}
+
+.news-like-btn:hover .news-like-icon {
+    transform: scale(1.15);
+}
+
+.news-like-btn.liked .news-like-icon {
+    animation: likePopIn 0.3s ease;
+}
+
+.news-like-btn .news-like-label {
+    min-width: 32px;
+}
+
+.news-like-btn .news-like-count {
+    font-weight: 600;
+    min-width: 0;
+}
+
+@keyframes likePopIn {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
 }
 
 /* === Responsive === */

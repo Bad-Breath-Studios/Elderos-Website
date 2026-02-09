@@ -1,0 +1,689 @@
+/* ============================================================
+   CONTAINER EDITOR — Visual item grid editor for inventory/equipment/bank
+   ============================================================ */
+
+/* === Overlay & Modal === */
+
+.container-editor-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: ce-fade-in 0.2s ease;
+}
+
+@keyframes ce-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.container-editor-modal {
+    background: var(--bg-elevated, #1a1a2e);
+    border: 1px solid var(--border-default, #2a2a3e);
+    border-radius: 12px;
+    width: 520px;
+    max-width: 95vw;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: ce-slide-up 0.25s ease;
+}
+
+.container-editor-modal.ce-bank {
+    width: 440px;
+}
+
+@keyframes ce-slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Header === */
+
+.ce-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-default, #2a2a3e);
+    flex-shrink: 0;
+}
+
+.ce-header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ce-header-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text, #e0e0e0);
+}
+
+.ce-header-player {
+    font-size: 13px;
+    color: var(--text-secondary, #888);
+}
+
+.ce-header-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.ce-header-pill.online {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.ce-header-pill.offline {
+    background: rgba(107, 114, 128, 0.15);
+    color: #9ca3af;
+}
+
+.ce-header-pill .pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.ce-close-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary, #888);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ce-close-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text, #e0e0e0);
+}
+
+.ce-close-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* === Body (scrollable) === */
+
+.ce-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+/* === Grid Containers (Inventory & Bank) === */
+
+.ce-grid {
+    display: grid;
+    gap: 4px;
+    justify-content: center;
+}
+
+.ce-grid.ce-inv-grid {
+    grid-template-columns: repeat(4, 42px);
+    gap: 4px;
+}
+
+.ce-grid.ce-bank-grid {
+    grid-template-columns: repeat(8, 38px);
+    gap: 2px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.ce-grid.ce-bank-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ce-grid.ce-bank-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ce-grid.ce-bank-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+/* === Equipment Layout (Paper Doll) === */
+
+.ce-equipment {
+    display: grid;
+    grid-template-columns: 42px 42px 42px;
+    grid-template-rows: 36px 36px 36px 36px 36px;
+    gap: 4px;
+    justify-content: center;
+}
+
+/* Equipment slot positions in 3x5 grid */
+.ce-equip-slot[data-equip="head"]    { grid-area: 1 / 2 / 2 / 3; }
+.ce-equip-slot[data-equip="cape"]    { grid-area: 2 / 1 / 3 / 2; }
+.ce-equip-slot[data-equip="amulet"]  { grid-area: 2 / 2 / 3 / 3; }
+.ce-equip-slot[data-equip="ammo"]    { grid-area: 2 / 3 / 3 / 4; }
+.ce-equip-slot[data-equip="weapon"]  { grid-area: 3 / 1 / 4 / 2; }
+.ce-equip-slot[data-equip="body"]    { grid-area: 3 / 2 / 4 / 3; }
+.ce-equip-slot[data-equip="shield"]  { grid-area: 3 / 3 / 4 / 4; }
+.ce-equip-slot[data-equip="legs"]    { grid-area: 4 / 2 / 5 / 3; }
+.ce-equip-slot[data-equip="gloves"]  { grid-area: 5 / 1 / 6 / 2; }
+.ce-equip-slot[data-equip="boots"]   { grid-area: 5 / 2 / 6 / 3; }
+.ce-equip-slot[data-equip="ring"]    { grid-area: 5 / 3 / 6 / 4; }
+
+/* === Individual Slot === */
+
+.container-slot {
+    width: 42px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.12s;
+    user-select: none;
+}
+
+.ce-bank-grid .container-slot {
+    width: 38px;
+    height: 34px;
+}
+
+.container-slot.occupied {
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.container-slot:hover {
+    border-color: var(--accent, #F40E00);
+    background: rgba(244, 14, 0, 0.06);
+}
+
+.container-slot.drag-over {
+    border-color: var(--accent, #F40E00);
+    background: rgba(244, 14, 0, 0.12);
+    box-shadow: 0 0 8px rgba(244, 14, 0, 0.2);
+}
+
+.container-slot.dragging {
+    opacity: 0.3;
+}
+
+/* Empty equipment slot labels */
+.container-slot .slot-label {
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.15);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    pointer-events: none;
+}
+
+/* Item sprite inside slot */
+.container-slot .item-icon {
+    pointer-events: none;
+}
+
+/* === Quantity Overlay === */
+
+.slot-quantity {
+    position: absolute;
+    bottom: 1px;
+    right: 2px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9), -1px -1px 0 rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.slot-quantity.qty-yellow { color: #ffff00; }
+.slot-quantity.qty-white  { color: #ffffff; }
+.slot-quantity.qty-green  { color: #00ff80; }
+.slot-quantity.qty-cyan   { color: #00ffff; }
+
+/* === Slot Popover (context menu) === */
+
+.slot-popover {
+    position: fixed;
+    z-index: 10001;
+    background: var(--bg-elevated, #1a1a2e);
+    border: 1px solid var(--border-default, #2a2a3e);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    padding: 8px 0;
+    min-width: 200px;
+    animation: ce-pop-in 0.12s ease;
+}
+
+@keyframes ce-pop-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.slot-popover-header {
+    padding: 6px 12px 8px;
+    border-bottom: 1px solid var(--border-default, #2a2a3e);
+    margin-bottom: 4px;
+}
+
+.slot-popover-item-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text, #e0e0e0);
+}
+
+.slot-popover-item-id {
+    font-size: 11px;
+    color: var(--text-secondary, #888);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.slot-popover-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--text, #e0e0e0);
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.1s;
+    text-align: left;
+}
+
+.slot-popover-action:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.slot-popover-action.danger {
+    color: #ef4444;
+}
+
+.slot-popover-action.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.slot-popover-action svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+/* Inline quantity edit inside popover */
+.slot-popover-qty-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+}
+
+.slot-popover-qty-row label {
+    font-size: 12px;
+    color: var(--text-secondary, #888);
+    white-space: nowrap;
+}
+
+.slot-popover-qty-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text, #e0e0e0);
+    outline: none;
+    width: 80px;
+}
+
+.slot-popover-qty-input:focus {
+    border-color: var(--accent, #F40E00);
+}
+
+.slot-popover-qty-save {
+    background: var(--accent, #F40E00);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.slot-popover-qty-save:hover {
+    filter: brightness(1.1);
+}
+
+/* === Add Item Popover === */
+
+.slot-popover-search {
+    padding: 6px 12px 8px;
+}
+
+.slot-popover-search input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 12px;
+    color: var(--text, #e0e0e0);
+    outline: none;
+}
+
+.slot-popover-search input:focus {
+    border-color: var(--accent, #F40E00);
+}
+
+.slot-popover-results {
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 0 4px;
+}
+
+.slot-popover-result {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.1s;
+}
+
+.slot-popover-result:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.slot-popover-result .result-name {
+    font-size: 12px;
+    color: var(--text, #e0e0e0);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.slot-popover-result .result-id {
+    font-size: 10px;
+    color: var(--text-secondary, #888);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.slot-popover-add-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--border-default, #2a2a3e);
+    margin-top: 4px;
+}
+
+.slot-popover-add-row label {
+    font-size: 12px;
+    color: var(--text-secondary, #888);
+}
+
+.slot-popover-add-row input {
+    width: 70px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text, #e0e0e0);
+    outline: none;
+}
+
+.slot-popover-add-row input:focus {
+    border-color: var(--accent, #F40E00);
+}
+
+.slot-popover-add-btn {
+    background: var(--accent, #F40E00);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.slot-popover-add-btn:hover {
+    filter: brightness(1.1);
+}
+
+.slot-popover-add-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.slot-popover-empty {
+    padding: 12px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary, #888);
+}
+
+/* === Footer === */
+
+.ce-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-default, #2a2a3e);
+    flex-shrink: 0;
+}
+
+.ce-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ce-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ce-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ce-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.ce-btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text, #e0e0e0);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ce-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ce-btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.ce-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.ce-status {
+    font-size: 11px;
+    color: var(--text-secondary, #888);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ce-status.saving {
+    color: var(--accent, #F40E00);
+}
+
+.ce-status.error {
+    color: #ef4444;
+}
+
+.ce-status .ce-spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid rgba(244, 14, 0, 0.2);
+    border-top-color: var(--accent, #F40E00);
+    border-radius: 50%;
+    animation: ce-spin 0.8s linear infinite;
+}
+
+@keyframes ce-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* === Drag Ghost === */
+
+.container-drag-ghost {
+    position: fixed;
+    z-index: 10002;
+    pointer-events: none;
+    opacity: 0.85;
+    transform: scale(1.1);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+}
+
+/* === Clear All Confirm Modal === */
+
+.ce-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10003;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ce-confirm-modal {
+    background: var(--bg-elevated, #1a1a2e);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 10px;
+    padding: 24px;
+    width: 340px;
+    text-align: center;
+}
+
+.ce-confirm-modal h3 {
+    color: #ef4444;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.ce-confirm-modal p {
+    color: var(--text-secondary, #888);
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.ce-confirm-modal input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text, #e0e0e0);
+    text-align: center;
+    outline: none;
+    margin-bottom: 16px;
+}
+
+.ce-confirm-modal input:focus {
+    border-color: #ef4444;
+}
+
+.ce-confirm-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.ce-confirm-actions .ce-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 8px;
+}
+
+/* === Player View Button Integration === */
+
+.btn-container-view {
+    background: rgba(244, 14, 0, 0.08);
+    border: 1px solid rgba(244, 14, 0, 0.2);
+    color: var(--accent, #F40E00);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-container-view:hover {
+    background: rgba(244, 14, 0, 0.15);
+    border-color: rgba(244, 14, 0, 0.4);
+}
+
+.btn-container-view svg {
+    width: 13px;
+    height: 13px;
+}

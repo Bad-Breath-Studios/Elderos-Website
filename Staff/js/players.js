@@ -74,6 +74,18 @@ const Players = {
         });
         // Always load players on page load
         this.loadAllPlayers();
+
+        // Inject Create Player button if Admin+ (MODIFY_PLAYER_DATA)
+        if (Auth.hasPermission(CONFIG.PERMISSIONS.MODIFY_PLAYER_DATA)) {
+            const tableHeader = document.querySelector('#playersTable .table-header');
+            if (tableHeader && !tableHeader.querySelector('.create-player-btn')) {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-primary create-player-btn';
+                btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create Player`;
+                btn.onclick = () => Players.showCreateModal();
+                tableHeader.appendChild(btn);
+            }
+        }
     },
 
     /**
@@ -683,6 +695,161 @@ const Players = {
             const start = this.totalResults === 0 ? 0 : (this.currentPage - 1) * CONFIG.DEFAULT_PAGE_SIZE + 1;
             const end = Math.min(this.currentPage * CONFIG.DEFAULT_PAGE_SIZE, this.totalResults);
             this.elements.tableInfo.innerHTML = `Showing <strong>${start}-${end}</strong> of <strong>${this.totalResults}</strong> players`;
+        }
+    },
+
+    // ==================== CREATE PLAYER MODAL ====================
+
+    /**
+     * Show create player modal
+     */
+    showCreateModal() {
+        // Remove existing overlay if any
+        this.closeCreateModal();
+
+        const overlay = document.createElement('div');
+        overlay.className = 'players-create-overlay';
+        overlay.id = 'createPlayerOverlay';
+        overlay.onclick = (e) => { if (e.target === overlay) Players.closeCreateModal(); };
+
+        overlay.innerHTML = `
+            <div class="players-create-modal">
+                <div class="players-create-header">
+                    <h3>Create Player</h3>
+                    <button class="players-create-close" onclick="Players.closeCreateModal()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="players-create-body">
+                    <div class="players-create-field">
+                        <label for="createPlayerUsername">Username</label>
+                        <input type="text" id="createPlayerUsername" placeholder="3-12 characters" maxlength="12" autocomplete="off" spellcheck="false">
+                        <span class="players-create-hint">Letters, numbers, underscores & spaces</span>
+                    </div>
+                    <div class="players-create-field">
+                        <label for="createPlayerEmail">Email</label>
+                        <input type="email" id="createPlayerEmail" placeholder="player@example.com" autocomplete="off">
+                    </div>
+                    <div class="players-create-field">
+                        <label for="createPlayerPassword">Password</label>
+                        <div class="players-create-password-row">
+                            <div class="players-create-password-wrapper">
+                                <input type="password" id="createPlayerPassword" placeholder="Min 6 characters" autocomplete="new-password">
+                                <button type="button" class="players-create-toggle-pw" onclick="Players._togglePasswordVisibility()" title="Toggle visibility">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <button type="button" class="btn btn-sm players-create-generate" onclick="Players._generatePassword()">Generate</button>
+                        </div>
+                    </div>
+                    <div class="players-create-error" id="createPlayerError" style="display:none;"></div>
+                </div>
+                <div class="players-create-footer">
+                    <button class="btn btn-secondary" onclick="Players.closeCreateModal()">Cancel</button>
+                    <button class="btn btn-primary" id="createPlayerSubmit" onclick="Players._submitCreatePlayer()">Create Account</button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+        // Focus username field
+        setTimeout(() => document.getElementById('createPlayerUsername')?.focus(), 100);
+    },
+
+    /**
+     * Close create player modal
+     */
+    closeCreateModal() {
+        const overlay = document.getElementById('createPlayerOverlay');
+        if (overlay) overlay.remove();
+    },
+
+    /**
+     * Toggle password field visibility
+     */
+    _togglePasswordVisibility() {
+        const input = document.getElementById('createPlayerPassword');
+        if (!input) return;
+        input.type = input.type === 'password' ? 'text' : 'password';
+    },
+
+    /**
+     * Generate a random password
+     */
+    _generatePassword() {
+        const chars = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%';
+        let pw = '';
+        for (let i = 0; i < 12; i++) pw += chars.charAt(Math.floor(Math.random() * chars.length));
+        const input = document.getElementById('createPlayerPassword');
+        if (input) {
+            input.value = pw;
+            input.type = 'text'; // Show generated password
+        }
+    },
+
+    /**
+     * Submit create player form
+     */
+    async _submitCreatePlayer() {
+        const username = document.getElementById('createPlayerUsername')?.value?.trim() || '';
+        const email = document.getElementById('createPlayerEmail')?.value?.trim() || '';
+        const password = document.getElementById('createPlayerPassword')?.value || '';
+        const errorEl = document.getElementById('createPlayerError');
+        const submitBtn = document.getElementById('createPlayerSubmit');
+
+        // Client-side validation
+        if (!username || username.length < 3 || username.length > 12) {
+            this._showCreateError('Username must be between 3 and 12 characters');
+            return;
+        }
+        if (!/^[a-zA-Z0-9_ ]+$/.test(username)) {
+            this._showCreateError('Username can only contain letters, numbers, underscores and spaces');
+            return;
+        }
+        if (!email || !email.includes('@') || !email.includes('.')) {
+            this._showCreateError('Please enter a valid email address');
+            return;
+        }
+        if (!password || password.length < 6) {
+            this._showCreateError('Password must be at least 6 characters');
+            return;
+        }
+
+        // Hide error, disable button
+        if (errorEl) errorEl.style.display = 'none';
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
+        }
+
+        try {
+            const result = await API.players.create(username, email, password);
+            Toast.success(`Player "${result.account.username}" created successfully`);
+            this.closeCreateModal();
+            this.loadAllPlayers(this.currentPage);
+        } catch (error) {
+            this._showCreateError(error.message || 'Failed to create account');
+        } finally {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+            }
+        }
+    },
+
+    /**
+     * Show error message in create modal
+     */
+    _showCreateError(msg) {
+        const el = document.getElementById('createPlayerError');
+        if (el) {
+            el.textContent = msg;
+            el.style.display = 'block';
         }
     },
 
