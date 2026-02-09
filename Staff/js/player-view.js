@@ -635,7 +635,14 @@ const PlayerView = {
         `;
     },
 
-    CONTAINER_KEYS: new Set(['inventory', 'equipment', 'bank']),
+    // Container field keys are namespaced: main_profiles.inventory, main_profiles.equipment, main_profiles.bank
+    CONTAINER_KEYS: new Set(['main_profiles.inventory', 'main_profiles.equipment', 'main_profiles.bank']),
+
+    _containerType(fieldKey) {
+        // Extract column name from "table.column" key
+        const col = fieldKey.includes('.') ? fieldKey.split('.').pop() : fieldKey;
+        return col; // 'inventory', 'equipment', or 'bank'
+    },
 
     renderFieldValue(field) {
         let valueClass = 'player-view-data-value';
@@ -651,6 +658,7 @@ const PlayerView = {
 
         // Container fields — show visual editor button instead of raw JSON
         if (this.CONTAINER_KEYS.has(field.key)) {
+            const containerType = this._containerType(field.key);
             let itemCount = 0;
             try {
                 const parsed = field.value ? JSON.parse(field.value) : [];
@@ -658,13 +666,13 @@ const PlayerView = {
             } catch (e) { /* ignore parse errors */ }
             const labels = { inventory: 'Inventory', equipment: 'Equipment', bank: 'Bank' };
             return `<span class="${valueClass}">
-                <button class="btn-container-view" data-container="${field.key}" onclick="PlayerView.openContainerEditor('${field.key}')">
+                <button class="btn-container-view" data-container="${containerType}" onclick="PlayerView.openContainerEditor('${containerType}')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
                         <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
                         <line x1="12" y1="22.08" x2="12" y2="12"/>
                     </svg>
-                    View ${labels[field.key] || field.key} (${itemCount} items)
+                    View ${labels[containerType] || containerType} (${itemCount} items)
                 </button>
             </span>`;
         }
