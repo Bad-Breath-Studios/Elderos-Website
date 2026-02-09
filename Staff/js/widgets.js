@@ -9,6 +9,7 @@ const Widgets = {
     _intervals: [],
     _container: null,
     _previewRole: null, // Ashpire-only: simulated role level for testing
+    _dashboardCache: null, // cache dashboard data to avoid duplicate fetches
 
     init() {
         this._container = document.getElementById('widgets-container');
@@ -24,18 +25,28 @@ const Widgets = {
             size: 'full',
             minRole: 1,
             visible: () => true,
-            fetch: () => API.stats.getDashboard(),
+            fetch: () => this._getCachedDashboard(),
             render: (el, data) => this._renderOverview(el, data)
         });
 
         // === MODERATOR+ (role level >= 2) ===
+        this._register({
+            id: 'moderation-summary',
+            title: 'Moderation',
+            size: 'half',
+            minRole: 2,
+            visible: () => Auth.hasRoleLevel(2),
+            fetch: () => this._getCachedDashboard(),
+            render: (el, data) => this._renderModerationSummary(el, data)
+        });
+
         this._register({
             id: 'recent-activity',
             title: 'Recent Activity',
             size: 'half',
             minRole: 2,
             visible: () => Auth.hasRoleLevel(2),
-            fetch: () => API.stats.getDashboard(),
+            fetch: () => this._getCachedDashboard(),
             render: (el, data) => this._renderRecentActivity(el, data)
         });
 
@@ -45,7 +56,7 @@ const Widgets = {
             size: 'half',
             minRole: 2,
             visible: () => Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_REPORTS),
-            fetch: () => API.stats.getDashboard(),
+            fetch: () => this._getCachedDashboard(),
             render: (el, data) => this._renderOpenReports(el, data)
         });
 
@@ -87,6 +98,16 @@ const Widgets = {
     },
 
     /**
+     * Cached dashboard fetch — avoids multiple identical API calls per refresh cycle.
+     */
+    async _getCachedDashboard() {
+        if (!this._dashboardCache) {
+            this._dashboardCache = API.stats.getDashboard();
+        }
+        return this._dashboardCache;
+    },
+
+    /**
      * Check if a widget should be visible, respecting preview mode.
      */
     _isVisible(widget) {
@@ -99,6 +120,7 @@ const Widgets = {
     async load() {
         if (!this._container) return;
         this._container.innerHTML = '';
+        this._dashboardCache = null; // clear cache for fresh data
 
         // Render preview bar for Ashpire
         if (Auth.isAshpire()) {
@@ -157,6 +179,7 @@ const Widgets = {
     },
 
     async refresh() {
+        this._dashboardCache = null; // clear cache for fresh data
         const visible = this._registry.filter(w => this._isVisible(w));
         for (const widget of visible) {
             const card = document.getElementById(`widget-${widget.id}`);
@@ -225,10 +248,11 @@ const Widgets = {
         const playersOnline = stats.playersOnline || 0;
         const worldsOnline = stats.worldsOnline || 0;
         const totalWorlds = stats.totalWorlds || 0;
-        const activeBans = stats.activeBans || 0;
         const staffOnline = stats.staffOnline || 0;
+        const totalPlayers = stats.totalPlayers || 0;
+        const newPlayersToday = stats.newPlayersToday || 0;
 
-        // Also update the header online counter
+        // Update the header online counter
         const onlineCountEl = document.getElementById('onlineCount');
         if (onlineCountEl) onlineCountEl.textContent = Utils.formatNumber(playersOnline);
 
@@ -262,18 +286,6 @@ const Widgets = {
                     </div>
                 </div>
                 <div class="widget-stat-card">
-                    <div class="widget-stat-icon red">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-                        </svg>
-                    </div>
-                    <div class="widget-stat-info">
-                        <div class="widget-stat-label">Active Bans</div>
-                        <div class="widget-stat-value">${Utils.formatNumber(activeBans)}</div>
-                    </div>
-                </div>
-                <div class="widget-stat-card">
                     <div class="widget-stat-icon purple">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -286,20 +298,119 @@ const Widgets = {
                         <div class="widget-stat-value">${Utils.formatNumber(staffOnline)}</div>
                     </div>
                 </div>
+                <div class="widget-stat-card">
+                    <div class="widget-stat-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="widget-stat-info">
+                        <div class="widget-stat-label">Total Players</div>
+                        <div class="widget-stat-value">${Utils.formatNumber(totalPlayers)}</div>
+                        ${newPlayersToday > 0 ? `<div class="widget-stat-sub">+${Utils.formatNumber(newPlayersToday)} today</div>` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    _renderModerationSummary(el, data) {
+        const stats = data.stats || data;
+        const activeBans = stats.activeBans || 0;
+        const activeMutes = stats.activeMutes || 0;
+        const activeTimeouts = stats.activeTimeouts || 0;
+        const total = activeBans + activeMutes + activeTimeouts;
+
+        el.innerHTML = `
+            <div class="widget-mod-summary">
+                <div class="widget-mod-total">
+                    <span class="widget-mod-total-num">${total}</span>
+                    <span class="widget-mod-total-label">active punishments</span>
+                </div>
+                <div class="widget-mod-breakdown">
+                    <a href="#bans" class="widget-mod-item">
+                        <div class="widget-mod-item-icon red">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                            </svg>
+                        </div>
+                        <div class="widget-mod-item-info">
+                            <div class="widget-mod-item-val">${activeBans}</div>
+                            <div class="widget-mod-item-label">Bans</div>
+                        </div>
+                    </a>
+                    <a href="#mutes" class="widget-mod-item">
+                        <div class="widget-mod-item-icon yellow">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                                <line x1="23" y1="9" x2="17" y2="15"/>
+                                <line x1="17" y1="9" x2="23" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="widget-mod-item-info">
+                            <div class="widget-mod-item-val">${activeMutes}</div>
+                            <div class="widget-mod-item-label">Mutes</div>
+                        </div>
+                    </a>
+                    <a href="#timeouts" class="widget-mod-item">
+                        <div class="widget-mod-item-icon purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <div class="widget-mod-item-info">
+                            <div class="widget-mod-item-val">${activeTimeouts}</div>
+                            <div class="widget-mod-item-label">Timeouts</div>
+                        </div>
+                    </a>
+                </div>
             </div>
         `;
     },
 
     _renderRecentActivity(el, data) {
-        el.innerHTML = `
-            <div class="widget-empty">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32" style="margin-bottom: 8px; opacity: 0.4;">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                </svg>
-                <div>No recent activity</div>
-            </div>
-        `;
+        const actions = data.recentActions || [];
+
+        if (actions.length === 0) {
+            el.innerHTML = `
+                <div class="widget-empty">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32" style="margin-bottom: 8px; opacity: 0.4;">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <div>No recent activity</div>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '<div class="widget-activity-list">';
+        for (const action of actions) {
+            const timeAgo = this._timeAgo(action.createdAt);
+            const icon = this._actionIcon(action.actionType);
+            const colorClass = this._actionColor(action.actionType);
+            const label = this._actionLabel(action.actionType);
+            const target = action.targetUsername ? `<span class="activity-target">${this._escapeHtml(action.targetUsername)}</span>` : '';
+
+            html += `
+                <div class="widget-activity-row">
+                    <div class="widget-activity-icon ${colorClass}">${icon}</div>
+                    <div class="widget-activity-content">
+                        <div class="widget-activity-text">
+                            <span class="activity-staff">${this._escapeHtml(action.staffUsername)}</span>
+                            <span class="activity-action">${label}</span>
+                            ${target}
+                        </div>
+                        <div class="widget-activity-time">${timeAgo}</div>
+                    </div>
+                </div>
+            `;
+        }
+        html += '</div>';
+        el.innerHTML = html;
     },
 
     _renderOpenReports(el, data) {
@@ -355,7 +466,6 @@ const Widgets = {
             let cpuSparkline = '';
             const wd = sparklineData[String(w.id)];
             if (wd && typeof Telemetry !== 'undefined' && wd.cpu !== undefined) {
-                // Use a simple indicator dot for latest instead of full sparkline (no history in latest endpoint)
                 const cpuColor = wd.cpu > 75 ? '#f40e00' : wd.cpu > 50 ? '#eab308' : '#22c55e';
                 cpuSparkline = `<span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:${cpuColor}; margin-left:4px;"></span>`;
             }
@@ -529,6 +639,65 @@ const Widgets = {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    },
+
+    _timeAgo(timestamp) {
+        const diff = Date.now() - timestamp;
+        const mins = Math.floor(diff / 60000);
+        if (mins < 1) return 'just now';
+        if (mins < 60) return `${mins}m ago`;
+        const hours = Math.floor(mins / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        if (days < 7) return `${days}d ago`;
+        return new Date(timestamp).toLocaleDateString();
+    },
+
+    _actionIcon(type) {
+        const icons = {
+            'TEMP_BAN': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
+            'PERM_BAN': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
+            'IP_BAN': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>',
+            'UNBAN': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>',
+            'MUTE': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>',
+            'UNMUTE': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>',
+            'KICK': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>',
+            'TIMEOUT': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+            'UNTIMEOUT': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>',
+            'WARNING': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+            'MODIFY_PLAYER_DATA': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+        };
+        return icons[type] || '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+    },
+
+    _actionColor(type) {
+        const colors = {
+            'TEMP_BAN': 'red', 'PERM_BAN': 'red', 'IP_BAN': 'red',
+            'UNBAN': 'green', 'UNMUTE': 'green', 'UNTIMEOUT': 'green',
+            'MUTE': 'yellow', 'WARNING': 'yellow',
+            'KICK': 'orange', 'TIMEOUT': 'purple',
+            'MODIFY_PLAYER_DATA': 'blue',
+        };
+        return colors[type] || 'muted';
+    },
+
+    _actionLabel(type) {
+        const labels = {
+            'TEMP_BAN': 'temp banned',
+            'PERM_BAN': 'permanently banned',
+            'IP_BAN': 'IP banned',
+            'UNBAN': 'unbanned',
+            'MUTE': 'muted',
+            'UNMUTE': 'unmuted',
+            'KICK': 'kicked',
+            'TIMEOUT': 'timed out',
+            'UNTIMEOUT': 'released',
+            'WARNING': 'warned',
+            'MESSAGE': 'messaged',
+            'TELEPORT': 'teleported to',
+            'MODIFY_PLAYER_DATA': 'modified',
+        };
+        return labels[type] || type.toLowerCase().replace(/_/g, ' ');
     }
 };
 
