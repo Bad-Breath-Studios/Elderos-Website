@@ -626,9 +626,11 @@ const PlayerView = {
                     ${!isEditable ? `<svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>` : ''}
                     ${field.label}
                 </span>
-                ${this.renderFieldValue(field)}
-                ${isEditable ? this.renderFieldInput(field, section) : ''}
-                <div class="player-view-field-feedback" data-feedback-for="${field.key}"></div>
+                <div class="player-view-data-right">
+                    ${this.renderFieldValue(field)}
+                    ${isEditable ? this.renderFieldInput(field, section) : ''}
+                    <div class="player-view-field-feedback" data-feedback-for="${field.key}"></div>
+                </div>
             </div>
         `;
     },
