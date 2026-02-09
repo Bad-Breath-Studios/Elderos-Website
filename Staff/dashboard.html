@@ -209,6 +209,13 @@
                         </svg>
                         <span class="nav-item-label">System Logs</span>
                     </a>
+                    <a href="#vote-config" class="nav-item" data-page="vote-config">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4"/>
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                        </svg>
+                        <span class="nav-item-label">Vote Config</span>
+                    </a>
                 </div>
 
                 <!-- Ashpire (Owner account only) -->
@@ -676,6 +683,9 @@
                 <!-- System Logs Page -->
                 <div class="page hidden" id="page-system-logs"></div>
 
+                <!-- Vote Config Page (Developer+) -->
+                <div class="page hidden" id="page-vote-config"></div>
+
                 <!-- Store Config Page (Ashpire) -->
                 <div class="page hidden" id="page-store-config"></div>
 
@@ -763,6 +773,7 @@
     <script src="js/ashpire-revenue.js?v=1"></script>
     <script src="js/ashpire-controls.js?v=5"></script>
     <script src="js/hub-config.js?v=1"></script>
+    <script src="js/vote-config.js?v=1"></script>
     <script src="js/worlds-config.js?v=1"></script>
     <script src="js/animations.js?v=18"></script>
     <script>
@@ -829,6 +840,8 @@
             console.log('[Dashboard] AshpireControls initialized');
             HubConfig.init();
             console.log('[Dashboard] HubConfig initialized');
+            VoteConfigEditor.init();
+            console.log('[Dashboard] VoteConfigEditor initialized');
             WorldsConfig.init();
             console.log('[Dashboard] WorldsConfig initialized');
             Animations.init();
@@ -941,6 +954,7 @@
                 showSection('nav-section-system', isDev);
                 showNavItem('store-config', Auth.hasPermission(CONFIG.PERMISSIONS.MANAGE_STORE));
                 showNavItem('system-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_SYSTEM_LOGS));
+                showNavItem('vote-config', isDev);
 
                 // Ashpire
                 showSection('nav-section-ashpire', Auth.isAshpire());

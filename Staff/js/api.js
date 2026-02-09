@@ -681,6 +681,18 @@ const API = {
 
         async getLockStatus(configId) {
             return API.get('/config/lock/status', { configId });
+        },
+
+        // --- Vote Config (Developer+) ---
+
+        async getVoteConfig() {
+            return API.get('/config/vote');
+        },
+
+        async saveVoteConfig(yaml, basedOnHash = null) {
+            const body = { yaml };
+            if (basedOnHash) body.basedOnHash = basedOnHash;
+            return API.post('/config/vote', body);
         }
     },
 
