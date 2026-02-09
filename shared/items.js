@@ -25,12 +25,24 @@ const ItemData = (() => {
     // Smaller scale for the base item inside a noted composite
     const NOTED_INNER_RATIO = 0.55;
 
+    /** Resolve a noted item's display name (own name or base item's name) */
+    function _resolveName(entry) {
+        if (entry.n) return entry.n;
+        if (entry.nt && entry.ln) {
+            const base = _items[String(entry.ln)];
+            return base ? base.n : null;
+        }
+        return null;
+    }
+
     function _buildSearchIndex() {
         if (!_items) return;
         _searchIndex = [];
         for (const id of Object.keys(_items)) {
             const entry = _items[id];
-            _searchIndex.push({ id: parseInt(id), nameLower: entry.n.toLowerCase(), noted: !!entry.nt });
+            const name = _resolveName(entry);
+            if (!name) continue;
+            _searchIndex.push({ id: parseInt(id), nameLower: name.toLowerCase(), noted: !!entry.nt });
         }
     }
 
@@ -99,10 +111,11 @@ const ItemData = (() => {
             if (!_items) return null;
             const entry = _items[String(itemId)];
             if (!entry) return null;
+            const name = _resolveName(entry);
             if (entry.nt) {
                 return {
                     id: itemId,
-                    name: entry.n,
+                    name: name,
                     noted: true,
                     baseItemId: entry.ln,
                     tradeable: entry.tr,
@@ -112,7 +125,7 @@ const ItemData = (() => {
             }
             return {
                 id: itemId,
-                name: entry.n,
+                name: name,
                 noted: false,
                 sheet: entry.s,
                 x: entry.x,
@@ -127,7 +140,8 @@ const ItemData = (() => {
         getName(itemId) {
             if (!_items) return null;
             const entry = _items[String(itemId)];
-            return entry ? entry.n : null;
+            if (!entry) return null;
+            return _resolveName(entry);
         },
 
         /** Check if item ID exists */
@@ -170,7 +184,7 @@ const ItemData = (() => {
                 }
 
                 el.classList.add('item-icon--noted');
-                el.title = entry.n + ' (noted)';
+                el.title = (_resolveName(entry) || 'Noted item') + ' (noted)';
 
                 // Inner sprite: base item scaled down
                 const inner = document.createElement('div');
@@ -224,7 +238,7 @@ const ItemData = (() => {
                     return;
                 }
                 element.classList.add('item-icon--noted');
-                element.title = entry.n + ' (noted)';
+                element.title = (_resolveName(entry) || 'Noted item') + ' (noted)';
 
                 const inner = document.createElement('div');
                 inner.className = 'item-icon-noted-inner';
@@ -272,7 +286,7 @@ const ItemData = (() => {
             }
 
             const results = [...exact, ...startsWith, ...contains].slice(0, limit);
-            return results.map(e => ({ id: e.id, name: _items[String(e.id)].n }));
+            return results.map(e => ({ id: e.id, name: _resolveName(_items[String(e.id)]) || 'Unknown' }));
         }
     };
 })();
