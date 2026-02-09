@@ -224,17 +224,20 @@
     font-weight: var(--font-medium);
 }
 
-/* ==================== MODERATION SUMMARY ==================== */
+/* ==================== MODERATION SUMMARY (full-width horizontal) ==================== */
 .widget-mod-summary {
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
+    align-items: center;
+    gap: var(--spacing-lg);
 }
 
 .widget-mod-total {
     display: flex;
-    align-items: baseline;
-    gap: var(--spacing-sm);
+    flex-direction: column;
+    align-items: center;
+    padding: 0 var(--spacing-lg) 0 var(--spacing-sm);
+    border-right: 1px solid var(--border-subtle);
+    min-width: 90px;
 }
 
 .widget-mod-total-num {
@@ -245,12 +248,15 @@
 }
 
 .widget-mod-total-label {
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--text-muted);
+    margin-top: 4px;
+    white-space: nowrap;
 }
 
 .widget-mod-breakdown {
     display: flex;
+    flex: 1;
     gap: var(--spacing-sm);
 }
 
@@ -258,8 +264,8 @@
     flex: 1;
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: 10px 12px;
+    gap: var(--spacing-md);
+    padding: 14px 16px;
     background: var(--bg-elevated);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
@@ -274,8 +280,8 @@
 }
 
 .widget-mod-item-icon {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -292,7 +298,7 @@
 }
 
 .widget-mod-item-val {
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
     font-weight: var(--font-bold);
     color: var(--text-primary);
     line-height: 1.1;
@@ -301,6 +307,73 @@
 .widget-mod-item-label {
     font-size: var(--text-xs);
     color: var(--text-muted);
+    margin-top: 1px;
+}
+
+/* ==================== REVENUE SUMMARY (Owner+) ==================== */
+.widget-revenue-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-sm);
+}
+
+.widget-revenue-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: 14px 16px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.widget-revenue-card:hover {
+    border-color: var(--border-default);
+    background: var(--bg-card-hover);
+}
+
+.widget-revenue-card.main {
+    cursor: pointer;
+}
+
+.widget-revenue-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.widget-revenue-icon.green { background: var(--success-muted); color: var(--success); }
+.widget-revenue-icon.blue { background: var(--info-muted); color: var(--info); }
+.widget-revenue-icon.orange { background: var(--accent-muted); color: var(--accent); }
+.widget-revenue-icon.purple { background: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
+
+.widget-revenue-info {
+    min-width: 0;
+    flex: 1;
+}
+
+.widget-revenue-label {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+    margin-bottom: 2px;
+}
+
+.widget-revenue-val {
+    font-size: var(--text-xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    line-height: 1.1;
+}
+
+.widget-revenue-val.main-val {
+    font-size: var(--text-2xl);
+    color: var(--success);
 }
 
 /* ==================== RECENT ACTIVITY LIST ==================== */
@@ -661,6 +734,29 @@
     .widget-services-table td:nth-child(5) {
         display: none;
     }
+
+    .widget-mod-summary {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .widget-mod-total {
+        flex-direction: row;
+        align-items: baseline;
+        gap: var(--spacing-sm);
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 0 0 var(--spacing-sm) 0;
+        min-width: unset;
+    }
+
+    .widget-mod-breakdown {
+        flex-direction: column;
+    }
+
+    .widget-revenue-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 480px) {
@@ -674,5 +770,9 @@
 
     .widget-header {
         padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .widget-revenue-grid {
+        grid-template-columns: 1fr;
     }
 }

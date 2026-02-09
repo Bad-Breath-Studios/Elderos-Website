@@ -10,6 +10,7 @@ const Widgets = {
     _container: null,
     _previewRole: null, // Ashpire-only: simulated role level for testing
     _dashboardCache: null, // cache dashboard data to avoid duplicate fetches
+    _revenueCache: null, // cache revenue data
 
     init() {
         this._container = document.getElementById('widgets-container');
@@ -33,7 +34,7 @@ const Widgets = {
         this._register({
             id: 'moderation-summary',
             title: 'Moderation',
-            size: 'half',
+            size: 'full',
             minRole: 2,
             visible: () => Auth.hasRoleLevel(2),
             fetch: () => this._getCachedDashboard(),
@@ -58,6 +59,17 @@ const Widgets = {
             visible: () => Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_REPORTS),
             fetch: () => this._getCachedDashboard(),
             render: (el, data) => this._renderOpenReports(el, data)
+        });
+
+        // === OWNER+ (role level >= 5) ===
+        this._register({
+            id: 'revenue-summary',
+            title: 'Revenue',
+            size: 'full',
+            minRole: 5,
+            visible: () => Auth.hasRoleLevel(5),
+            fetch: () => this._getCachedRevenue(),
+            render: (el, data) => this._renderRevenueSummary(el, data)
         });
 
         // === DEVELOPER+ (VIEW_WORLDS permission) ===
@@ -107,6 +119,13 @@ const Widgets = {
         return this._dashboardCache;
     },
 
+    async _getCachedRevenue() {
+        if (!this._revenueCache) {
+            this._revenueCache = API.ashpire.getRevenueSummary();
+        }
+        return this._revenueCache;
+    },
+
     /**
      * Check if a widget should be visible, respecting preview mode.
      */
@@ -120,7 +139,8 @@ const Widgets = {
     async load() {
         if (!this._container) return;
         this._container.innerHTML = '';
-        this._dashboardCache = null; // clear cache for fresh data
+        this._dashboardCache = null;
+        this._revenueCache = null;
 
         // Render preview bar for Ashpire
         if (Auth.isAshpire()) {
@@ -179,7 +199,8 @@ const Widgets = {
     },
 
     async refresh() {
-        this._dashboardCache = null; // clear cache for fresh data
+        this._dashboardCache = null;
+        this._revenueCache = null;
         const visible = this._registry.filter(w => this._isVisible(w));
         for (const widget of visible) {
             const card = document.getElementById(`widget-${widget.id}`);
@@ -366,6 +387,66 @@ const Widgets = {
                             <div class="widget-mod-item-label">Timeouts</div>
                         </div>
                     </a>
+                </div>
+            </div>
+        `;
+    },
+
+    _renderRevenueSummary(el, data) {
+        const totalCents = data.totalRevenueCents || 0;
+        const totalTx = data.totalTransactions || 0;
+        const uniqueBuyers = data.uniqueBuyers || 0;
+        const totalTokens = data.totalTokensCredited || 0;
+        const totalSpent = data.totalTokensSpent || 0;
+
+        const dollars = (totalCents / 100).toFixed(2);
+        const spendRate = totalTokens > 0 ? Math.round((totalSpent / totalTokens) * 100) : 0;
+
+        el.innerHTML = `
+            <div class="widget-revenue-grid">
+                <a href="#ashpire-revenue" class="widget-revenue-card main">
+                    <div class="widget-revenue-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="widget-revenue-info">
+                        <div class="widget-revenue-label">Total Revenue</div>
+                        <div class="widget-revenue-val main-val">$${this._formatDollars(totalCents)}</div>
+                    </div>
+                </a>
+                <div class="widget-revenue-card">
+                    <div class="widget-revenue-icon blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                    </div>
+                    <div class="widget-revenue-info">
+                        <div class="widget-revenue-label">Transactions</div>
+                        <div class="widget-revenue-val">${Utils.formatNumber(totalTx)}</div>
+                    </div>
+                </div>
+                <div class="widget-revenue-card">
+                    <div class="widget-revenue-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="widget-revenue-info">
+                        <div class="widget-revenue-label">Unique Buyers</div>
+                        <div class="widget-revenue-val">${Utils.formatNumber(uniqueBuyers)}</div>
+                    </div>
+                </div>
+                <div class="widget-revenue-card">
+                    <div class="widget-revenue-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+                        </svg>
+                    </div>
+                    <div class="widget-revenue-info">
+                        <div class="widget-revenue-label">Token Spend Rate</div>
+                        <div class="widget-revenue-val">${spendRate}%</div>
+                    </div>
                 </div>
             </div>
         `;
@@ -627,6 +708,12 @@ const Widgets = {
             i++;
         }
         return val.toFixed(i > 0 ? 1 : 0) + ' ' + units[i];
+    },
+
+    _formatDollars(cents) {
+        const val = cents / 100;
+        if (val >= 1000) return Utils.formatNumber(Math.round(val));
+        return val.toFixed(2);
     },
 
     _regionFlag(region) {
