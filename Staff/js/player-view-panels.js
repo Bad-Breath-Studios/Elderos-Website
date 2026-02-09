@@ -1,6 +1,6 @@
 /* ============================================================
    ELDEROS STAFF PANEL - PLAYER VIEW RIGHT COLUMN PANELS
-   Quick Actions, Notes, Activity Log
+   Quick Actions, Punishments, Notes, Activity Log
    ============================================================ */
 console.log('[PlayerViewPanels] Loading player-view-panels.js...');
 
@@ -9,6 +9,12 @@ const PlayerViewPanels = {
     // Notes state (owned by this module)
     notes: [],
     notesLoaded: false,
+
+    // Punishments state
+    punishments: { active: [], history: [] },
+    punishmentsLoaded: false,
+    totalHistory: 0,
+    showAllHistory: false,
 
     /**
      * Render the Quick Actions panel
@@ -89,6 +95,224 @@ const PlayerViewPanels = {
             </div>
         `;
     },
+
+    // === Punishments Panel ===
+
+    /**
+     * Render the Punishments panel
+     */
+    renderPunishments(player) {
+        if (!player) return '';
+
+        const activeCount = this.punishmentsLoaded ? this.punishments.active.length : 0;
+
+        return `
+            <div class="pv-panel" id="pvPanelPunishments">
+                <div class="pv-panel-header">
+                    <div class="pv-panel-header-left">
+                        <div class="pv-panel-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                        </div>
+                        <span class="pv-panel-title">Punishments</span>
+                    </div>
+                    ${activeCount > 0 ? `<span class="pv-panel-badge pv-badge-danger">${activeCount} active</span>` : ''}
+                </div>
+                <div class="pv-panel-body" id="pvPunishmentsContent">
+                    ${this.punishmentsLoaded ? this._renderPunishmentsContent() : `
+                        <div class="pv-notes-loading">
+                            <div class="spinner"></div>
+                        </div>
+                    `}
+                </div>
+            </div>
+        `;
+    },
+
+    /**
+     * Render punishment content (active + history)
+     */
+    _renderPunishmentsContent() {
+        const active = this.punishments.active || [];
+        const history = this.punishments.history || [];
+
+        let html = '';
+
+        // Active punishments
+        if (active.length > 0) {
+            html += `<div class="pv-punishment-section-label">Active (${active.length})</div>`;
+            html += active.map(p => this._renderPunishmentCard(p, true)).join('');
+        }
+
+        // History
+        if (history.length > 0) {
+            html += `<div class="pv-punishment-section-label pv-punishment-history-label">History (${this.totalHistory})</div>`;
+            const displayHistory = this.showAllHistory ? history : history.slice(0, 5);
+            html += displayHistory.map(p => this._renderPunishmentCard(p, false)).join('');
+
+            if (!this.showAllHistory && history.length > 5) {
+                html += `<button class="pv-punishment-show-more" onclick="PlayerViewPanels.showAllHistory = true; PlayerViewPanels._refreshPunishmentsDom()">Show all</button>`;
+            }
+        }
+
+        if (active.length === 0 && history.length === 0) {
+            html = '<div class="pv-notes-empty">No punishments</div>';
+        }
+
+        return html;
+    },
+
+    /**
+     * Render a single punishment card
+     */
+    _renderPunishmentCard(p, isActive) {
+        const typeColors = {
+            'TEMP_BAN': 'red', 'PERM_BAN': 'red', 'IP_BAN': 'red',
+            'MUTE': 'yellow', 'TIMEOUT': 'purple',
+            'WARNING': 'blue', 'KICK': 'orange'
+        };
+        const color = typeColors[p.type] || 'blue';
+        const typeLabel = p.type.replace('_', ' ');
+
+        const timeAgo = Utils.formatRelativeTime(p.createdAt);
+
+        let expiryText = '';
+        if (p.expiresAt && isActive) {
+            const now = Date.now();
+            if (p.expiresAt > now) {
+                expiryText = `Expires ${Utils.formatRelativeTime(p.expiresAt)}`;
+            } else {
+                expiryText = 'Expired';
+            }
+        } else if (p.type === 'PERM_BAN' && isActive) {
+            expiryText = 'Permanent';
+        }
+
+        let statusText = '';
+        if (!isActive) {
+            if (p.revokedAt) {
+                statusText = `<span class="pv-punishment-status revoked">Revoked${p.revokedBy ? ` by ${Utils.escapeHtml(p.revokedBy)}` : ''}</span>`;
+            } else if (p.expiresAt && p.expiresAt < Date.now()) {
+                statusText = `<span class="pv-punishment-status expired">Expired</span>`;
+            } else {
+                statusText = `<span class="pv-punishment-status">Inactive</span>`;
+            }
+        }
+
+        const canRevoke = isActive && this._canRevokePunishment(p.type);
+
+        return `
+            <div class="pv-punishment-card ${isActive ? 'active' : 'history'} border-${color}">
+                <div class="pv-punishment-card-header">
+                    <span class="pv-punishment-type-badge ${color}">${typeLabel}</span>
+                    ${statusText}
+                    <span class="pv-punishment-time">${timeAgo}</span>
+                </div>
+                <div class="pv-punishment-reason">${Utils.escapeHtml(p.reason || 'No reason')}</div>
+                <div class="pv-punishment-meta">
+                    By: ${Utils.escapeHtml(p.staffUsername || 'System')}
+                    ${expiryText ? ` &middot; ${expiryText}` : ''}
+                </div>
+                ${p.revokeReason ? `<div class="pv-punishment-revoke-reason">Revoke reason: ${Utils.escapeHtml(p.revokeReason)}</div>` : ''}
+                ${canRevoke ? `
+                    <button class="pv-punishment-revoke-btn" onclick="PlayerViewPanels.revokePunishment(${p.id})">
+                        Revoke
+                    </button>
+                ` : ''}
+            </div>
+        `;
+    },
+
+    /**
+     * Check if current staff can revoke a punishment type
+     */
+    _canRevokePunishment(type) {
+        switch (type) {
+            case 'TEMP_BAN': return Auth.hasPermission(CONFIG.PERMISSIONS.TEMP_BAN) || Auth.hasPermission(CONFIG.PERMISSIONS.UNBAN);
+            case 'PERM_BAN': return Auth.hasPermission(CONFIG.PERMISSIONS.PERM_BAN) || Auth.hasPermission(CONFIG.PERMISSIONS.UNBAN);
+            case 'IP_BAN': return Auth.hasPermission(CONFIG.PERMISSIONS.IP_BAN) || Auth.hasPermission(CONFIG.PERMISSIONS.UNBAN);
+            case 'MUTE': return Auth.hasPermission(CONFIG.PERMISSIONS.MUTE_PLAYER) || Auth.hasPermission(CONFIG.PERMISSIONS.UNMUTE_PLAYER);
+            case 'TIMEOUT': return Auth.hasPermission(CONFIG.PERMISSIONS.MANAGE_TIMEOUTS);
+            default: return false;
+        }
+    },
+
+    /**
+     * Load punishments for the current player
+     */
+    async loadPunishments(playerId) {
+        if (!playerId) return;
+
+        try {
+            const response = await API.players.getPunishments(playerId);
+            if (response.success) {
+                this.punishments = {
+                    active: response.active || [],
+                    history: response.history || []
+                };
+                this.totalHistory = response.totalHistory || 0;
+                this.punishmentsLoaded = true;
+                this._refreshPunishmentsDom();
+            }
+        } catch (error) {
+            console.error('[PlayerViewPanels] Failed to load punishments:', error);
+            this.punishmentsLoaded = true;
+            this.punishments = { active: [], history: [] };
+            this._refreshPunishmentsDom();
+        }
+    },
+
+    /**
+     * Refresh punishments panel DOM
+     */
+    _refreshPunishmentsDom() {
+        const container = document.getElementById('pvPunishmentsContent');
+        if (container) {
+            container.innerHTML = this._renderPunishmentsContent();
+        }
+        // Update badge
+        const badge = document.querySelector('#pvPanelPunishments .pv-panel-badge');
+        const activeCount = this.punishments.active.length;
+        if (badge) {
+            if (activeCount > 0) {
+                badge.textContent = `${activeCount} active`;
+                badge.style.display = '';
+            } else {
+                badge.style.display = 'none';
+            }
+        } else if (activeCount > 0) {
+            const header = document.querySelector('#pvPanelPunishments .pv-panel-header');
+            if (header && !header.querySelector('.pv-panel-badge')) {
+                header.insertAdjacentHTML('beforeend', `<span class="pv-panel-badge pv-badge-danger">${activeCount} active</span>`);
+            }
+        }
+    },
+
+    /**
+     * Revoke a punishment via the revoke modal
+     */
+    async revokePunishment(punishmentId) {
+        if (typeof Popup !== 'undefined' && Popup.showRevokeModal) {
+            Popup.showRevokeModal(punishmentId);
+        } else {
+            // Fallback: simple prompt
+            const reason = prompt('Reason for revoking (min 10 chars):');
+            if (!reason || reason.trim().length < 10) {
+                Toast.error('Revoke reason must be at least 10 characters');
+                return;
+            }
+            try {
+                await API.punishments.revoke(punishmentId, reason.trim());
+                Toast.success('Punishment revoked');
+                if (PlayerView.player) {
+                    this.loadPunishments(PlayerView.player.id);
+                }
+            } catch (error) {
+                Toast.error(error.message || 'Failed to revoke');
+            }
+        }
+    },
+
+    // === Notes Panel ===
 
     /**
      * Render the Notes panel
@@ -320,6 +544,10 @@ const PlayerViewPanels = {
     reset() {
         this.notes = [];
         this.notesLoaded = false;
+        this.punishments = { active: [], history: [] };
+        this.punishmentsLoaded = false;
+        this.totalHistory = 0;
+        this.showAllHistory = false;
     }
 };
 

@@ -252,6 +252,15 @@ const API = {
         },
 
         /**
+         * Save a single field (PUT per-field save)
+         * @param {string|number} playerId - Player ID
+         * @param {object} data - { field, value, scope, worldType?, reason? }
+         */
+        async saveField(playerId, data) {
+            return API.put(`/players/${playerId}/fields`, data);
+        },
+
+        /**
          * Apply punishment
          */
         async punish(playerId, punishment) {

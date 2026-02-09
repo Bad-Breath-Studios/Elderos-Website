@@ -298,3 +298,249 @@
     margin-bottom: 8px;
     opacity: 0.4;
 }
+
+/* ======================== */
+/*  PUNISHMENT PANEL        */
+/* ======================== */
+.pv-punishment-section-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pv-punishment-section-label .pv-panel-badge {
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.pv-punishment-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    border-left: 3px solid var(--text-muted);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    transition: border-color 0.15s ease;
+}
+
+.pv-punishment-card:last-child {
+    margin-bottom: 0;
+}
+
+.pv-punishment-card:hover {
+    border-color: var(--border-default);
+}
+
+/* Border accent by type */
+.pv-punishment-card.border-red { border-left-color: var(--error); }
+.pv-punishment-card.border-yellow { border-left-color: #fbbf24; }
+.pv-punishment-card.border-purple { border-left-color: #a855f7; }
+.pv-punishment-card.border-orange { border-left-color: var(--accent); }
+.pv-punishment-card.border-blue { border-left-color: #3b82f6; }
+
+.pv-punishment-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.pv-punishment-card-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Type badge */
+.pv-punishment-type-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.pv-punishment-type-badge.badge-red {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+}
+
+.pv-punishment-type-badge.badge-yellow {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fbbf24;
+}
+
+.pv-punishment-type-badge.badge-purple {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+}
+
+.pv-punishment-type-badge.badge-orange {
+    background: rgba(249, 115, 22, 0.12);
+    color: var(--accent);
+}
+
+.pv-punishment-type-badge.badge-blue {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+}
+
+/* Status text */
+.pv-punishment-status {
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.pv-punishment-status.active {
+    color: var(--error);
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.pv-punishment-status.expired {
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.pv-punishment-status.revoked {
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.08);
+}
+
+/* Reason + meta */
+.pv-punishment-reason {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    word-break: break-word;
+}
+
+.pv-punishment-meta {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+}
+
+.pv-punishment-meta span {
+    color: var(--text-secondary);
+}
+
+/* Revoke reason */
+.pv-punishment-revoke-reason {
+    font-size: 0.72rem;
+    color: #fbbf24;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed rgba(251, 191, 36, 0.2);
+}
+
+/* Revoke button */
+.pv-punishment-revoke-btn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.08);
+    color: #f87171;
+    font-family: var(--font-primary);
+    transition: all 0.15s ease;
+}
+
+.pv-punishment-revoke-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+/* History section */
+.pv-punishment-history {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.pv-punishment-show-more {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    background: none;
+    border: 1px dashed var(--border-default);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+}
+
+.pv-punishment-show-more:hover {
+    color: var(--text-primary);
+    border-color: var(--accent);
+    background: rgba(249, 115, 22, 0.05);
+}
+
+/* Compact history card */
+.pv-punishment-card.compact {
+    padding: 8px 12px;
+}
+
+.pv-punishment-card.compact .pv-punishment-card-header {
+    margin-bottom: 4px;
+}
+
+.pv-punishment-card.compact .pv-punishment-reason {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+    max-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pv-punishment-card.compact .pv-punishment-meta {
+    font-size: 0.68rem;
+}
+
+/* Empty + loading states */
+.pv-punishments-empty {
+    text-align: center;
+    padding: 20px 12px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+}
+
+.pv-punishments-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+/* View all link */
+.pv-punishment-view-all {
+    font-size: 0.72rem;
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.pv-punishment-view-all:hover {
+    color: #ea580c;
+    text-decoration: underline;
+}
