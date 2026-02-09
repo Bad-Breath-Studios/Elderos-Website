@@ -826,7 +826,7 @@ const Popup = {
             `).join('');
 
         const viewAllBtn = totalCount > 5 && this.currentPlayer ? `
-            <button class="btn btn-secondary btn-sm" style="margin-top: var(--spacing-sm); width: 100%;" onclick="Popup.close(); PlayerView.open(${this.currentPlayer.id}).then(() => PlayerView.switchTab('notes'));">
+            <button class="btn btn-secondary btn-sm" style="margin-top: var(--spacing-sm); width: 100%;" onclick="Popup.close(); PlayerView.open(${this.currentPlayer.id}).then(() => { const el = document.getElementById('pvPanelNotes'); if (el) el.scrollIntoView({behavior:'smooth'}); });">
                 View All Notes (${totalCount})
             </button>
         ` : '';
