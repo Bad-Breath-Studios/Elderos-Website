@@ -594,7 +594,7 @@ const PlayerView = {
     renderSectionContent(section) {
         if (section.groups) {
             return section.groups.map(group => `
-                <div class="player-view-data-group-header">${group.header}</div>
+                ${group.header ? `<div class="player-view-data-group-header">${group.header}</div>` : ''}
                 ${group.fields
                     .filter(field => !this.HIDDEN_FIELDS.has(field.key))
                     .map(field => this.renderField(field, section)).join('')}
