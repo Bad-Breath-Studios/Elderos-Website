@@ -11,9 +11,9 @@
     z-index: 100;
     padding: 0 clamp(20px, 5vw, 80px);
     height: 72px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
     align-items: center;
+    justify-content: center;
     background: rgba(6, 6, 10, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -23,6 +23,13 @@
 
 .shared-nav.scrolled {
     background: rgba(6, 6, 10, 0.9);
+}
+
+/* === Centered Nav Group (links + logo + links) === */
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 /* === Left Links === */
@@ -37,6 +44,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    margin: 0 12px;
 }
 
 .nav-logo {
@@ -44,26 +53,39 @@
     align-items: center;
     text-decoration: none;
     position: relative;
+    z-index: 2;
 }
 
 .nav-logo-img {
-    height: 72px;
+    height: 96px;
     width: auto;
-    filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.3));
+    filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.35));
     position: relative;
-    top: 8px;
+    top: 12px;
     transition: filter 0.3s ease;
 }
 
 .nav-logo:hover .nav-logo-img {
-    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.5));
+    filter: drop-shadow(0 0 22px rgba(249, 115, 22, 0.55));
 }
 
-/* === Right Section (links + auth) === */
-.nav-right {
+/* === Logo Glow === */
+.nav-logo-glow {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 60px;
+    background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.18) 0%, rgba(249, 115, 22, 0.06) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* === Right Links (Discord + Play Now) === */
+.nav-right-links {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: 4px;
 }
 
@@ -78,15 +100,47 @@
     transition: all 0.25s ease;
     letter-spacing: 0.02em;
     white-space: nowrap;
+    position: relative;
 }
 
 .nav-link:hover {
     color: var(--text);
-    background: rgba(255, 255, 255, 0.04);
 }
 
+/* === Active Link Underline === */
 .nav-link.active {
-    color: var(--accent);
+    color: var(--text);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 24px);
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* Subtle hover underline for non-active links */
+.nav-link:not(.active)::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: calc(100% - 24px);
+    height: 2px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 1px;
+    transition: transform 0.25s ease;
+}
+
+.nav-link:not(.active):hover::after {
+    transform: translateX(-50%) scaleX(1);
 }
 
 /* === Play Now CTA === */
@@ -115,10 +169,10 @@
     box-shadow: 0 0 25px var(--accent-glow);
 }
 
-/* === Auth Section === */
+/* === Auth Section (pinned right) === */
 .nav-auth {
-    margin-left: 12px;
-    position: relative;
+    position: absolute;
+    right: clamp(20px, 5vw, 80px);
 }
 
 .nav-login-link {
@@ -160,6 +214,7 @@
     border-color: var(--border-hover);
 }
 
+/* === Avatar (initial letter fallback) === */
 .nav-avatar {
     width: 32px;
     height: 32px;
@@ -173,6 +228,13 @@
     font-weight: 700;
     font-size: 0.85rem;
     color: var(--accent);
+    overflow: hidden;
+}
+
+/* === Avatar (Discord image) === */
+.nav-avatar.nav-avatar-img {
+    display: block;
+    object-fit: cover;
 }
 
 .nav-username {
@@ -467,6 +529,8 @@
     padding: 8px;
     border: none;
     background: none;
+    position: absolute;
+    right: clamp(20px, 5vw, 80px);
 }
 
 .nav-hamburger span {
@@ -519,6 +583,15 @@
 .nav-mobile-menu .nav-link {
     padding: 12px 16px;
     font-size: 0.95rem;
+}
+
+/* No underline on mobile menu items */
+.nav-mobile-menu .nav-link::after {
+    display: none;
+}
+
+.nav-mobile-menu .nav-link.active {
+    color: var(--accent);
 }
 
 .nav-mobile-menu .nav-cta {
@@ -575,18 +648,22 @@
 
 /* === Responsive === */
 @media (max-width: 900px) {
+    .nav-group {
+        display: flex;
+        align-items: center;
+    }
+
     .nav-left,
-    .nav-right {
+    .nav-right-links {
         display: none;
     }
 
-    .shared-nav {
-        grid-template-columns: 1fr auto 1fr;
+    .nav-auth {
+        display: none;
     }
 
     .nav-hamburger {
         display: flex;
-        justify-self: end;
     }
 }
 

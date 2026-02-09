@@ -23,12 +23,20 @@
         return getActivePage() === page ? ' active' : '';
     }
 
+    function getAvatarHTML(user, username, size) {
+        const initial = username ? username.charAt(0).toUpperCase() : '?';
+        if (user && user.discordId && user.discordAvatarHash) {
+            const url = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.discordAvatarHash}.png?size=${size || 64}`;
+            return `<img class="nav-avatar nav-avatar-img" src="${url}" alt="${initial}" onerror="this.outerHTML='<div class=\\'nav-avatar\\'>${initial}</div>'">`;
+        }
+        return `<div class="nav-avatar">${initial}</div>`;
+    }
+
     function buildNavHTML() {
         const page = getActivePage();
         const isLoggedIn = typeof Auth !== 'undefined' && Auth.isLoggedIn();
         const user = isLoggedIn ? Auth.getUser() : null;
         const username = isLoggedIn ? Auth.getUsername() : null;
-        const initial = username ? username.charAt(0).toUpperCase() : '?';
 
         // Auth section for desktop
         let authHTML = '';
@@ -36,7 +44,7 @@
             authHTML = `
                 <div class="nav-auth">
                     <button class="nav-user-btn" id="nav-user-btn">
-                        <div class="nav-avatar">${initial}</div>
+                        ${getAvatarHTML(user, username, 64)}
                         <span class="nav-username">${username || 'Player'}</span>
                         <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
@@ -69,7 +77,7 @@
             mobileAuthHTML = `
                 <div class="nav-mobile-auth">
                     <div class="nav-mobile-user">
-                        <div class="nav-avatar">${initial}</div>
+                        ${getAvatarHTML(user, username, 48)}
                         <span class="nav-mobile-user-name">${username || 'Player'}</span>
                     </div>
                     <button class="nav-mobile-logout" id="nav-mobile-logout">Log Out</button>
@@ -83,24 +91,28 @@
 
         return `
             <nav class="shared-nav" id="shared-nav">
-                <div class="nav-left">
-                    <a href="https://elderos.io#features" class="nav-link${activeClass('features')}">Features</a>
-                    <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
-                    <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
-                    <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
+                <div class="nav-group">
+                    <div class="nav-left">
+                        <a href="https://elderos.io#features" class="nav-link${activeClass('features')}">Features</a>
+                        <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+                        <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
+                        <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
+                    </div>
+
+                    <div class="nav-center">
+                        <a href="https://elderos.io" class="nav-logo">
+                            <img src="/assets/logo.png" alt="Elderos" class="nav-logo-img">
+                        </a>
+                        <div class="nav-logo-glow"></div>
+                    </div>
+
+                    <div class="nav-right-links">
+                        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+                        <a href="https://play.elderos.io" class="nav-cta${activeClass('play')}">Play Now</a>
+                    </div>
                 </div>
 
-                <div class="nav-center">
-                    <a href="https://elderos.io" class="nav-logo">
-                        <img src="/assets/logo.png" alt="Elderos" class="nav-logo-img">
-                    </a>
-                </div>
-
-                <div class="nav-right">
-                    <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
-                    <a href="https://play.elderos.io" class="nav-cta${activeClass('play')}">Play Now</a>
-                    ${authHTML}
-                </div>
+                ${authHTML}
 
                 <button class="nav-hamburger" id="nav-hamburger">
                     <span></span>
