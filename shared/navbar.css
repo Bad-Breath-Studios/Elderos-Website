@@ -498,6 +498,109 @@
     color: var(--text);
 }
 
+/* === Launcher Auth Card === */
+.launcher-auth-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(249, 115, 22, 0.06);
+    border: 1px solid rgba(249, 115, 22, 0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+    margin-bottom: 0;
+}
+
+.launcher-auth-card:hover {
+    background: rgba(249, 115, 22, 0.1);
+    border-color: rgba(249, 115, 22, 0.35);
+}
+
+.launcher-auth-card:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.launcher-auth-card.loading .launcher-auth-arrow {
+    animation: launcherSpin 1s linear infinite;
+}
+
+@keyframes launcherSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.launcher-auth-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    border: 1px solid rgba(249, 115, 22, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.launcher-auth-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.launcher-auth-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.launcher-auth-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.launcher-auth-arrow {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.launcher-auth-card:hover .launcher-auth-arrow {
+    transform: translateX(2px);
+}
+
+.launcher-auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 4px;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
+.launcher-auth-divider::before,
+.launcher-auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+}
+
 /* === Hamburger (Mobile) === */
 .nav-hamburger {
     display: none;

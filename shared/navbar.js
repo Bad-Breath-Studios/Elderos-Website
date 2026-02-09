@@ -14,6 +14,7 @@
         if (host.includes('vote')) return 'vote';
         if (host.includes('play')) return 'play';
         if (host.includes('staff')) return 'staff';
+        if (path.startsWith('/news')) return 'news';
         // Home page or content pages under /pages/
         if (path === '/' || path === '/index.html' || path.startsWith('/pages/')) return 'home';
         return 'home';
@@ -95,6 +96,7 @@
                     <div class="nav-left">
                         <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                         <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
+                        <a href="/news/" class="nav-link${activeClass('news')}">News</a>
                     </div>
 
                     <div class="nav-center">
@@ -122,6 +124,7 @@
             <div class="nav-mobile-menu" id="nav-mobile-menu">
                 <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                 <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
+                <a href="/news/" class="nav-link${activeClass('news')}">News</a>
                 <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                 <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
                 ${mobileAuthHTML}
@@ -133,6 +136,22 @@
                     <button class="nav-login-close" id="nav-login-close">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                     </button>
+
+                    <!-- Launcher Auth Card (hidden by default, shown if launcher detected) -->
+                    <div id="nav-launcher-auth" style="display:none">
+                        <button class="launcher-auth-card" id="nav-launcher-btn">
+                            <div class="launcher-auth-avatar" id="nav-launcher-avatar"></div>
+                            <div class="launcher-auth-info">
+                                <div class="launcher-auth-name" id="nav-launcher-name">Player</div>
+                                <div class="launcher-auth-hint">Log in via your launcher</div>
+                            </div>
+                            <svg class="launcher-auth-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                        <div class="nav-login-error" id="nav-launcher-error" style="display:none"></div>
+                        <div class="launcher-auth-divider">
+                            <span>or log in manually</span>
+                        </div>
+                    </div>
 
                     <!-- Step 1: Credentials -->
                     <div id="nav-login-step-creds">
@@ -167,6 +186,105 @@
                     </div>
                 </div>
             </div>`;
+    }
+
+    // === Launcher Auth Bridge ===
+
+    let _launcherStatus = null;
+
+    async function checkLauncher() {
+        try {
+            const res = await fetch('http://localhost:47015/status', {
+                signal: AbortSignal.timeout(2000)
+            });
+            const data = await res.json();
+            if (data.running && data.loggedIn && data.username) {
+                _launcherStatus = data;
+                return data;
+            }
+        } catch (e) {
+            // Silent fail — launcher not running
+        }
+        _launcherStatus = null;
+        return null;
+    }
+
+    function showLauncherCard(status) {
+        const card = document.getElementById('nav-launcher-auth');
+        if (!card) return;
+
+        const nameEl = document.getElementById('nav-launcher-name');
+        const avatarEl = document.getElementById('nav-launcher-avatar');
+
+        if (nameEl) nameEl.textContent = 'Continue as ' + status.username;
+        if (avatarEl) {
+            const initial = status.username.charAt(0).toUpperCase();
+            avatarEl.textContent = initial;
+        }
+
+        card.style.display = '';
+    }
+
+    function hideLauncherCard() {
+        const card = document.getElementById('nav-launcher-auth');
+        if (card) card.style.display = 'none';
+    }
+
+    async function handleLauncherAuth() {
+        const btn = document.getElementById('nav-launcher-btn');
+        const errorEl = document.getElementById('nav-launcher-error');
+        if (!btn) return;
+
+        // Disable and show loading
+        btn.disabled = true;
+        btn.classList.add('loading');
+        hideError(errorEl);
+
+        try {
+            // Request auth code from launcher (user may take time to approve)
+            const codeRes = await fetch('http://localhost:47015/auth/request', {
+                method: 'POST',
+                signal: AbortSignal.timeout(35000) // 35s — launcher has 30s approval timeout
+            });
+            const codeData = await codeRes.json();
+
+            if (!codeData.success) {
+                const msg = codeData.error === 'user_declined' ? 'Login declined in launcher.'
+                    : codeData.error === 'timeout' ? 'Request timed out. Please try again.'
+                    : codeData.error === 'not_logged_in' ? 'Not logged in to launcher.'
+                    : 'Failed to complete login.';
+                showError(errorEl, msg);
+                return;
+            }
+
+            // Exchange code for JWT via Hub API
+            const API_BASE = (typeof Auth !== 'undefined') ? Auth.API_BASE : 'https://api.elderos.io';
+            const exchangeRes = await fetch(`${API_BASE}/api/auth/launcher-exchange`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: codeData.code })
+            });
+            const exchangeData = await exchangeRes.json();
+
+            if (!exchangeData.success || !exchangeData.token) {
+                showError(errorEl, exchangeData.message || 'Failed to complete login.');
+                return;
+            }
+
+            // Store login and reload
+            Auth.storeLogin(exchangeData.token, exchangeData.account);
+            window.location.reload();
+
+        } catch (e) {
+            if (e.name === 'TimeoutError') {
+                showError(errorEl, 'Request timed out. Please try again.');
+            } else {
+                showError(errorEl, 'Failed to connect to launcher.');
+            }
+        } finally {
+            btn.disabled = false;
+            btn.classList.remove('loading');
+        }
     }
 
     function init() {
@@ -229,11 +347,23 @@
 
         // Login modal open/close
         const loginModal = document.getElementById('nav-login-modal');
-        const openLogin = () => { if (loginModal) loginModal.classList.add('active'); };
+        const openLogin = () => {
+            if (loginModal) loginModal.classList.add('active');
+            // Check for launcher in background
+            hideLauncherCard();
+            checkLauncher().then(status => {
+                if (status) showLauncherCard(status);
+            });
+        };
         const closeLogin = () => {
             if (loginModal) loginModal.classList.remove('active');
             resetLoginForm();
+            hideLauncherCard();
         };
+
+        // Launcher auth button
+        const launcherBtn = document.getElementById('nav-launcher-btn');
+        if (launcherBtn) launcherBtn.addEventListener('click', handleLauncherAuth);
 
         const loginLink = document.getElementById('nav-login-link');
         if (loginLink) loginLink.addEventListener('click', openLogin);

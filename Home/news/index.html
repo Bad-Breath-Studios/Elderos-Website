@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News — Elderos</title>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=5">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <link rel="stylesheet" href="css/news.css?v=1">
+
+    <!-- Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+</head>
+<body>
+
+<div class="ambient-bg"></div>
+<div class="grain"></div>
+
+<!-- Shared Navbar -->
+<div id="navbar"></div>
+
+<!-- News Content -->
+<main class="news-main">
+
+    <!-- List View (default) -->
+    <div id="news-list-view">
+        <div class="news-header">
+            <div class="section-tag">Latest News</div>
+            <h1 class="section-title">News & Updates</h1>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="news-filters" id="news-filters">
+            <button class="news-filter active" data-category="">All</button>
+            <button class="news-filter" data-category="UPDATE">Updates</button>
+            <button class="news-filter" data-category="ANNOUNCEMENT">Announcements</button>
+            <button class="news-filter" data-category="EVENT">Events</button>
+            <button class="news-filter" data-category="PATCH">Patches</button>
+        </div>
+
+        <!-- Posts Grid -->
+        <div class="news-grid" id="news-grid">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Loading / Empty states -->
+        <div class="news-loading" id="news-loading">Loading news...</div>
+        <div class="news-empty" id="news-empty" style="display:none">No news posts yet. Check back soon!</div>
+
+        <!-- Load More -->
+        <div class="news-load-more" id="news-load-more" style="display:none">
+            <button class="btn-secondary" id="news-load-more-btn">Load More</button>
+        </div>
+    </div>
+
+    <!-- Post View (single post) -->
+    <div id="news-post-view" style="display:none">
+        <a href="/news/" class="news-back" id="news-back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            Back to News
+        </a>
+
+        <article class="news-article" id="news-article">
+            <div class="news-article-meta" id="news-article-meta">
+                <!-- Badge, date, author injected by JS -->
+            </div>
+            <h1 class="news-article-title" id="news-article-title"></h1>
+            <div class="news-article-content" id="news-article-content">
+                <!-- Rendered markdown -->
+            </div>
+        </article>
+    </div>
+
+</main>
+
+<!-- Shared Footer -->
+<div id="footer"></div>
+
+<!-- Shared JS -->
+<script src="/shared/auth.js?v=1"></script>
+<script src="/shared/navbar.js?v=5"></script>
+<script src="/shared/footer.js?v=2"></script>
+<script src="js/news.js?v=1"></script>
+
+<script>
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                const siblings = entry.target.parentElement.querySelectorAll('.reveal');
+                const index = Array.from(siblings).indexOf(entry.target);
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, index * 80);
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+</script>
+
+</body>
+</html>

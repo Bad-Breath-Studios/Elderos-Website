@@ -7,456 +7,9 @@
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/shared/shared.css?v=1">
-    <link rel="stylesheet" href="/shared/navbar.css?v=3">
+    <link rel="stylesheet" href="/shared/navbar.css?v=5">
     <link rel="stylesheet" href="/shared/footer.css?v=1">
-    <style>
-        body {
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        /* ======================== */
-        /*  AMBIENT BACKGROUND      */
-        /* ======================== */
-        .ambient-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .ambient-bg::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            left: -20%;
-            width: 80%;
-            height: 80%;
-            background: radial-gradient(ellipse, rgba(249, 115, 22, 0.04) 0%, transparent 70%);
-            animation: ambientDrift1 25s ease-in-out infinite;
-        }
-
-        .ambient-bg::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            right: -20%;
-            width: 70%;
-            height: 70%;
-            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.025) 0%, transparent 70%);
-            animation: ambientDrift2 30s ease-in-out infinite;
-        }
-
-        @keyframes ambientDrift1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(5%, 8%) scale(1.1); }
-        }
-
-        @keyframes ambientDrift2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-5%, -6%) scale(1.05); }
-        }
-
-        /* ======================== */
-        /*  GRAIN OVERLAY           */
-        /* ======================== */
-        .grain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.025;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 256px 256px;
-        }
-
-        /* ======================== */
-        /*  HERO SECTION            */
-        /* ======================== */
-        .hero {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 120px 24px 80px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            border-radius: 100px;
-            background: var(--accent-soft);
-            border: 1px solid rgba(249, 115, 22, 0.15);
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--accent);
-            letter-spacing: 0.04em;
-            margin-bottom: 32px;
-            opacity: 0;
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-        }
-
-        .hero-badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .hero-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 800;
-            font-size: clamp(3rem, 8vw, 6.5rem);
-            line-height: 1;
-            letter-spacing: 0.06em;
-            margin-bottom: 8px;
-            opacity: 0;
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
-        }
-
-        .hero-title .accent {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--gold) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-family: 'Cinzel', serif;
-            font-weight: 500;
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            color: var(--text-dim);
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            margin-bottom: 28px;
-            opacity: 0;
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-        }
-
-        .hero-description {
-            max-width: 520px;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--text-dim);
-            margin-bottom: 48px;
-            opacity: 0;
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
-        }
-
-        .hero-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-            opacity: 0;
-            animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.75s forwards;
-        }
-
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 32px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #fff;
-            background: var(--accent);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            box-shadow: 0 0 30px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        .btn-primary:hover {
-            background: #ea680c;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 40px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,0.15);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .btn-disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            pointer-events: none;
-            filter: grayscale(0.3);
-        }
-
-        .btn-secondary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: var(--text);
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border-hover);
-            border-radius: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.07);
-            border-color: rgba(255, 255, 255, 0.18);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        .btn-icon {
-            width: 18px;
-            height: 18px;
-            opacity: 0.9;
-        }
-
-        /* ======================== */
-        /*  DIVIDER LINE            */
-        /* ======================== */
-        .section-divider {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--border-hover), transparent);
-        }
-
-        /* ======================== */
-        /*  STATS BAR               */
-        /* ======================== */
-        .stats-bar {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: clamp(32px, 6vw, 80px);
-            padding: 56px 24px;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: clamp(2rem, 4vw, 3rem);
-            color: var(--text);
-            line-height: 1;
-        }
-
-        .stat-number .accent {
-            color: var(--accent);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-top: 8px;
-        }
-
-        /* ======================== */
-        /*  FEATURES SECTION        */
-        /* ======================== */
-        .features {
-            position: relative;
-            z-index: 2;
-            padding: 80px clamp(20px, 5vw, 80px);
-            max-width: 1240px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 56px;
-        }
-
-        .section-tag {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--accent);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .section-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            letter-spacing: 0.04em;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
-
-        .feature-card {
-            position: relative;
-            padding: 36px 28px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--accent-glow), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .feature-card:hover {
-            background: var(--bg-card-hover);
-            border-color: var(--border-hover);
-            transform: translateY(-4px);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-
-        .feature-icon.orange { background: rgba(249, 115, 22, 0.1); }
-        .feature-icon.blue { background: rgba(59, 130, 246, 0.1); }
-        .feature-icon.purple { background: rgba(139, 92, 246, 0.1); }
-        .feature-icon.green { background: rgba(34, 197, 94, 0.1); }
-        .feature-icon.red { background: rgba(239, 68, 68, 0.1); }
-        .feature-icon.gold { background: var(--gold-dim); }
-
-        .feature-title {
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-bottom: 10px;
-            letter-spacing: 0.03em;
-        }
-
-        .feature-desc {
-            font-size: 0.88rem;
-            line-height: 1.65;
-            color: var(--text-dim);
-        }
-
-        /* ======================== */
-        /*  ANIMATIONS              */
-        /* ======================== */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ======================== */
-        /*  MOBILE                  */
-        /* ======================== */
-        @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 14px;
-            }
-
-            .hero-title {
-                font-size: clamp(2.5rem, 12vw, 4rem);
-            }
-
-            .stats-bar {
-                gap: 24px;
-            }
-
-            .stat-item {
-                min-width: 120px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-actions {
-                flex-direction: column;
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/home.css?v=1">
 </head>
 <body>
 
@@ -486,10 +39,10 @@
     </p>
 
     <div class="hero-actions">
-        <span class="btn-primary btn-disabled" title="Coming soon">
+        <a href="https://play.elderos.io" class="btn-primary">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Play Now
-        </span>
+        </a>
         <a href="https://discord.gg/MwkvVMFmfg" class="btn-secondary" target="_blank">
             <img src="assets/discord-icon.png" alt="" class="btn-icon" style="width:18px;height:18px;">
             Join Discord
@@ -509,37 +62,37 @@
 
     <div class="features-grid">
         <div class="feature-card reveal">
-            <div class="feature-icon orange">⚔️</div>
+            <div class="feature-icon orange">&#9876;&#65039;</div>
             <div class="feature-title">1:1 Combat System</div>
             <div class="feature-desc">Authentic OSRS combat mechanics. Every tick, every prayer flick, every spec — exactly how you remember it.</div>
         </div>
 
         <div class="feature-card reveal">
-            <div class="feature-icon gold">💰</div>
+            <div class="feature-icon gold">&#128176;</div>
             <div class="feature-title">Real Economy</div>
             <div class="feature-desc">A living, player-driven economy with a functional Grand Exchange, proper drop tables, and no pay-to-win garbage.</div>
         </div>
 
         <div class="feature-card reveal">
-            <div class="feature-icon purple">🏰</div>
+            <div class="feature-icon purple">&#127984;</div>
             <div class="feature-title">Custom Content</div>
             <div class="feature-desc">Original bosses, unique dungeons, and exclusive content you won't find anywhere else — all built with the OSRS spirit in mind.</div>
         </div>
 
         <div class="feature-card reveal">
-            <div class="feature-icon blue">📊</div>
+            <div class="feature-icon blue">&#128202;</div>
             <div class="feature-title">Hiscores</div>
             <div class="feature-desc">Compete for the top spot. Full skill tracking, boss kill counts, and seasonal leaderboards to prove you're the best.</div>
         </div>
 
         <div class="feature-card reveal">
-            <div class="feature-icon green">🛡️</div>
+            <div class="feature-icon green">&#128737;&#65039;</div>
             <div class="feature-title">Active Staff</div>
             <div class="feature-desc">Dedicated team that actually plays the game. Issues get fixed fast, suggestions get heard, and toxic players get removed.</div>
         </div>
 
         <div class="feature-card reveal">
-            <div class="feature-icon red">🔥</div>
+            <div class="feature-icon red">&#128293;</div>
             <div class="feature-title">Regular Updates</div>
             <div class="feature-desc">New content every week. We're not a dead server with a flashy homepage — we're actively building something great.</div>
         </div>
@@ -549,16 +102,16 @@
 
     <section class="stats-bar">
         <div class="stat-item reveal">
-            <div class="stat-number"><span class="accent">500</span>+</div>
-            <div class="stat-label">Players</div>
+            <div class="stat-number"><span class="accent" id="stat-players-online">&mdash;</span></div>
+            <div class="stat-label">Players Online</div>
         </div>
         <div class="stat-item reveal">
-            <div class="stat-number"><span class="accent">25</span>+</div>
-            <div class="stat-label">Bosses</div>
+            <div class="stat-number"><span class="accent" id="stat-total-accounts">&mdash;</span></div>
+            <div class="stat-label">Accounts</div>
         </div>
         <div class="stat-item reveal">
-            <div class="stat-number"><span class="accent">23</span></div>
-            <div class="stat-label">Skills</div>
+            <div class="stat-number"><span class="accent" id="stat-worlds-online">&mdash;</span></div>
+            <div class="stat-label">Worlds Online</div>
         </div>
         <div class="stat-item reveal">
             <div class="stat-number"><span class="accent">99</span>%</div>
@@ -567,13 +120,54 @@
     </section>
 </section>
 
+<!-- ======================== -->
+<!--  NEWS PREVIEW            -->
+<!-- ======================== -->
+<div class="section-divider"></div>
+
+<section class="news-preview" id="news-preview" style="display:none">
+    <div class="section-header reveal">
+        <div class="section-tag">Latest News</div>
+        <h2 class="section-title">Stay Updated</h2>
+    </div>
+    <div class="news-preview-grid" id="news-preview-grid"></div>
+    <div class="news-preview-more">
+        <a href="/news/" class="btn-secondary">View All News &rarr;</a>
+    </div>
+</section>
+
+<!-- ======================== -->
+<!--  BOTTOM CTA              -->
+<!-- ======================== -->
+<div class="section-divider"></div>
+
+<section class="bottom-cta reveal">
+    <div class="section-tag">Ready to Play?</div>
+    <h2 class="section-title">Your Adventure Awaits</h2>
+    <p class="bottom-cta-desc">
+        Download the launcher, create your account, and jump into the world of Elderos.
+        The community is waiting for you.
+    </p>
+    <div class="bottom-cta-actions">
+        <a href="https://play.elderos.io" class="btn-primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Launcher
+        </a>
+        <a href="https://discord.gg/MwkvVMFmfg" class="btn-secondary" target="_blank">
+            <img src="assets/discord-icon.png" alt="" class="btn-icon" style="width:18px;height:18px;">
+            Join Discord
+        </a>
+    </div>
+</section>
+
 <!-- Shared Footer -->
 <div id="footer"></div>
 
 <!-- Shared JS -->
 <script src="/shared/auth.js?v=1"></script>
-<script src="/shared/navbar.js?v=3"></script>
+<script src="/shared/navbar.js?v=5"></script>
 <script src="/shared/footer.js?v=2"></script>
+<script src="js/home.js?v=1"></script>
 
 <script>
     // Scroll reveal
