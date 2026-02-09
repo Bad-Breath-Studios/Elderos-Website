@@ -1,0 +1,14 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/eldessdm/repositories/elderos-website
+    # Deploy Home to public_html (main domain)
+    - /bin/cp -R $DEPLOYPATH/Home/. /home/eldessdm/public_html/
+    # Deploy Hiscores
+    - /bin/cp -R $DEPLOYPATH/Hiscores/. /home/eldessdm/hiscores.elderos.io/
+    # Deploy Play
+    - /bin/cp -R $DEPLOYPATH/Play/. /home/eldessdm/play.elderos.io/
+    # Deploy Staff
+    - /bin/cp -R $DEPLOYPATH/Staff/. /home/eldessdm/staff.elderos.io/
+    # Deploy Vote (create subdomain first)
+    - /bin/cp -R $DEPLOYPATH/Vote/. /home/eldessdm/vote.elderos.io/
