@@ -361,7 +361,7 @@ body {
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     gap: 14px;
     transition: all 0.25s ease;
     overflow: hidden;
@@ -398,6 +398,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    width: 100%;
 }
 
 .vote-site-icon {
@@ -455,6 +456,7 @@ body {
     font-weight: 600;
     color: var(--text-dim);
     letter-spacing: 0.02em;
+    text-align: center;
 }
 .vote-timer.ready-text {
     color: var(--accent);
