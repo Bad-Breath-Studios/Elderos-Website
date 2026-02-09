@@ -267,6 +267,7 @@
                 <div class="profile-identity">
                     <h2 class="profile-name">${escapeHtml(player.username)}</h2>
                     <span class="profile-badges">${badges}</span>
+                    <a href="https://adventurers.elderos.io/${encodeURIComponent(player.username)}" class="profile-view-link" target="_blank" style="margin-left:8px;font-size:13px;color:var(--accent);text-decoration:none;">View Profile &rarr;</a>
                 </div>
             </div>`;
 

@@ -7,6 +7,8 @@ deployment:
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/Staff/. /home/eldessdm/staff.elderos.io/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/Vote/. /home/eldessdm/vote.elderos.io/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/News/. /home/eldessdm/news.elderos.io/
+    - /bin/cp -R /home/eldessdm/repositories/elderos-website/Adventurers/. /home/eldessdm/adventurers.elderos.io/
+    - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/adventurers.elderos.io/shared/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/public_html/shared/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/hiscores.elderos.io/shared/
     - /bin/cp -R /home/eldessdm/repositories/elderos-website/shared/. /home/eldessdm/play.elderos.io/shared/

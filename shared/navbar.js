@@ -10,6 +10,7 @@
     function getActivePage() {
         const host = window.location.hostname;
         const path = window.location.pathname;
+        if (host.includes('adventurers')) return 'adventurers';
         if (host.includes('hiscores')) return 'hiscores';
         if (host.includes('vote')) return 'vote';
         if (host.includes('play')) return 'play';
@@ -50,6 +51,10 @@
                         <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                     <div class="nav-dropdown" id="nav-dropdown">
+                        <a href="https://adventurers.elderos.io/${encodeURIComponent(username || '')}" class="nav-dropdown-item">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/></svg>
+                            My Profile
+                        </a>
                         <a href="https://hiscores.elderos.io?player=${encodeURIComponent(username || '')}" class="nav-dropdown-item">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                             My Hiscores
