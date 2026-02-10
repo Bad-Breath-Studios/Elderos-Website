@@ -297,9 +297,21 @@
         }
     }
 
+    function revealPage() {
+        // Clear the safety timer from lockdown-check.js
+        if (window.__lockdownRevealTimer) {
+            clearTimeout(window.__lockdownRevealTimer);
+            window.__lockdownRevealTimer = null;
+        }
+        document.documentElement.style.visibility = '';
+    }
+
     async function init() {
         const container = document.getElementById('navbar');
-        if (!container) return;
+        if (!container) {
+            revealPage();
+            return;
+        }
 
         // Site lockdown — redirect non-homepage subdomains
         const host = window.location.hostname;
@@ -316,7 +328,7 @@
         }
 
         // Reveal page after lockdown check passes (lockdown-check.js hides it in <head>)
-        document.documentElement.style.visibility = '';
+        revealPage();
 
         container.innerHTML = buildNavHTML();
 
