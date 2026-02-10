@@ -282,6 +282,16 @@
 
 .quick-stat-sub { font-size: 9px; color: rgba(255,255,255,0.18); margin-top: 2px; }
 
+.qs-icon {
+    width: 14px; height: 14px; margin-right: 3px;
+    image-rendering: pixelated; vertical-align: -2px;
+}
+
+.totals-icon {
+    width: 12px; height: 12px; margin-right: 2px;
+    image-rendering: pixelated; vertical-align: -1px;
+}
+
 /* ── Grade Pills (Roman numerals I-X, matching hiscores) ───── */
 .grade-pill {
     display: inline-flex; align-items: center; justify-content: center;

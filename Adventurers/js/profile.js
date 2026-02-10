@@ -15,29 +15,29 @@
 
     // OSRS skill display order (3-column grid, reads left→right, top→bottom)
     const SKILLS = [
-        { key: 'attack',       name: 'Attack',        icon: 'assets/skills/attack.png' },
-        { key: 'hitpoints',    name: 'Hitpoints',     icon: 'assets/skills/constitution.png' },
-        { key: 'mining',       name: 'Mining',        icon: 'assets/skills/mining.png' },
-        { key: 'strength',     name: 'Strength',      icon: 'assets/skills/strength.png' },
-        { key: 'agility',      name: 'Agility',       icon: 'assets/skills/agility.png' },
-        { key: 'smithing',     name: 'Smithing',      icon: 'assets/skills/smithing.png' },
-        { key: 'defence',      name: 'Defence',       icon: 'assets/skills/defence.png' },
-        { key: 'herblore',     name: 'Herblore',      icon: 'assets/skills/herblore.png' },
-        { key: 'fishing',      name: 'Fishing',       icon: 'assets/skills/fishing.png' },
-        { key: 'ranged',       name: 'Ranged',        icon: 'assets/skills/range.png' },
-        { key: 'thieving',     name: 'Thieving',      icon: 'assets/skills/thieving.png' },
-        { key: 'cooking',      name: 'Cooking',       icon: 'assets/skills/cooking.png' },
-        { key: 'prayer',       name: 'Prayer',        icon: 'assets/skills/prayer.png' },
-        { key: 'crafting',     name: 'Crafting',      icon: 'assets/skills/crafting.png' },
-        { key: 'firemaking',   name: 'Firemaking',    icon: 'assets/skills/firemaking.png' },
-        { key: 'magic',        name: 'Magic',         icon: 'assets/skills/magic.png' },
-        { key: 'fletching',    name: 'Fletching',     icon: 'assets/skills/fletching.png' },
-        { key: 'woodcutting',  name: 'Woodcutting',   icon: 'assets/skills/woodcutting.png' },
-        { key: 'runecraft',    name: 'Runecraft',     icon: 'assets/skills/runecrafting.png' },
-        { key: 'slayer',       name: 'Slayer',        icon: 'assets/skills/slayer.png' },
-        { key: 'farming',      name: 'Farming',       icon: 'assets/skills/farming.png' },
-        { key: 'augmentation', name: 'Augmentation',   icon: 'assets/skills/augmentation.png' },
-        { key: 'hunter',       name: 'Hunter',        icon: 'assets/skills/hunter.png' },
+        { key: 'attack',       name: 'Attack',        icon: '/shared/sprites/skills/attack.png' },
+        { key: 'hitpoints',    name: 'Hitpoints',     icon: '/shared/sprites/skills/constitution.png' },
+        { key: 'mining',       name: 'Mining',        icon: '/shared/sprites/skills/mining.png' },
+        { key: 'strength',     name: 'Strength',      icon: '/shared/sprites/skills/strength.png' },
+        { key: 'agility',      name: 'Agility',       icon: '/shared/sprites/skills/agility.png' },
+        { key: 'smithing',     name: 'Smithing',      icon: '/shared/sprites/skills/smithing.png' },
+        { key: 'defence',      name: 'Defence',       icon: '/shared/sprites/skills/defence.png' },
+        { key: 'herblore',     name: 'Herblore',      icon: '/shared/sprites/skills/herblore.png' },
+        { key: 'fishing',      name: 'Fishing',       icon: '/shared/sprites/skills/fishing.png' },
+        { key: 'ranged',       name: 'Ranged',        icon: '/shared/sprites/skills/range.png' },
+        { key: 'thieving',     name: 'Thieving',      icon: '/shared/sprites/skills/thieving.png' },
+        { key: 'cooking',      name: 'Cooking',       icon: '/shared/sprites/skills/cooking.png' },
+        { key: 'prayer',       name: 'Prayer',        icon: '/shared/sprites/skills/prayer.png' },
+        { key: 'crafting',     name: 'Crafting',      icon: '/shared/sprites/skills/crafting.png' },
+        { key: 'firemaking',   name: 'Firemaking',    icon: '/shared/sprites/skills/firemaking.png' },
+        { key: 'magic',        name: 'Magic',         icon: '/shared/sprites/skills/magic.png' },
+        { key: 'fletching',    name: 'Fletching',     icon: '/shared/sprites/skills/fletching.png' },
+        { key: 'woodcutting',  name: 'Woodcutting',   icon: '/shared/sprites/skills/woodcutting.png' },
+        { key: 'runecraft',    name: 'Runecraft',     icon: '/shared/sprites/skills/runecrafting.png' },
+        { key: 'slayer',       name: 'Slayer',        icon: '/shared/sprites/skills/slayer.png' },
+        { key: 'farming',      name: 'Farming',       icon: '/shared/sprites/skills/farming.png' },
+        { key: 'augmentation', name: 'Augmentation',   icon: '/shared/sprites/skills/augmentation.png' },
+        { key: 'hunter',       name: 'Hunter',        icon: '/shared/sprites/skills/hunter.png' },
     ];
 
     const STAFF_MAP = {
@@ -459,7 +459,7 @@
                 </div>
                 <div class="quick-stat">
                     <div class="quick-stat-value">${formatNumber(eco.totalLevel)}</div>
-                    <div class="quick-stat-label">Total Level</div>
+                    <div class="quick-stat-label"><img src="/shared/sprites/total-level.png" class="qs-icon" alt="">Total Level</div>
                     <div class="quick-stat-sub">/ 2,277</div>
                 </div>
                 <div class="quick-stat">
@@ -468,7 +468,7 @@
                 </div>
                 <div class="quick-stat">
                     <div class="quick-stat-value">${eco.combatLevel || 3}</div>
-                    <div class="quick-stat-label">Combat Level</div>
+                    <div class="quick-stat-label"><img src="/shared/sprites/combat-level.png" class="qs-icon" alt="">Combat Level</div>
                 </div>
                 <div class="quick-stat">
                     <div class="quick-stat-value ranked">${eco.prestige ? 'P' + eco.prestige : '—'}</div>
@@ -528,7 +528,7 @@
                 <div class="skill-totals-level">${formatNumber(totalLevel)}</div>
                 <div class="skill-totals-sub">/ 2,277</div>
                 <div class="skill-totals-row">
-                    <span class="skill-totals-label">Combat</span>
+                    <img src="/shared/sprites/combat-level.png" class="totals-icon" alt=""><span class="skill-totals-label">Combat</span>
                     <span class="skill-totals-val">${combatLevel}</span>
                 </div>
                 <div class="skill-totals-row">
