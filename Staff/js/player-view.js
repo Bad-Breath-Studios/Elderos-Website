@@ -378,6 +378,7 @@ const PlayerView = {
                             <div class="player-view-meta">
                                 ID: <span>${this.player.id}</span>
                             </div>
+                            ${this._renderBioField()}
                         </div>
                     </div>
                     <div class="player-view-status-badge ${statusClass}">
@@ -443,6 +444,87 @@ const PlayerView = {
             'SUPPORT': 'SUPPORT.png'
         };
         return iconMap[staffRole] || null;
+    },
+
+    // === Bio (Ashpire only) ===
+
+    _renderBioField() {
+        if (!Auth.isAshpire()) return '';
+        const bio = this.player.bio || '';
+        return `
+            <div class="player-view-bio" id="playerViewBio">
+                <div class="player-view-bio-display" id="playerViewBioDisplay">
+                    <span class="player-view-bio-text">${bio ? Utils.escapeHtml(bio) : '<em style="color:var(--text-muted)">No bio set</em>'}</span>
+                    <button class="player-view-bio-edit-btn" onclick="PlayerView.startBioEdit()" title="Edit bio">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </button>
+                </div>
+                <div class="player-view-bio-editor" id="playerViewBioEditor" style="display:none;">
+                    <textarea class="player-view-bio-textarea" id="playerViewBioTextarea" maxlength="200" placeholder="Enter bio (max 200 chars)...">${Utils.escapeHtml(bio)}</textarea>
+                    <div class="player-view-bio-editor-actions">
+                        <span class="player-view-bio-charcount" id="playerViewBioCharcount">${bio.length}/200</span>
+                        <button class="btn btn-sm btn-secondary" onclick="PlayerView.cancelBioEdit()">Cancel</button>
+                        <button class="btn btn-sm btn-primary" onclick="PlayerView.saveBio()">Save</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    startBioEdit() {
+        const display = document.getElementById('playerViewBioDisplay');
+        const editor = document.getElementById('playerViewBioEditor');
+        const textarea = document.getElementById('playerViewBioTextarea');
+        if (display) display.style.display = 'none';
+        if (editor) editor.style.display = '';
+        if (textarea) {
+            textarea.focus();
+            textarea.addEventListener('input', () => {
+                const charcount = document.getElementById('playerViewBioCharcount');
+                if (charcount) charcount.textContent = `${textarea.value.length}/200`;
+            });
+        }
+    },
+
+    cancelBioEdit() {
+        const display = document.getElementById('playerViewBioDisplay');
+        const editor = document.getElementById('playerViewBioEditor');
+        const textarea = document.getElementById('playerViewBioTextarea');
+        if (display) display.style.display = '';
+        if (editor) editor.style.display = 'none';
+        // Reset textarea to current bio
+        if (textarea) textarea.value = this.player.bio || '';
+    },
+
+    async saveBio() {
+        if (!this.player) return;
+        const textarea = document.getElementById('playerViewBioTextarea');
+        if (!textarea) return;
+
+        const bio = textarea.value.trim();
+        if (bio.length > 200) {
+            Toast.error('Bio must be 200 characters or less');
+            return;
+        }
+
+        try {
+            const response = await API.players.updateBio(this.player.id, bio);
+            if (response.success) {
+                this.player.bio = response.bio || bio;
+                // Update display
+                const display = document.getElementById('playerViewBioDisplay');
+                const editor = document.getElementById('playerViewBioEditor');
+                const bioText = display?.querySelector('.player-view-bio-text');
+                if (bioText) {
+                    bioText.innerHTML = bio ? Utils.escapeHtml(bio) : '<em style="color:var(--text-muted)">No bio set</em>';
+                }
+                if (display) display.style.display = '';
+                if (editor) editor.style.display = 'none';
+                Toast.success('Bio updated');
+            }
+        } catch (error) {
+            Toast.error(error.message || 'Failed to update bio');
+        }
     },
 
     // === Tags ===
@@ -922,8 +1004,8 @@ const PlayerView = {
             return;
         }
 
-        // Check if sensitive field needs reason
-        if (row.dataset.sensitive === 'true') {
+        // Check if sensitive field needs reason (Ashpire bypasses)
+        if (row.dataset.sensitive === 'true' && !Auth.isAshpire()) {
             this._showInlineReason(row, key, sectionKey, currentValue);
             return;
         }

@@ -289,6 +289,15 @@ const API = {
          */
         async create(username, email, password) {
             return API.post('/players/create', { username, email, password });
+        },
+
+        /**
+         * Update a player's adventurer profile bio (Ashpire only)
+         * @param {number} playerId
+         * @param {string} bio - Max 200 characters
+         */
+        async updateBio(playerId, bio) {
+            return API.patch(`/players/${playerId}/bio`, { bio });
         }
     },
 

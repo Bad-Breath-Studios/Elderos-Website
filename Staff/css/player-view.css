@@ -502,6 +502,8 @@
     align-items: center;
     justify-content: center;
     font-size: 0.95rem;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .player-view-section-icon.purple { background: rgba(139, 92, 246, 0.12); }
@@ -1111,6 +1113,90 @@ body.player-view-edit-mode .player-view-data-row.readonly .player-view-data-inpu
     font-size: 0.8rem;
     color: var(--text-muted);
     text-align: center;
+}
+
+/* ======================== */
+/*  BIO FIELD (Ashpire)      */
+/* ======================== */
+.player-view-bio {
+    margin-top: 4px;
+}
+
+.player-view-bio-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.player-view-bio-text {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+    max-width: 400px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.player-view-bio-edit-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+}
+
+.player-view-bio-display:hover .player-view-bio-edit-btn {
+    opacity: 1;
+}
+
+.player-view-bio-edit-btn:hover {
+    color: var(--accent);
+    background: rgba(249, 115, 22, 0.08);
+}
+
+.player-view-bio-textarea {
+    width: 100%;
+    max-width: 400px;
+    min-height: 48px;
+    padding: 8px 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    font-family: var(--font-primary);
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    resize: vertical;
+    transition: border-color 0.2s ease;
+}
+
+.player-view-bio-textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.player-view-bio-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.player-view-bio-editor-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.player-view-bio-charcount {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    margin-right: auto;
 }
 
 /* ======================== */

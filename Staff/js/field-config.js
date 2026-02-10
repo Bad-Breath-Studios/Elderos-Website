@@ -11,6 +11,21 @@ const FieldConfig = {
     schema: {},
     enumTypes: [],
     isLoading: false,
+    originalOrder: [], // Track original sort order for detecting changes
+
+    // Drag state
+    draggedRow: null,
+    draggedIndex: -1,
+    orderChanged: false,
+
+    // Permission descriptions
+    PERMISSION_DESCRIPTIONS: {
+        '': 'Any staff member can edit this field',
+        'MODIFY_PLAYER_DATA': 'Requires the general player data modification permission',
+        'MANAGE_PUNISHMENTS': 'Restricted to staff who can manage punishments',
+        'MANAGE_STAFF': 'Restricted to administrators and above',
+        'VIEW_IP': 'Restricted to staff with IP viewing access'
+    },
 
     /**
      * Initialize the field config module
@@ -63,7 +78,7 @@ const FieldConfig = {
                     </div>
                     <div class="fc-info-content">
                         <strong>Field Configuration</strong>
-                        <p>Customize how fields appear in the player view. Changes override automatic conventions. Use "Reset to Convention" to restore defaults.</p>
+                        <p>Customize how fields appear in the player view. Drag rows to reorder. Changes override automatic conventions. Use "Reset to Convention" to restore defaults.</p>
                     </div>
                     <button class="btn btn-secondary btn-sm" id="fcRefreshCacheBtn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
@@ -82,6 +97,13 @@ const FieldConfig = {
                     </div>
                 </div>
 
+                <!-- Save Order Button (hidden by default) -->
+                <div class="fc-save-order-bar" id="fcSaveOrderBar" style="display: none;">
+                    <span>Field order has been changed</span>
+                    <button class="btn btn-primary btn-sm" id="fcSaveOrderBtn">Save Order</button>
+                    <button class="btn btn-secondary btn-sm" id="fcRevertOrderBtn">Revert</button>
+                </div>
+
                 <!-- Field Table -->
                 <div class="fc-field-table-container">
                     <div class="fc-loading" id="fcLoading" style="display: none;">
@@ -91,6 +113,7 @@ const FieldConfig = {
                     <table class="fc-field-table" id="fcFieldTable">
                         <thead>
                             <tr>
+                                <th class="fc-drag-col"></th>
                                 <th>Column</th>
                                 <th>Label</th>
                                 <th>Type</th>
@@ -148,6 +171,10 @@ const FieldConfig = {
 
         // Modal reset
         document.getElementById('fcModalReset')?.addEventListener('click', () => this.resetToConvention());
+
+        // Save/revert order buttons
+        document.getElementById('fcSaveOrderBtn')?.addEventListener('click', () => this.saveOrder());
+        document.getElementById('fcRevertOrderBtn')?.addEventListener('click', () => this.revertOrder());
     },
 
     /**
@@ -178,11 +205,11 @@ const FieldConfig = {
 
         // Define tabs in specific order with icons and colors
         const tabConfig = [
-            { table: 'accounts', label: 'Accounts', icon: '👤', color: 'purple' },
-            { table: 'economy_profiles', label: 'Economy', icon: '💰', color: 'green' },
-            { table: 'pvp_profiles', label: 'PvP', icon: '⚔️', color: 'red' },
-            { table: 'league_profiles', label: 'Leagues', icon: '🏆', color: 'purple' },
-            { table: 'custom_profiles', label: 'Customs', icon: '🎮', color: 'cyan' }
+            { table: 'accounts', label: 'Accounts', icon: '\uD83D\uDC64', color: 'purple' },
+            { table: 'economy_profiles', label: 'Economy', icon: '\uD83D\uDCB0', color: 'green' },
+            { table: 'pvp_profiles', label: 'PvP', icon: '\u2694\uFE0F', color: 'red' },
+            { table: 'league_profiles', label: 'Leagues', icon: '\uD83C\uDFC6', color: 'purple' },
+            { table: 'custom_profiles', label: 'Customs', icon: '\uD83C\uDFAE', color: 'cyan' }
         ];
 
         // Only show tabs for tables that exist in schema
@@ -211,11 +238,14 @@ const FieldConfig = {
      */
     async loadFields(tableName) {
         this.showLoading(true);
+        this.orderChanged = false;
+        this._updateSaveOrderBar();
         try {
             console.log('[FieldConfig] Loading fields for table:', tableName);
             const response = await API.admin.getFieldConfig(tableName);
             console.log('[FieldConfig] Fields response:', response);
             this.fields = response.fields || [];
+            this.originalOrder = this.fields.map(f => f.column);
             console.log('[FieldConfig] Fields loaded:', this.fields.length);
             this.renderFieldTable();
         } catch (error) {
@@ -238,7 +268,7 @@ const FieldConfig = {
     },
 
     /**
-     * Render the field table
+     * Render the field table with drag handles
      */
     renderFieldTable() {
         const tbody = document.getElementById('fcFieldTableBody');
@@ -247,25 +277,36 @@ const FieldConfig = {
         if (this.fields.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="7" class="fc-empty">No fields found for this table</td>
+                    <td colspan="8" class="fc-empty">No fields found for this table</td>
                 </tr>
             `;
             return;
         }
 
-        tbody.innerHTML = this.fields.map(field => {
+        tbody.innerHTML = this.fields.map((field, index) => {
             const typeClass = this.getTypeClass(field.inputType);
             const isHidden = !field.visible;
 
             return `
-                <tr class="${isHidden ? 'fc-row-hidden' : ''} ${field.hasOverride ? 'fc-row-override' : ''}">
+                <tr class="${isHidden ? 'fc-row-hidden' : ''} ${field.hasOverride ? 'fc-row-override' : ''}"
+                    draggable="true" data-index="${index}" data-column="${field.column}">
+                    <td class="fc-drag-handle" title="Drag to reorder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <line x1="8" y1="6" x2="8" y2="6.01"/>
+                            <line x1="16" y1="6" x2="16" y2="6.01"/>
+                            <line x1="8" y1="12" x2="8" y2="12.01"/>
+                            <line x1="16" y1="12" x2="16" y2="12.01"/>
+                            <line x1="8" y1="18" x2="8" y2="18.01"/>
+                            <line x1="16" y1="18" x2="16" y2="18.01"/>
+                        </svg>
+                    </td>
                     <td>
                         <div class="fc-column-name">
                             <code>${field.column}</code>
                             ${field.hasOverride ? '<span class="fc-override-badge">Override</span>' : ''}
                         </div>
                     </td>
-                    <td>${field.label || '—'}</td>
+                    <td>${field.label || '\u2014'}</td>
                     <td>
                         <span class="fc-type-badge ${typeClass}">${field.inputType || 'text'}</span>
                     </td>
@@ -280,7 +321,7 @@ const FieldConfig = {
                         </span>
                     </td>
                     <td>
-                        <span class="fc-permission">${field.permission || '—'}</span>
+                        <span class="fc-permission">${field.permission || '\u2014'}</span>
                     </td>
                     <td>
                         <button class="btn btn-secondary btn-sm fc-edit-btn" data-column="${field.column}">
@@ -295,13 +336,164 @@ const FieldConfig = {
         tbody.querySelectorAll('.fc-edit-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const column = btn.dataset.column;
-                console.log('[FieldConfig] Edit clicked for column:', column);
-                console.log('[FieldConfig] Available fields:', this.fields.map(f => f.column));
                 const field = this.fields.find(f => f.column === column);
-                console.log('[FieldConfig] Found field:', field);
                 if (field) this.openEditModal(field);
             });
         });
+
+        // Setup drag-and-drop
+        this._setupDragAndDrop(tbody);
+    },
+
+    // === Drag-and-Drop ===
+
+    _setupDragAndDrop(tbody) {
+        const rows = tbody.querySelectorAll('tr[draggable]');
+
+        rows.forEach(row => {
+            row.addEventListener('dragstart', (e) => {
+                this.draggedRow = row;
+                this.draggedIndex = parseInt(row.dataset.index);
+                row.classList.add('fc-dragging');
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', row.dataset.index);
+            });
+
+            row.addEventListener('dragend', () => {
+                row.classList.remove('fc-dragging');
+                this.draggedRow = null;
+                this.draggedIndex = -1;
+                // Remove all drop indicators
+                tbody.querySelectorAll('.fc-drop-above, .fc-drop-below').forEach(r => {
+                    r.classList.remove('fc-drop-above', 'fc-drop-below');
+                });
+            });
+
+            row.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                if (!this.draggedRow || row === this.draggedRow) return;
+
+                // Remove existing indicators
+                tbody.querySelectorAll('.fc-drop-above, .fc-drop-below').forEach(r => {
+                    r.classList.remove('fc-drop-above', 'fc-drop-below');
+                });
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                if (e.clientY < midY) {
+                    row.classList.add('fc-drop-above');
+                } else {
+                    row.classList.add('fc-drop-below');
+                }
+            });
+
+            row.addEventListener('dragleave', () => {
+                row.classList.remove('fc-drop-above', 'fc-drop-below');
+            });
+
+            row.addEventListener('drop', (e) => {
+                e.preventDefault();
+                row.classList.remove('fc-drop-above', 'fc-drop-below');
+
+                if (!this.draggedRow || row === this.draggedRow) return;
+
+                const fromIndex = this.draggedIndex;
+                let toIndex = parseInt(row.dataset.index);
+
+                const rect = row.getBoundingClientRect();
+                const midY = rect.top + rect.height / 2;
+                if (e.clientY >= midY && toIndex < fromIndex) {
+                    toIndex++;
+                } else if (e.clientY < midY && toIndex > fromIndex) {
+                    toIndex--;
+                }
+
+                // Reorder the fields array
+                const [moved] = this.fields.splice(fromIndex, 1);
+                this.fields.splice(toIndex, 0, moved);
+
+                // Check if order changed vs original
+                const currentOrder = this.fields.map(f => f.column);
+                this.orderChanged = currentOrder.some((col, i) => col !== this.originalOrder[i]);
+                this._updateSaveOrderBar();
+
+                // Re-render
+                this.renderFieldTable();
+            });
+        });
+    },
+
+    _updateSaveOrderBar() {
+        const bar = document.getElementById('fcSaveOrderBar');
+        if (bar) bar.style.display = this.orderChanged ? 'flex' : 'none';
+    },
+
+    async saveOrder() {
+        // Compute new sort orders (position * 10)
+        const updates = [];
+        this.fields.forEach((field, index) => {
+            const newSortOrder = (index + 1) * 10;
+            if (field.sortOrder !== newSortOrder) {
+                updates.push({ column: field.column, sortOrder: newSortOrder });
+            }
+        });
+
+        if (updates.length === 0) {
+            this.orderChanged = false;
+            this._updateSaveOrderBar();
+            return;
+        }
+
+        try {
+            // Save each changed field's sort order
+            for (const update of updates) {
+                const field = this.fields.find(f => f.column === update.column);
+                if (!field) continue;
+                await API.admin.updateFieldConfig(this.currentTable, update.column, {
+                    ...this._getFieldConfig(field),
+                    sortOrder: update.sortOrder
+                });
+            }
+            Toast.success(`Updated order for ${updates.length} fields`);
+            this.orderChanged = false;
+            this._updateSaveOrderBar();
+            // Reload to get fresh data
+            await this.loadFields(this.currentTable);
+        } catch (error) {
+            console.error('[FieldConfig] Failed to save order:', error);
+            Toast.error('Failed to save order: ' + error.message);
+        }
+    },
+
+    _getFieldConfig(field) {
+        return {
+            label: field.label || null,
+            description: field.description || null,
+            displayType: field.displayType || null,
+            format: field.format || null,
+            visible: field.visible,
+            editable: field.editable,
+            permission: field.permission || null,
+            inputType: field.inputType || null,
+            enumType: field.enumType || null,
+            minValue: field.minValue ?? null,
+            maxValue: field.maxValue ?? null,
+            maxLength: field.maxLength ?? null,
+            sectionKey: field.sectionKey || null,
+            groupName: field.groupName || null,
+            sortOrder: field.sortOrder ?? null
+        };
+    },
+
+    revertOrder() {
+        // Restore original order
+        const orderMap = {};
+        this.originalOrder.forEach((col, i) => orderMap[col] = i);
+        this.fields.sort((a, b) => (orderMap[a.column] ?? 999) - (orderMap[b.column] ?? 999));
+        this.orderChanged = false;
+        this._updateSaveOrderBar();
+        this.renderFieldTable();
     },
 
     /**
@@ -384,17 +576,19 @@ const FieldConfig = {
                 <!-- Behavior Section -->
                 <div class="fc-form-section">
                     <h4>Behavior</h4>
-                    <div class="fc-form-row">
-                        <div class="fc-form-group fc-checkbox-group">
-                            <label>
+                    <div class="fc-form-row fc-toggle-row-container">
+                        <div class="fc-toggle-row">
+                            <span class="fc-toggle-label">Visible in player view</span>
+                            <label class="fc-toggle-switch">
                                 <input type="checkbox" id="fcFieldVisible" ${field.visible ? 'checked' : ''}>
-                                Visible in player view
+                                <span class="fc-toggle-slider"></span>
                             </label>
                         </div>
-                        <div class="fc-form-group fc-checkbox-group">
-                            <label>
+                        <div class="fc-toggle-row">
+                            <span class="fc-toggle-label">Editable by staff</span>
+                            <label class="fc-toggle-switch">
                                 <input type="checkbox" id="fcFieldEditable" ${field.editable ? 'checked' : ''}>
-                                Editable by staff
+                                <span class="fc-toggle-slider"></span>
                             </label>
                         </div>
                     </div>
@@ -402,12 +596,13 @@ const FieldConfig = {
                         <div class="fc-form-group">
                             <label>Permission Required</label>
                             <select id="fcFieldPermission">
-                                <option value="">None (anyone can edit)</option>
+                                <option value="">None</option>
                                 <option value="MODIFY_PLAYER_DATA" ${field.permission === 'MODIFY_PLAYER_DATA' ? 'selected' : ''}>MODIFY_PLAYER_DATA</option>
                                 <option value="MANAGE_PUNISHMENTS" ${field.permission === 'MANAGE_PUNISHMENTS' ? 'selected' : ''}>MANAGE_PUNISHMENTS</option>
                                 <option value="MANAGE_STAFF" ${field.permission === 'MANAGE_STAFF' ? 'selected' : ''}>MANAGE_STAFF</option>
                                 <option value="VIEW_IP" ${field.permission === 'VIEW_IP' ? 'selected' : ''}>VIEW_IP</option>
                             </select>
+                            <span class="fc-permission-desc" id="fcPermissionDesc">${this.PERMISSION_DESCRIPTIONS[field.permission || '']}</span>
                         </div>
                     </div>
                 </div>
@@ -477,6 +672,12 @@ const FieldConfig = {
             document.getElementById('fcFieldEnumType').disabled = e.target.value !== 'enum';
         });
 
+        // Update permission description on change
+        document.getElementById('fcFieldPermission').addEventListener('change', (e) => {
+            const desc = document.getElementById('fcPermissionDesc');
+            if (desc) desc.textContent = this.PERMISSION_DESCRIPTIONS[e.target.value] || '';
+        });
+
         document.getElementById('fcEditModal').classList.add('show');
     },
 
@@ -517,12 +718,12 @@ const FieldConfig = {
 
         try {
             await API.admin.updateFieldConfig(this.currentTable, this.editingField.column, config);
-            Utils.showToast('Field configuration saved', 'success');
+            Toast.success('Field configuration saved');
             this.closeModal();
             await this.loadFields(this.currentTable);
         } catch (error) {
             console.error('[FieldConfig] Failed to save field:', error);
-            Utils.showToast('Failed to save: ' + error.message, 'error');
+            Toast.error('Failed to save: ' + error.message);
         }
     },
 
@@ -538,12 +739,12 @@ const FieldConfig = {
 
         try {
             await API.admin.deleteFieldConfig(this.currentTable, this.editingField.column);
-            Utils.showToast('Field reset to convention', 'success');
+            Toast.success('Field reset to convention');
             this.closeModal();
             await this.loadFields(this.currentTable);
         } catch (error) {
             console.error('[FieldConfig] Failed to reset field:', error);
-            Utils.showToast('Failed to reset: ' + error.message, 'error');
+            Toast.error('Failed to reset: ' + error.message);
         }
     },
 
@@ -553,11 +754,11 @@ const FieldConfig = {
     async refreshCache() {
         try {
             await API.admin.refreshCache();
-            Utils.showToast('Cache refreshed successfully', 'success');
+            Toast.success('Cache refreshed successfully');
             await this.loadFields(this.currentTable);
         } catch (error) {
             console.error('[FieldConfig] Failed to refresh cache:', error);
-            Utils.showToast('Failed to refresh cache: ' + error.message, 'error');
+            Toast.error('Failed to refresh cache: ' + error.message);
         }
     }
 };
