@@ -86,6 +86,27 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
+/* Shimmer sweep for high-tier donator names */
+.profile-username.shimmer {
+    background: linear-gradient(
+        110deg,
+        var(--rank-primary) 0%,
+        var(--rank-primary) 35%,
+        rgba(255,255,255,0.9) 47%,
+        rgba(255,255,255,0.9) 53%,
+        var(--rank-primary) 65%,
+        var(--rank-primary) 100%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    animation: name-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes name-shimmer {
+    0%, 100% { background-position: 100% 0; }
+    50% { background-position: 0% 0; }
+}
+
 .profile-badges { display: flex; align-items: center; gap: 6px; }
 
 .badge {
@@ -109,8 +130,8 @@
     border: 1px solid rgba(255,255,255,0.08);
 }
 
-.badge img {
-    width: 14px; height: 14px; image-rendering: pixelated;
+.badge img, .badge-icon {
+    width: 14px; height: 14px; image-rendering: pixelated; vertical-align: -2px;
 }
 
 /* ── Like Button ────────────────────────────────────────────── */

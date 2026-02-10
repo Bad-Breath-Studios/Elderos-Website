@@ -46,6 +46,40 @@
         MODERATOR: 'Moderator', SUPPORT: 'Support', YOUTUBER: 'YouTuber',
     };
 
+    const STAFF_ICONS = {
+        OWNER: '/shared/sprites/staff-ranks/OWNER.png',
+        DEVELOPER: '/shared/sprites/staff-ranks/DEVELOPER.png',
+        MANAGER: '/shared/sprites/staff-ranks/MANAGER.png',
+        ADMINISTRATOR: '/shared/sprites/staff-ranks/ADMIN.png',
+        HEAD_MODERATOR: '/shared/sprites/staff-ranks/MOD.png',
+        MODERATOR: '/shared/sprites/staff-ranks/MOD.png',
+        SUPPORT: '/shared/sprites/staff-ranks/SUPPORT.png',
+        YOUTUBER: '/shared/sprites/staff-ranks/YOUTUBER.png',
+    };
+
+    const DONATOR_ICONS = {
+        SAPPHIRE: '/shared/sprites/donator-ranks/SAPPHIRE.png',
+        EMERALD: '/shared/sprites/donator-ranks/EMERALD.png',
+        RUBY: '/shared/sprites/donator-ranks/RUBY.png',
+        DIAMOND: '/shared/sprites/donator-ranks/DIAMOND.png',
+        DRAGONSTONE: '/shared/sprites/donator-ranks/DRAGONSTONE.png',
+        ONYX: '/shared/sprites/donator-ranks/ONYX.png',
+        ZENYTE: '/shared/sprites/donator-ranks/ZENYTE.png',
+        ETERNAL: '/shared/sprites/donator-ranks/ETERNAL.png',
+        ASCENDANT: '/shared/sprites/donator-ranks/ASCENDANT.png',
+    };
+
+    const GAMEMODE_ICONS = {
+        IRONMAN: '/shared/sprites/game-ranks/IRONMAN.png',
+        HARDCORE: '/shared/sprites/game-ranks/HARDCORE_IRONMAN.png',
+        ULTIMATE: '/shared/sprites/game-ranks/ULTIMATE_IRONMAN.png',
+        GROUP: '/shared/sprites/game-ranks/GROUP_IRONMAN.png',
+        PERMA: '/shared/sprites/game-ranks/PERMA_IRONMAN.png',
+    };
+
+    // Donator ranks that get the name shimmer effect
+    const SHIMMER_RANKS = new Set(['ONYX', 'ZENYTE', 'ETERNAL', 'ASCENDANT']);
+
     const ROMAN = ['—', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 
     // === Helpers ===
@@ -279,17 +313,24 @@
             avatarContent = initial;
         }
 
-        // Badges
+        // Badges (with rank icons)
         let badges = '';
         if (data.staffRole && STAFF_MAP[data.staffRole.toUpperCase()]) {
-            badges += `<span class="badge badge-staff">${STAFF_MAP[data.staffRole.toUpperCase()]}</span>`;
+            const staffIcon = STAFF_ICONS[data.staffRole.toUpperCase()];
+            const iconHtml = staffIcon ? `<img src="${staffIcon}" class="badge-icon" alt="">` : '';
+            badges += `<span class="badge badge-staff">${iconHtml}${STAFF_MAP[data.staffRole.toUpperCase()]}</span>`;
         }
         if (data.donatorRank) {
+            const rankKey = data.donatorRank.toUpperCase();
+            const donatorIcon = DONATOR_ICONS[rankKey];
+            const iconHtml = donatorIcon ? `<img src="${donatorIcon}" class="badge-icon" alt="">` : '';
             const rank = data.donatorRank.charAt(0).toUpperCase() + data.donatorRank.slice(1).toLowerCase();
-            badges += `<span class="badge badge-donator">${escapeHtml(rank)}</span>`;
+            badges += `<span class="badge badge-donator">${iconHtml}${escapeHtml(rank)}</span>`;
         }
         if (data.gameMode && data.gameMode !== 'NORMAL') {
-            badges += `<span class="badge badge-gamemode">${escapeHtml(data.gameMode)}</span>`;
+            const gmIcon = GAMEMODE_ICONS[data.gameMode.toUpperCase()];
+            const iconHtml = gmIcon ? `<img src="${gmIcon}" class="badge-icon" alt="">` : '';
+            badges += `<span class="badge badge-gamemode">${iconHtml}${escapeHtml(data.gameMode)}</span>`;
         }
 
         // Online status
@@ -330,7 +371,7 @@
                     <div class="profile-avatar">${avatarContent}</div>
                     <div class="profile-info">
                         <div class="profile-name-row">
-                            <span class="profile-username">${escapeHtml(data.username)}</span>
+                            <span class="profile-username${data.donatorRank && SHIMMER_RANKS.has(data.donatorRank.toUpperCase()) ? ' shimmer' : ''}">${escapeHtml(data.username)}</span>
                             <div class="profile-badges">${badges}</div>
                         </div>
                         <div class="profile-row-2">
