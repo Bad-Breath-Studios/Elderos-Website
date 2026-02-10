@@ -641,6 +641,9 @@ const PlayerView = {
     // Container field keys are namespaced: economy_profiles.inventory, economy_profiles.equipment, economy_profiles.bank
     CONTAINER_KEYS: new Set(['economy_profiles.inventory', 'economy_profiles.equipment', 'economy_profiles.bank']),
 
+    // Skills field keys are namespaced: economy_profiles.skills, pvp_profiles.skills, etc.
+    SKILL_KEYS: new Set(['economy_profiles.skills', 'pvp_profiles.skills', 'league_profiles.skills', 'custom_profiles.skills']),
+
     _containerType(fieldKey) {
         // Extract column name from "table.column" key
         const col = fieldKey.includes('.') ? fieldKey.split('.').pop() : fieldKey;
@@ -680,12 +683,34 @@ const PlayerView = {
             </span>`;
         }
 
+        // Skills fields — show visual skill editor button instead of raw JSON
+        if (this.SKILL_KEYS.has(field.key)) {
+            const profileType = field.key.split('.')[0]; // e.g. 'economy_profiles'
+            let skillCount = 0;
+            try {
+                const parsed = field.value ? JSON.parse(field.value) : {};
+                skillCount = parsed.skills ? parsed.skills.length : 0;
+            } catch (e) { /* ignore parse errors */ }
+            return `<span class="${valueClass}">
+                <button class="btn-skill-view" onclick="PlayerView.openSkillEditor('${profileType}')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                        <line x1="18" y1="20" x2="18" y2="10"/>
+                        <line x1="12" y1="20" x2="12" y2="4"/>
+                        <line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                    View Skills (${skillCount} skills)
+                </button>
+            </span>`;
+        }
+
         return `<span class="${valueClass}">${field.displayValue || field.value || '\u2014'}</span>`;
     },
 
     renderFieldInput(field, section) {
         // Container fields are edited via ContainerEditor modal, not inline
         if (this.CONTAINER_KEYS.has(field.key)) return '';
+        // Skills fields are edited via SkillEditor modal, not inline
+        if (this.SKILL_KEYS.has(field.key)) return '';
 
         switch (field.inputType) {
             case 'text':
@@ -787,6 +812,13 @@ const PlayerView = {
         const isOnline = this.player.online || false;
         const playerName = this.player.username || this.player.displayName || '';
         ContainerEditor.open(this.player.id, containerType, playerName, isOnline);
+    },
+
+    openSkillEditor(profileType) {
+        if (!this.player) return;
+        const isOnline = this.player.online || false;
+        const playerName = this.player.username || this.player.displayName || '';
+        SkillEditor.open(this.player.id, profileType, playerName, isOnline);
     },
 
     toggleSection(headerEl) {

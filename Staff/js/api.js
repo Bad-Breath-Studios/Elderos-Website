@@ -437,6 +437,29 @@ const API = {
         }
     },
 
+    // ==================== SKILL ENDPOINTS ====================
+
+    skills: {
+        /**
+         * Get skill data for a player
+         * @param {number} playerId
+         * @param {string} profileType - e.g. economy_profiles, pvp_profiles
+         */
+        async get(playerId, profileType) {
+            return API.get(`/skills/${playerId}/${profileType}`);
+        },
+
+        /**
+         * Update a player's skills
+         * @param {number} playerId
+         * @param {string} profileType
+         * @param {object} action - {action:'set'|'max_all'|'reset_all', ...}
+         */
+        async update(playerId, profileType, action) {
+            return API.post(`/skills/${playerId}/${profileType}/update`, action);
+        }
+    },
+
     // ==================== STATS ENDPOINTS ====================
 
     stats: {

@@ -81,6 +81,7 @@ const CONFIG = {
         // Data
         MODIFY_PLAYER_DATA: 'MODIFY_PLAYER_DATA',
         EDIT_CONTAINERS: 'EDIT_CONTAINERS',
+        EDIT_SKILLS: 'EDIT_SKILLS',
         // Staff
         VIEW_STAFF: 'VIEW_STAFF',
         MANAGE_STAFF: 'MANAGE_STAFF',

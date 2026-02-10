@@ -607,17 +607,22 @@
     }
 
     async function showCreateGiveawayModal() {
-        // Fetch videos and prizes
-        const [videosData, prizesData] = await Promise.all([
-            apiFetch('/videos?limit=50'),
-            apiFetch('/prizes')
-        ]);
+        let videosData, prizesData;
+        try {
+            [videosData, prizesData] = await Promise.all([
+                apiFetch('/videos?limit=50'),
+                apiFetch('/prizes')
+            ]);
+        } catch (err) {
+            console.error('Failed to load giveaway data:', err);
+            return showToast('Failed to load videos or prizes — check console', 'error');
+        }
 
         const videos = videosData.videos || [];
         const prizes = prizesData.prizes || [];
 
         if (!videos.length) return showToast('Sync your videos first before creating a giveaway', 'error');
-        if (!prizes.length) return showToast('No prize tiers configured', 'error');
+        if (!prizes.length) return showToast('No prize tiers configured — add giveaway_prizes to hub_configurations.yaml', 'error');
 
         const videoOptions = videos.map(v => `<option value="${escapeHtml(v.youtubeVideoId)}">${escapeHtml(v.title)}</option>`).join('');
         const prizeOptions = prizes.map(p => `<option value="${escapeHtml(p.id)}">${escapeHtml(p.name)}</option>`).join('');
