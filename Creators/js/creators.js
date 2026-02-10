@@ -33,7 +33,8 @@
     function authHeaders() {
         const h = { 'Content-Type': 'application/json' };
         if (typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
-            h['Authorization'] = Auth.getAuthHeader();
+            const token = Auth.getToken();
+            if (token) h['Authorization'] = 'Bearer ' + token;
         }
         return h;
     }
