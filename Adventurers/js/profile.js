@@ -46,6 +46,8 @@
         MODERATOR: 'Moderator', SUPPORT: 'Support', YOUTUBER: 'YouTuber',
     };
 
+    const ROMAN = ['—', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+
     // === Helpers ===
     function escapeHtml(str) {
         if (!str) return '';
@@ -109,10 +111,11 @@
         document.body.classList.add(`rank-${rank}`);
     }
 
-    // === Grade badge HTML ===
-    function gradeBadge(grade, cls) {
-        cls = cls || 'grade-badge';
-        return `<span class="${cls} grade-${grade || 'D'}">${grade || 'D'}</span>`;
+    // === Grade badge HTML (0-10 → Roman numerals) ===
+    function gradeBadge(grade, small) {
+        const g = typeof grade === 'number' ? grade : 0;
+        const cls = small ? 'grade-pill-sm' : 'grade-pill';
+        return `<span class="${cls} g${g}"><span class="numeral">${ROMAN[g] || '—'}</span></span>`;
     }
 
     // === Init ===
@@ -446,7 +449,7 @@
     // === Quick Stats ===
     function renderQuickStats(eco) {
         const rank = eco.overallRank || '—';
-        const grade = eco.overallGrade || 'D';
+        const grade = typeof eco.overallGrade === 'number' ? eco.overallGrade : 0;
 
         return `
             <div class="quick-stats">
@@ -485,7 +488,7 @@
             const data = skills[s.key];
             const level = data ? data.level : 1;
             const xp = data ? data.xp : 0;
-            const grade = data ? data.grade : 'D';
+            const grade = data ? (typeof data.grade === 'number' ? data.grade : 0) : 0;
             const isMaxed = level >= 99;
 
             html += `
@@ -497,7 +500,7 @@
                     </div>
                     <div class="skill-right">
                         <span class="skill-level ${isMaxed ? 'maxed' : ''}">${level}</span>
-                        <span class="skill-grade grade-${grade}">${grade}</span>
+                        ${gradeBadge(grade, true)}
                     </div>
                 </div>`;
         }
