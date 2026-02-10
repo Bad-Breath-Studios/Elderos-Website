@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Program — Elderos</title>
+    <meta name="description" content="Earn rewards by promoting Elderos. Join our affiliate program and get paid for every player you bring.">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/shared.css?v=1">
+    <link rel="stylesheet" href="/shared/navbar.css?v=8">
+    <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(249,115,22,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .tiers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+        }
+        .tier-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            transition: border-color 0.2s ease;
+        }
+        .tier-card:hover { border-color: var(--border-hover); }
+        .tier-card .tier-name {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+        .tier-card .tier-req {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        .tier-card .tier-rate {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+        .tier-card .tier-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+        }
+        .tier-card ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .tier-card li {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            padding-left: 16px;
+            position: relative;
+        }
+        .tier-card li::before {
+            content: '\2713';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .tier-bronze .tier-name { color: #cd7f32; }
+        .tier-silver .tier-name { color: #c0c0c0; }
+        .tier-gold .tier-name { color: var(--gold); }
+        .steps-list {
+            counter-reset: step;
+            list-style: none;
+            padding: 0;
+            margin: 24px 0;
+        }
+        .steps-list li {
+            counter-increment: step;
+            padding: 16px 16px 16px 56px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            position: relative;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .steps-list li strong { color: var(--text); }
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: var(--radius-md);
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+        .highlight-box p {
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: var(--text-dim);
+        }
+        .highlight-box strong { color: var(--text); }
+        .cta-section {
+            text-align: center;
+            margin: 48px 0 0;
+            padding: 32px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+        .cta-section h2 {
+            margin-top: 0 !important;
+            margin-bottom: 8px;
+        }
+        .cta-section p {
+            margin-bottom: 20px;
+        }
+        .cta-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 16px rgba(244, 14, 0, 0.25);
+        }
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 24px rgba(244, 14, 0, 0.4);
+            color: #fff;
+        }
+        @media (max-width: 700px) {
+            .tiers-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    <div id="navbar"></div>
+
+    <main class="content-page">
+        <h1>Affiliate Program</h1>
+        <p class="page-subtitle">Promote Elderos. Earn rewards. Grow with us.</p>
+
+        <h2>How It Works</h2>
+        <p>Our affiliate program rewards content creators and community members who bring new players to Elderos. Share your unique referral link, and earn a commission on every purchase made by players you refer.</p>
+
+        <div class="highlight-box">
+            <p><strong>Simple deal:</strong> When someone signs up through your link and makes a purchase in the Elderos store, you earn a percentage of that sale as Eldercoins credited directly to your account. Eldercoins can be spent on anything in the store.</p>
+        </div>
+
+        <h2>Commission Tiers</h2>
+        <p>The more players you refer, the higher your commission rate. Tiers are evaluated monthly based on active referrals.</p>
+
+        <div class="tiers-grid">
+            <div class="tier-card tier-bronze">
+                <div class="tier-name">Bronze</div>
+                <div class="tier-req">0 &ndash; 9 referrals</div>
+                <div class="tier-rate">5%</div>
+                <div class="tier-label">commission per sale</div>
+                <ul>
+                    <li>Unique referral link</li>
+                    <li>Dashboard tracking</li>
+                    <li>Monthly payouts</li>
+                </ul>
+            </div>
+            <div class="tier-card tier-silver">
+                <div class="tier-name">Silver</div>
+                <div class="tier-req">10 &ndash; 49 referrals</div>
+                <div class="tier-rate">10%</div>
+                <div class="tier-label">commission per sale</div>
+                <ul>
+                    <li>Everything in Bronze</li>
+                    <li>Priority support</li>
+                    <li>Exclusive affiliate badge</li>
+                </ul>
+            </div>
+            <div class="tier-card tier-gold">
+                <div class="tier-name">Gold</div>
+                <div class="tier-req">50+ referrals</div>
+                <div class="tier-rate">15%</div>
+                <div class="tier-label">commission per sale</div>
+                <ul>
+                    <li>Everything in Silver</li>
+                    <li>Custom promo codes</li>
+                    <li>Featured on Creators page</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>Getting Started</h2>
+        <ol class="steps-list">
+            <li><strong>Create an account</strong> &mdash; Download the <a href="https://play.elderos.io">Elderos launcher</a> and register your account.</li>
+            <li><strong>Apply on Discord</strong> &mdash; Open a ticket in our <a href="https://discord.gg/MwkvVMFmfg" target="_blank">Discord server</a> and request affiliate access. Include your Elderos username and any content platforms you use.</li>
+            <li><strong>Get your link</strong> &mdash; Once approved, you'll receive a unique referral link and access to the affiliate dashboard on the <a href="https://creators.elderos.io/#/dashboard">Creators page</a>.</li>
+            <li><strong>Start earning</strong> &mdash; Share your link in videos, streams, social media, or wherever your audience hangs out. Track clicks, signups, and earnings in real time.</li>
+        </ol>
+
+        <h2>Rules &amp; Guidelines</h2>
+        <ul>
+            <li><strong>No spam.</strong> Don't mass-DM, bot, or use misleading ads to drive referrals.</li>
+            <li><strong>No self-referrals.</strong> Creating alt accounts through your own link will get you removed.</li>
+            <li><strong>Be honest.</strong> Represent Elderos accurately &mdash; don't make promises we can't keep.</li>
+            <li><strong>Cookie duration:</strong> Referral cookies last 30 days. If a referred player makes a purchase within 30 days of clicking your link, you get credit.</li>
+            <li><strong>Minimum payout:</strong> Earnings are paid out monthly once your balance reaches 500 Eldercoins.</li>
+        </ul>
+
+        <h2>FAQ</h2>
+        <h3>Who can join?</h3>
+        <p>Anyone with an active Elderos account. Content creators, streamers, community leaders, or just players who love the game and want to share it.</p>
+
+        <h3>How are referrals tracked?</h3>
+        <p>Each affiliate gets a unique link (e.g., <code>elderos.io/?ref=yourname</code>). When someone clicks it, a 30-day cookie is set. Any account created and purchases made during that window are attributed to you.</p>
+
+        <h3>When do I get paid?</h3>
+        <p>Earnings are credited to your Elderos account as Eldercoins on the 1st of each month. You can spend them immediately in the store.</p>
+
+        <h3>Can I lose my affiliate status?</h3>
+        <p>Yes. Violating the guidelines above, inactivity for 90+ days, or abusive behavior will result in removal from the program. We'll always reach out before taking action.</p>
+
+        <div class="cta-section">
+            <h2>Ready to Start?</h2>
+            <p>Join the Elderos affiliate program and start earning today.</p>
+            <a href="https://discord.gg/MwkvVMFmfg" target="_blank" class="cta-btn">Apply on Discord</a>
+        </div>
+
+        <p class="last-updated">This page was last updated on February 9, 2026.</p>
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="/shared/auth.js?v=2"></script>
+    <script src="/shared/navbar.js?v=11"></script>
+    <script src="/shared/footer.js?v=2"></script>
+</body>
+</html>

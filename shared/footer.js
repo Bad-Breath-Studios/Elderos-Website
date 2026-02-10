@@ -53,6 +53,7 @@
                     <div class="footer-col">
                         <div class="footer-col-title">About</div>
                         <a href="https://elderos.io/pages/about.html">Our Story</a>
+                        <a href="https://elderos.io/pages/affiliate.html">Affiliate Program</a>
                     </div>
                 </div>
 

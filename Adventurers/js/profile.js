@@ -182,17 +182,45 @@
     }
 
     // === Search / Landing ===
-    function renderSearch(root) {
+    // Avatar rank → CSS class
+    function rankClass(donatorRank) {
+        if (!donatorRank) return 'none';
+        const r = donatorRank.toUpperCase();
+        if (['ZENYTE','ASCENDANT','ETERNAL'].includes(r)) return 'zenyte';
+        if (r === 'ONYX') return 'onyx';
+        if (['DIAMOND','DRAGONSTONE'].includes(r)) return 'diamond';
+        if (r === 'RUBY') return 'ruby';
+        if (['EMERALD','SAPPHIRE'].includes(r)) return 'emerald';
+        return 'none';
+    }
+
+    function profileHref(username) {
+        return '/' + encodeURIComponent(username);
+    }
+
+    async function renderSearch(root) {
+        // Render the shell immediately (hero + skeleton placeholders)
         root.innerHTML = `
-            <div class="profile-landing">
-                <h1>Elderos <span class="accent">Adventurers</span></h1>
-                <p>Look up any player to see their skills, stats, and rank.</p>
-                <div class="profile-search-box">
-                    <input type="text" class="profile-search-input" id="landing-search" placeholder="Enter username..." autofocus>
-                    <button class="profile-search-btn" id="landing-search-btn">Search</button>
+            <div class="landing-page">
+                <div class="search-hero">
+                    <div class="search-title">
+                        <span class="search-title-white">Elderos </span><span class="search-title-accent">Adventurers</span>
+                    </div>
+                    <div class="search-sub">Look up any player to see their skills, stats, and rank.</div>
+                    <div class="search-bar">
+                        <input class="search-input" type="text" id="landing-search" placeholder="Enter username..." autofocus>
+                        <button class="search-btn" id="landing-search-btn">Search</button>
+                    </div>
+                </div>
+                <div class="landing-body" id="landing-body">
+                    <div class="landing-loading">
+                        <div class="skeleton-bar w-xl"></div>
+                        <div class="skeleton-bar w-lg"></div>
+                    </div>
                 </div>
             </div>`;
 
+        // Bind search
         const input = document.getElementById('landing-search');
         const btn = document.getElementById('landing-search-btn');
         function go() {
@@ -201,6 +229,114 @@
         }
         btn.addEventListener('click', go);
         input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+
+        // Fetch landing data
+        try {
+            const res = await fetch(`${API_BASE}/api/v1/profile`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            renderLandingBody(data);
+        } catch (err) {
+            console.error('Landing data fetch failed:', err);
+            document.getElementById('landing-body').innerHTML = '';
+        }
+    }
+
+    function renderLandingBody(data) {
+        const body = document.getElementById('landing-body');
+        if (!body) return;
+
+        let html = '';
+
+        // Two-column: Most Liked + Recently Active
+        html += '<div class="landing-two-col">';
+
+        // ── Most Liked ──
+        html += '<div>';
+        html += `<div class="section-divider"><span class="section-divider-label">❤️ Most Liked</span><div class="section-divider-line"></div></div>`;
+        html += '<div class="liked-list">';
+        if (data.mostLiked && data.mostLiked.length > 0) {
+            data.mostLiked.forEach((p, i) => {
+                const initial = (p.username || '?').charAt(0).toUpperCase();
+                const rc = rankClass(p.donatorRank);
+                const rankLabel = p.donatorRank && p.donatorRank.toUpperCase() !== 'NONE'
+                    ? `<span class="liked-badge ${rc}">${p.donatorRank.charAt(0).toUpperCase() + p.donatorRank.slice(1).toLowerCase()}</span>` : '';
+                html += `
+                    <a href="${profileHref(p.username)}" class="liked-card">
+                        <span class="liked-rank">${i + 1}</span>
+                        <div class="liked-avatar ${rc}">${initial}</div>
+                        <div class="liked-info">
+                            <div class="liked-name">${escapeHtml(p.username)}</div>
+                            <div class="liked-meta">${rankLabel}<span>Total: ${formatNumber(p.totalLevel || 0)}</span></div>
+                        </div>
+                        <div class="liked-likes">
+                            <span class="liked-heart">❤️</span>
+                            <span class="liked-count">${p.likes || 0}</span>
+                        </div>
+                    </a>`;
+            });
+        } else {
+            html += '<div class="landing-empty">No liked profiles yet.</div>';
+        }
+        html += '</div></div>';
+
+        // ── Recently Active ──
+        html += '<div>';
+        html += `<div class="section-divider"><span class="section-divider-label">🟢 Recently Active</span><div class="section-divider-line"></div></div>`;
+        html += '<div class="online-list">';
+        if (data.recentlyActive && data.recentlyActive.length > 0) {
+            data.recentlyActive.forEach(p => {
+                const initial = (p.username || '?').charAt(0).toUpperCase();
+                const rc = rankClass(p.donatorRank);
+                html += `
+                    <a href="${profileHref(p.username)}" class="online-card">
+                        <div class="online-avatar ${rc}">${initial}</div>
+                        <div class="online-info">
+                            <div class="online-name">${escapeHtml(p.username)}</div>
+                            <div class="online-detail">Combat ${p.combatLevel || 3} · Total ${formatNumber(p.totalLevel || 0)}</div>
+                        </div>
+                        <div class="online-status">
+                            <div class="online-dot"></div>
+                        </div>
+                    </a>`;
+            });
+        } else {
+            html += '<div class="landing-empty">No recent activity.</div>';
+        }
+        html += '</div></div>';
+
+        html += '</div>'; // close landing-two-col
+
+        // ── Newest Adventurers ──
+        if (data.newest && data.newest.length > 0) {
+            html += '<div class="newest-section">';
+            html += `<div class="section-divider"><span class="section-divider-label">🆕 Newest Adventurers</span><div class="section-divider-line"></div></div>`;
+            html += '<div class="newest-grid">';
+            data.newest.forEach(p => {
+                const initial = (p.username || '?').charAt(0).toUpperCase();
+                const rc = rankClass(p.donatorRank);
+                html += `
+                    <a href="${profileHref(p.username)}" class="newest-card">
+                        <div class="newest-avatar ${rc}">${initial}</div>
+                        <div class="newest-name">${escapeHtml(p.username)}</div>
+                        <div class="newest-date">${joinedAgo(p.createdAt)}</div>
+                    </a>`;
+            });
+            html += '</div></div>';
+        }
+
+        body.innerHTML = html;
+    }
+
+    function joinedAgo(timestamp) {
+        if (!timestamp) return '';
+        const diff = Date.now() - timestamp;
+        const days = Math.floor(diff / 86400000);
+        if (days === 0) return 'Joined today';
+        if (days === 1) return 'Joined yesterday';
+        if (days < 30) return `${days} days ago`;
+        if (days < 365) return `${Math.floor(days / 30)}mo ago`;
+        return `${Math.floor(days / 365)}y ago`;
     }
 
     // === 404 ===
