@@ -610,9 +610,12 @@ const Events = {
                 <div class="events-modal-body">
                     ${!isEdit ? `
                     <div class="evt-template-row">
-                        <input type="checkbox" id="evtSaveTemplate" />
-                        <span class="evt-template-label">Save as template:</span>
-                        <input class="evt-template-name-input" type="text" id="evtTemplateName" placeholder="e.g. Friday Night Boss Mass" />
+                        <label class="evt-template-toggle">
+                            <input type="checkbox" id="evtSaveTemplate" />
+                            <span class="evt-template-switch"></span>
+                        </label>
+                        <span class="evt-template-label">Save as template</span>
+                        <input class="evt-template-name-input" type="text" id="evtTemplateName" placeholder="Template name..." disabled />
                     </div>` : ''}
 
                     <div class="evt-form-group">
@@ -731,6 +734,16 @@ const Events = {
                 if (allBtn) allBtn.classList.remove('selected');
             }
         });
+
+        // Template toggle → enable/disable name input
+        const tplCheck = document.getElementById('evtSaveTemplate');
+        const tplName = document.getElementById('evtTemplateName');
+        if (tplCheck && tplName) {
+            tplCheck.addEventListener('change', () => {
+                tplName.disabled = !tplCheck.checked;
+                if (tplCheck.checked) tplName.focus();
+            });
+        }
 
         // Duration change
         document.getElementById('evtDuration').addEventListener('change', e => {
