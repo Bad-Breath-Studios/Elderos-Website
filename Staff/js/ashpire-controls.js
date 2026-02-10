@@ -136,6 +136,30 @@ const AshpireControls = {
                     </div>
                 </div>
 
+                <!-- Website Lockdown Section -->
+                <div class="content-panel">
+                    <div class="panel-header">
+                        <h3 class="panel-title">Website Lockdown</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="ashpire-toggle-row">
+                            <div class="ashpire-toggle-info">
+                                <div class="ashpire-toggle-label">Lock Public Website</div>
+                                <div class="ashpire-toggle-desc">Redirect all public subdomains to the homepage. Hiscores, News, Play, Vote, Adventurers, and Creators will be inaccessible.</div>
+                            </div>
+                            <label class="ashpire-toggle">
+                                <input type="checkbox" id="toggleSiteLockdown" ${data.siteLockdownEnabled ? 'checked' : ''}>
+                                <span class="ashpire-toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="ashpire-panel-status ${data.siteLockdownEnabled ? 'lockdown-active' : ''}" id="siteLockdownStatusBar">
+                            <span class="ashpire-status-dot ${data.siteLockdownEnabled ? 'lockdown' : ''}"></span>
+                            <span id="siteLockdownStatusText">${data.siteLockdownEnabled ? 'Website lockdown active \u2014 All public subdomains redirect to homepage' : 'Website lockdown inactive \u2014 All subdomains accessible'}</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Active Staff Sessions Section -->
                 <div class="ashpire-section" id="ashpireSessionsSection">
                     <div class="ashpire-section-header" data-section="sessions">
@@ -190,6 +214,11 @@ const AshpireControls = {
             if (lockdownToggle?.checked) {
                 this._updateLockdown(true, e.target.value);
             }
+        });
+
+        // Bind website lockdown toggle
+        document.getElementById('toggleSiteLockdown')?.addEventListener('change', (e) => {
+            this._updateSiteLockdown(e.target.checked);
         });
 
         // Bind collapsible section headers
@@ -261,6 +290,26 @@ const AshpireControls = {
             }
         } catch (error) {
             Toast.error('Failed to update lockdown: ' + error.message);
+            this.load();
+        }
+    },
+
+    async _updateSiteLockdown(enabled) {
+        try {
+            const data = await API.ashpire.updateAuthSettings({ siteLockdownEnabled: enabled });
+
+            const bar = document.getElementById('siteLockdownStatusBar');
+            const dot = bar?.querySelector('.ashpire-status-dot');
+            const text = document.getElementById('siteLockdownStatusText');
+            if (bar) bar.classList.toggle('lockdown-active', data.siteLockdownEnabled);
+            if (dot) dot.classList.toggle('lockdown', data.siteLockdownEnabled);
+            if (text) text.textContent = data.siteLockdownEnabled
+                ? 'Website lockdown active \u2014 All public subdomains redirect to homepage'
+                : 'Website lockdown inactive \u2014 All subdomains accessible';
+
+            Toast.success(`Website lockdown ${enabled ? 'enabled' : 'disabled'}`);
+        } catch (error) {
+            Toast.error('Failed to update website lockdown: ' + error.message);
             this.load();
         }
     },

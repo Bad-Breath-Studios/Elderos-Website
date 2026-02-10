@@ -297,9 +297,23 @@
         }
     }
 
-    function init() {
+    async function init() {
         const container = document.getElementById('navbar');
         if (!container) return;
+
+        // Site lockdown — redirect non-homepage subdomains
+        const host = window.location.hostname;
+        const isHomepage = (host === 'elderos.io' || host === 'www.elderos.io' || host === 'localhost');
+        if (!isHomepage) {
+            try {
+                const resp = await fetch('https://api.elderos.io/api/v1/public/site-status');
+                const data = await resp.json();
+                if (data.lockdown) {
+                    window.location.href = 'https://elderos.io';
+                    return;
+                }
+            } catch (e) { /* API unreachable — don't block */ }
+        }
 
         container.innerHTML = buildNavHTML();
 
