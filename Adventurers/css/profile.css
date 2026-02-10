@@ -356,16 +356,39 @@
 
 .skill-level.maxed { color: var(--rank-primary); }
 
-.skills-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    background: var(--bg-card, #111114); border: 1px solid var(--border, rgba(255,255,255,0.05));
-    border-radius: 8px; padding: 10px 16px; margin-top: 6px;
+/* Totals cell — fills the empty slot in the last grid row */
+.skill-totals-cell {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: var(--bg-card, #111114); border: 1px solid var(--rank-border);
+    border-radius: 8px; padding: 8px 12px; text-align: center;
 }
 
-.skills-footer-left { display: flex; align-items: center; gap: 16px; }
-.skills-footer-label { font-size: 11px; color: rgba(255,255,255,0.42); }
-.skills-footer-value { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--text-bright, #eeeef0); }
-.skills-footer-xp { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--rank-primary); }
+.skill-totals-level {
+    font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 800;
+    color: var(--rank-primary); line-height: 1.1;
+}
+
+.skill-totals-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: rgba(255,255,255,0.18); margin-bottom: 4px;
+}
+
+.skill-totals-row {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; gap: 6px;
+}
+
+.skill-totals-label {
+    font-size: 10px; color: rgba(255,255,255,0.30);
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.skill-totals-val {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    color: var(--text-bright, #eeeef0);
+}
+
+.skill-totals-val.xp { color: var(--rank-primary); }
 
 /* ── Two Column Layout ──────────────────────────────────────── */
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }

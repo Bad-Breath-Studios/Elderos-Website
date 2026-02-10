@@ -505,22 +505,11 @@
                 </div>`;
         }
 
-        // Fill last row if needed (23 skills, need 24 for 8 complete rows)
-        if (SKILLS.length % 3 !== 0) {
-            const remaining = 3 - (SKILLS.length % 3);
-            for (let i = 0; i < remaining; i++) {
-                html += '<div class="skill-row" style="visibility:hidden"></div>';
-            }
-        }
-
-        html += '</div>';
-
-        // Footer
+        // Totals cell fills the remaining slot in the last row
         const overall = skills.overall;
         const totalLevel = overall ? overall.level : 0;
         const totalXp = overall ? overall.xp : 0;
 
-        // Compute combat level from skills
         const atk = (skills.attack || {}).level || 1;
         const str = (skills.strength || {}).level || 1;
         const def = (skills.defence || {}).level || 1;
@@ -535,13 +524,20 @@
         const combatLevel = Math.floor(base + Math.max(melee, Math.max(range, mage)));
 
         html += `
-            <div class="skills-footer">
-                <div class="skills-footer-left">
-                    <div><span class="skills-footer-label">Total Level: </span><span class="skills-footer-value">${formatNumber(totalLevel)}</span><span class="skills-footer-label"> / 2,277</span></div>
-                    <div><span class="skills-footer-label">Combat: </span><span class="skills-footer-value">${combatLevel}</span></div>
+            <div class="skill-totals-cell">
+                <div class="skill-totals-level">${formatNumber(totalLevel)}</div>
+                <div class="skill-totals-sub">/ 2,277</div>
+                <div class="skill-totals-row">
+                    <span class="skill-totals-label">Combat</span>
+                    <span class="skill-totals-val">${combatLevel}</span>
                 </div>
-                <div class="skills-footer-xp">${formatNumber(totalXp)} XP</div>
+                <div class="skill-totals-row">
+                    <span class="skill-totals-label">XP</span>
+                    <span class="skill-totals-val xp">${formatXpShort(totalXp)}</span>
+                </div>
             </div>`;
+
+        html += '</div>';
 
         return html;
     }
