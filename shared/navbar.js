@@ -10,6 +10,7 @@
     function getActivePage() {
         const host = window.location.hostname;
         const path = window.location.pathname;
+        if (host.includes('creators')) return 'creators';
         if (host.includes('adventurers')) return 'adventurers';
         if (host.includes('hiscores')) return 'hiscores';
         if (host.includes('vote')) return 'vote';
@@ -113,6 +114,7 @@
 
                     <div class="nav-right-links">
                         <a href="https://adventurers.elderos.io" class="nav-link${activeClass('adventurers')}">Adventurers</a>
+                        <a href="https://creators.elderos.io" class="nav-link${activeClass('creators')}">Creators</a>
                         <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                         <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
                     </div>
@@ -131,6 +133,7 @@
                 <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
                 <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
                 <a href="https://adventurers.elderos.io" class="nav-link${activeClass('adventurers')}">Adventurers</a>
+                <a href="https://creators.elderos.io" class="nav-link${activeClass('creators')}">Creators</a>
                 <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                 <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
                 <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
