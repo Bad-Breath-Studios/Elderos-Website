@@ -696,9 +696,7 @@
                 </div>`;
         }
 
-        html += '</div>';
-
-        // Totals bar — separate from grid so skill rows stay uniform
+        // Totals cell — fills the empty 3rd slot on the last row
         const overall = skills.overall;
         const totalLevel = overall ? overall.level : 0;
         const totalXp = overall ? overall.xp : 0;
@@ -717,23 +715,17 @@
         const combatLevel = Math.floor(base + Math.max(melee, Math.max(range, mage)));
 
         html += `
-            <div class="skill-totals-bar">
-                <div class="skill-totals-item primary">
-                    <span class="skill-totals-val">${formatNumber(totalLevel)}</span>
-                    <span class="skill-totals-label">/ 2,277</span>
-                </div>
+            <div class="skill-totals-cell">
+                <span class="skill-totals-val primary">${formatNumber(totalLevel)}</span>
+                <span class="skill-totals-label">/ 2,277</span>
                 <div class="skill-totals-sep"></div>
-                <div class="skill-totals-item">
-                    <img src="/shared/sprites/combat-level.png" class="totals-icon" alt="">
-                    <span class="skill-totals-label">Combat</span>
-                    <span class="skill-totals-val">${combatLevel}</span>
-                </div>
+                <img src="/shared/sprites/combat-level.png" class="totals-icon" alt="">
+                <span class="skill-totals-val">${combatLevel}</span>
                 <div class="skill-totals-sep"></div>
-                <div class="skill-totals-item">
-                    <span class="skill-totals-label">Total XP</span>
-                    <span class="skill-totals-val xp">${formatXpShort(totalXp)}</span>
-                </div>
+                <span class="skill-totals-val xp">${formatXpShort(totalXp)}</span>
             </div>`;
+
+        html += '</div>';
 
         return html;
     }
