@@ -315,6 +315,9 @@
             } catch (e) { /* API unreachable — don't block */ }
         }
 
+        // Reveal page after lockdown check passes (lockdown-check.js hides it in <head>)
+        document.documentElement.style.visibility = '';
+
         container.innerHTML = buildNavHTML();
 
         // Scroll effect
