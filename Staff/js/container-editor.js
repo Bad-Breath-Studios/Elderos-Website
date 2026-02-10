@@ -25,6 +25,8 @@ const ContainerEditor = (() => {
     // State
     let _overlay = null;
     let _popover = null;
+    let _popoverSlot = -1;
+    let _popoverClosedAt = 0;
     let _playerId = null;
     let _playerName = '';
     let _isOnline = false;
@@ -246,7 +248,11 @@ const ContainerEditor = (() => {
 
     function onSlotMouseDown(e, slotIndex) {
         if (e.button !== 0) return; // left click only
+
+        // If clicking the same slot that had a popover, just toggle it closed
+        const wasShowingForThisSlot = _popoverSlot === slotIndex;
         closePopover();
+        if (wasShowingForThisSlot) return;
 
         const item = getSlotItem(slotIndex);
 
@@ -398,7 +404,9 @@ const ContainerEditor = (() => {
         if (_popover) {
             _popover.remove();
             _popover = null;
+            _popoverClosedAt = Date.now();
         }
+        _popoverSlot = -1;
     }
 
     function positionPopover(popover, anchorEl) {
@@ -427,8 +435,11 @@ const ContainerEditor = (() => {
 
     function showOccupiedPopover(slotIndex, e) {
         closePopover();
+        // If this slot was JUST closed (within 50ms), don't reopen — it was a toggle
+        if (Date.now() - _popoverClosedAt < 50) return;
         const item = getSlotItem(slotIndex);
         if (!item) return;
+        _popoverSlot = slotIndex;
 
         const itemName = (typeof ItemData !== 'undefined' && ItemData.isLoaded()) ? (ItemData.getName(item.id) || 'Unknown') : 'Item';
 
@@ -514,6 +525,7 @@ const ContainerEditor = (() => {
 
     function showAddItemPopover(slotIndex, e) {
         closePopover();
+        _popoverSlot = slotIndex;
 
         const pop = document.createElement('div');
         pop.className = 'slot-popover';
