@@ -160,7 +160,6 @@
         totalPlayers: 0,
         players: [],
         loading: false,
-        playerView: null,      // username if on player profile page
     };
 
     // Client-side cache (60s TTL)
@@ -179,203 +178,34 @@
         return `<img src="${src}" alt="${escapeHtml(alt)}" class="${cls || 'icon-img'}" draggable="false">`;
     }
 
+    // Adventurers profile base URL
+    const ADVENTURERS_BASE = window.location.hostname === 'localhost'
+        ? '/adventurers'
+        : 'https://adventurers.elderos.io';
+
     // === Init ===
     document.addEventListener('DOMContentLoaded', () => {
         readUrl();
-        buildSidebar();
-        bindEvents();
 
-        if (state.playerView) {
-            showPlayerProfile(state.playerView);
-        } else {
-            showLeaderboard();
+        // Backward compat: redirect ?player=X to adventurers profile
+        if (new URLSearchParams(window.location.search).has('player')) {
+            const name = new URLSearchParams(window.location.search).get('player');
+            if (name) {
+                window.location.href = `${ADVENTURERS_BASE}/${encodeURIComponent(name)}`;
+                return;
+            }
         }
-    });
-
-    function showLeaderboard() {
-        state.playerView = null;
-
-        // Show leaderboard elements, hide profile
-        const modeTabs = $('#mode-tabs');
-        const donatorChips = $('#donator-chips');
-        const tableWrapper = $('.table-wrapper');
-        const profileContent = $('#profile-content');
-        if (modeTabs) modeTabs.style.display = '';
-        if (donatorChips) donatorChips.style.display = '';
-        if (tableWrapper) tableWrapper.style.display = '';
-        if (profileContent) { profileContent.style.display = 'none'; profileContent.innerHTML = ''; }
 
         buildSidebar();
         buildModeTabs();
         buildDonatorChips();
         bindEvents();
         fetchHiscores();
-    }
-
-    function showPlayerProfile(username) {
-        state.playerView = username;
-
-        // Hide leaderboard elements, show profile inline
-        const modeTabs = $('#mode-tabs');
-        const donatorChips = $('#donator-chips');
-        const tableWrapper = $('.table-wrapper');
-        const profileContent = $('#profile-content');
-        if (modeTabs) modeTabs.style.display = 'none';
-        if (donatorChips) donatorChips.style.display = 'none';
-        if (tableWrapper) tableWrapper.style.display = 'none';
-        if (profileContent) {
-            profileContent.style.display = '';
-            profileContent.innerHTML = '<div class="profile-loading">Loading player data...</div>';
-            fetchPlayerProfile(username, profileContent);
-        }
-    }
-
-    async function fetchPlayerProfile(username, container) {
-        try {
-            const res = await fetch(`${API_BASE}/hiscores/player/${encodeURIComponent(username)}`);
-            if (res.status === 404) {
-                container.innerHTML = `<div class="profile-error">
-                    <div class="state-message">
-                        <div class="state-title">Player Not Found</div>
-                        <div class="state-desc">Could not find a player named "${escapeHtml(username)}".</div>
-                        <button class="state-btn" onclick="window.Hiscores.backToLeaderboard()">Back to Hiscores</button>
-                    </div>
-                </div>`;
-                return;
-            }
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            renderPlayerProfile(data, container);
-        } catch (err) {
-            console.error('Player profile fetch failed:', err);
-            container.innerHTML = `<div class="profile-error">
-                <div class="state-message">
-                    <div class="state-title">Error</div>
-                    <div class="state-desc">Failed to load player profile. Please try again.</div>
-                    <button class="state-btn" onclick="window.Hiscores.backToLeaderboard()">Back to Hiscores</button>
-                </div>
-            </div>`;
-        }
-    }
-
-    function renderPlayerProfile(player, container) {
-        const badges = renderBadges(player);
-
-        let html = `
-            <div class="profile-header">
-                <div class="profile-nav-row">
-                    <button class="profile-back" onclick="window.Hiscores.backToLeaderboard()">&larr; Back to Hiscores</button>
-                    <a href="https://adventurers.elderos.io/${encodeURIComponent(player.username)}" class="profile-view-link" target="_blank">View Full Profile &rarr;</a>
-                </div>
-                <div class="profile-identity">
-                    <h2 class="profile-name">${escapeHtml(player.username)}</h2>
-                    <span class="profile-badges">${badges}</span>
-                </div>
-            </div>`;
-
-        // Overall banner
-        if (player.skills && player.skills.overall) {
-            const o = player.skills.overall;
-            html += `<div class="profile-overall-card">
-                <div class="profile-overall-row">
-                    ${iconImg('assets/skills/overall.png', 'Overall', 'profile-skill-icon')}
-                    <div class="profile-overall-info">
-                        <div class="profile-overall-label">Overall</div>
-                        <div class="profile-overall-values">
-                            <span class="profile-stat">Rank <strong>#${formatNumber(o.rank)}</strong></span>
-                            <span class="profile-stat">Level <strong>${formatNumber(o.level)}</strong></span>
-                            <span class="profile-stat">XP <strong>${formatNumber(o.xp)}</strong></span>
-                            ${renderGrade(o.xp, true)}
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        }
-
-        // Skills table
-        html += `<div class="profile-section">
-            <h3 class="profile-section-title">Skills</h3>
-            <div class="profile-table-wrap"><table class="profile-table">
-                <thead><tr>
-                    <th style="width:32px"></th>
-                    <th>Skill</th>
-                    <th style="width:70px;text-align:center">Grade</th>
-                    <th style="width:80px;text-align:right">Rank</th>
-                    <th style="width:70px;text-align:right">Level</th>
-                    <th style="width:110px;text-align:right">XP</th>
-                </tr></thead><tbody>`;
-
-        for (const skill of SKILLS) {
-            if (skill.key === 'overall') continue;
-            const s = player.skills ? player.skills[skill.key] : null;
-            const level = s ? s.level : 1;
-            const xp = s ? s.xp : 0;
-            const rank = s ? s.rank : '—';
-            html += `<tr>
-                <td>${iconImg(skill.icon, skill.name, 'profile-tbl-icon')}</td>
-                <td>${skill.name}</td>
-                <td style="text-align:center">${renderGrade(xp, false)}</td>
-                <td style="text-align:right;color:var(--accent)">#${formatNumber(rank)}</td>
-                <td style="text-align:right;font-weight:600">${formatNumber(level)}</td>
-                <td style="text-align:right;color:var(--text-dim)">${formatNumber(xp)}</td>
-            </tr>`;
-        }
-        html += '</tbody></table></div></div>';
-
-        // Boss Kill Counts table
-        html += `<div class="profile-section">
-            <h3 class="profile-section-title">Boss Kill Counts</h3>
-            <div class="profile-table-wrap"><table class="profile-table">
-                <thead><tr>
-                    <th style="width:32px"></th>
-                    <th>Boss</th>
-                    <th style="width:80px;text-align:right">Rank</th>
-                    <th style="width:100px;text-align:right">Kill Count</th>
-                </tr></thead><tbody>`;
-
-        for (const boss of BOSSES) {
-            html += `<tr>
-                <td>${iconImg(boss.icon, boss.name, 'profile-tbl-icon')}</td>
-                <td>${boss.name}</td>
-                <td style="text-align:right;color:var(--text-muted)">—</td>
-                <td style="text-align:right;color:var(--text-muted)">—</td>
-            </tr>`;
-        }
-        html += '</tbody></table></div></div>';
-
-        // Activities table
-        html += `<div class="profile-section">
-            <h3 class="profile-section-title">Activities</h3>
-            <div class="profile-table-wrap"><table class="profile-table">
-                <thead><tr>
-                    <th style="width:32px"></th>
-                    <th>Activity</th>
-                    <th style="width:80px;text-align:right">Rank</th>
-                    <th style="width:100px;text-align:right">Score</th>
-                </tr></thead><tbody>`;
-
-        for (const act of ACTIVITIES) {
-            html += `<tr>
-                <td>${iconImg(act.icon, act.name, 'profile-tbl-icon')}</td>
-                <td>${act.name}</td>
-                <td style="text-align:right;color:var(--text-muted)">—</td>
-                <td style="text-align:right;color:var(--text-muted)">—</td>
-            </tr>`;
-        }
-        html += '</tbody></table></div></div>';
-
-        container.innerHTML = html;
-    }
+    });
 
     // === URL Sync ===
     function readUrl() {
         const p = new URLSearchParams(window.location.search);
-
-        // Player profile page
-        if (p.has('player')) {
-            state.playerView = p.get('player');
-            return;
-        }
 
         if (p.has('skill'))   state.skill   = p.get('skill');
         if (p.has('mode'))    state.mode    = p.get('mode');
@@ -394,14 +224,10 @@
 
     function updateUrl() {
         const p = new URLSearchParams();
-        if (state.playerView) {
-            p.set('player', state.playerView);
-        } else {
-            if (state.skill !== 'overall') p.set('skill', state.skill);
-            if (state.mode !== 'all')      p.set('mode', state.mode);
-            if (state.donator !== 'all')   p.set('donator', state.donator);
-            if (state.page > 1)            p.set('page', state.page);
-        }
+        if (state.skill !== 'overall') p.set('skill', state.skill);
+        if (state.mode !== 'all')      p.set('mode', state.mode);
+        if (state.donator !== 'all')   p.set('donator', state.donator);
+        if (state.page > 1)            p.set('page', state.page);
         const qs = p.toString();
         const url = window.location.pathname + (qs ? '?' + qs : '');
         history.replaceState(null, '', url);
@@ -480,25 +306,9 @@
         document.addEventListener('click', (e) => {
             const item = e.target.closest('.sidebar-item');
             if (item) {
-                const cat = item.dataset.category;
-                const skill = item.dataset.skill;
-                state.category = cat;
-                state.skill = skill;
+                state.category = item.dataset.category;
+                state.skill = item.dataset.skill;
                 state.page = 1;
-
-                // If we're on a player profile, switch back to leaderboard
-                if (state.playerView) {
-                    state.playerView = null;
-                    const modeTabs = $('#mode-tabs');
-                    const donatorChips = $('#donator-chips');
-                    const tableWrapper = $('.table-wrapper');
-                    const profileContent = $('#profile-content');
-                    if (modeTabs) modeTabs.style.display = '';
-                    if (donatorChips) donatorChips.style.display = '';
-                    if (tableWrapper) tableWrapper.style.display = '';
-                    if (profileContent) { profileContent.style.display = 'none'; profileContent.innerHTML = ''; }
-                }
-
                 buildSidebar();
                 buildModeTabs();
                 buildDonatorChips();
@@ -544,15 +354,15 @@
             }
         });
 
-        // Table row click → open player profile
+        // Table row click → open adventurers profile
         document.addEventListener('click', (e) => {
             const link = e.target.closest('.player-link');
-            if (link) e.preventDefault();
+            if (link) { /* let normal navigation happen */ return; }
             const row = e.target.closest('tr[data-username]');
-            if (row) navigateToPlayer(row.dataset.username);
+            if (row) window.location.href = `${ADVENTURERS_BASE}/${encodeURIComponent(row.dataset.username)}`;
         });
 
-        // Player search → navigate to profile page
+        // Player search → navigate to adventurers profile
         const searchBtn = $('#search-btn');
         const searchInput = $('#search-input');
         if (searchBtn) searchBtn.addEventListener('click', doPlayerSearch);
@@ -583,24 +393,22 @@
         });
     }
 
-    function navigateToPlayer(username) {
-        state.playerView = username;
-        updateUrl();
-        showPlayerProfile(username);
+    function goToProfile(username) {
+        window.location.href = `${ADVENTURERS_BASE}/${encodeURIComponent(username)}`;
     }
 
     function doPlayerSearch() {
         const input = $('#search-input');
         if (!input) return;
         const name = input.value.trim();
-        if (name) navigateToPlayer(name);
+        if (name) goToProfile(name);
     }
 
     function doMobileSearch() {
         const input = $('#m-search-input');
         if (!input) return;
         const name = input.value.trim();
-        if (name) navigateToPlayer(name);
+        if (name) goToProfile(name);
     }
 
     function doJump() {
@@ -684,7 +492,7 @@
                 <td class="rank-cell">${renderRank(p.rank)}</td>
                 <td>
                     <div class="player-cell">
-                        <a href="?player=${encodeURIComponent(p.username)}" class="player-link" data-username="${escapeHtml(p.username)}">
+                        <a href="${ADVENTURERS_BASE}/${encodeURIComponent(p.username)}" class="player-link">
                             <span class="player-name">${escapeHtml(p.username)}</span>
                         </a>
                         <span class="player-badges">${renderBadges(p)}</span>
@@ -923,11 +731,6 @@
             buildDonatorChips();
             updateUrl();
             fetchHiscores();
-        },
-        backToLeaderboard() {
-            state.playerView = null;
-            updateUrl();
-            showLeaderboard();
         }
     };
 
