@@ -407,26 +407,23 @@
 
 .skill-level.maxed { color: var(--rank-primary); }
 
-/* Totals cell — fills the empty slot in the last grid row */
-.skill-totals-cell {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+/* Totals bar — sits below the skills grid */
+.skill-totals-bar {
+    display: flex; align-items: center; justify-content: center; gap: 20px;
     background: var(--bg-card, #111114); border: 1px solid var(--rank-border);
-    border-radius: 8px; padding: 8px 12px; text-align: center;
+    border-radius: 8px; padding: 10px 24px; margin-top: 6px;
 }
 
-.skill-totals-level {
-    font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 800;
-    color: var(--rank-primary); line-height: 1.1;
+.skill-totals-item {
+    display: flex; align-items: center; gap: 6px;
 }
 
-.skill-totals-sub {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    color: rgba(255,255,255,0.18); margin-bottom: 4px;
+.skill-totals-item.primary .skill-totals-val {
+    font-size: 18px; font-weight: 800; color: var(--rank-primary);
 }
 
-.skill-totals-row {
-    display: flex; align-items: center; justify-content: space-between;
-    width: 100%; gap: 6px;
+.skill-totals-sep {
+    width: 1px; height: 20px; background: rgba(255,255,255,0.06);
 }
 
 .skill-totals-label {
@@ -435,7 +432,7 @@
 }
 
 .skill-totals-val {
-    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
     color: var(--text-bright, #eeeef0);
 }
 
