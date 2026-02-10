@@ -921,6 +921,66 @@ const API = {
         }
     },
 
+    // ==================== EVENTS ENDPOINTS ====================
+
+    events: {
+        async getAll(params = {}) {
+            return API.get('/events', params);
+        },
+
+        async getActive() {
+            return API.get('/events/active');
+        },
+
+        async get(id) {
+            return API.get(`/events/${id}`);
+        },
+
+        async create(data) {
+            return API.post('/events', data);
+        },
+
+        async update(id, data) {
+            return API.patch(`/events/${id}`, data);
+        },
+
+        async delete(id) {
+            return API.delete(`/events/${id}`);
+        },
+
+        async start(id) {
+            return API.post(`/events/${id}/start`);
+        },
+
+        async stop(id) {
+            return API.post(`/events/${id}/stop`);
+        },
+
+        async cancel(id) {
+            return API.post(`/events/${id}/cancel`);
+        },
+
+        async getTemplates() {
+            return API.get('/events/templates');
+        },
+
+        async createTemplate(data) {
+            return API.post('/events/templates', data);
+        },
+
+        async deleteTemplate(id) {
+            return API.delete(`/events/templates/${id}`);
+        },
+
+        async createFromTemplate(templateId, data) {
+            return API.post(`/events/from-template/${templateId}`, data);
+        },
+
+        async getHistory(params = {}) {
+            return API.get('/events/history', params);
+        }
+    },
+
     // ==================== ADMIN ENDPOINTS ====================
 
     admin: {

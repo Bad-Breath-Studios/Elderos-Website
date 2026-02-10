@@ -47,6 +47,7 @@
     <link rel="stylesheet" href="css/ashpire-revenue.css?v=1">
     <link rel="stylesheet" href="css/telemetry.css?v=3">
     <link rel="stylesheet" href="css/item-search.css?v=3">
+    <link rel="stylesheet" href="css/events.css?v=1">
     <link rel="stylesheet" href="css/hub-config.css?v=1">
     <link rel="stylesheet" href="css/container-editor.css?v=1">
     <link rel="stylesheet" href="css/skill-editor.css?v=1">
@@ -164,6 +165,15 @@
                             <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
                         </svg>
                         <span class="nav-item-label">News</span>
+                    </a>
+                    <a href="#events" class="nav-item" data-page="events">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        <span class="nav-item-label">Events</span>
                     </a>
                 </div>
 
@@ -664,6 +674,11 @@
                     </div>
                 </div>
 
+                <!-- Events Page -->
+                <div class="page hidden" id="page-events">
+                    <!-- Content populated by events.js -->
+                </div>
+
                 <!-- Field Config Page (Developer/Owner only) -->
                 <div class="page hidden" id="page-field-config">
                     <!-- Content populated by field-config.js -->
@@ -788,6 +803,7 @@
     <script src="js/hub-config.js?v=2"></script>
     <script src="js/vote-config.js?v=1"></script>
     <script src="js/worlds-config.js?v=2"></script>
+    <script src="js/events.js?v=1"></script>
     <script src="js/animations.js?v=18"></script>
     <script>
         // Initialize dashboard
@@ -860,6 +876,8 @@
             console.log('[Dashboard] VoteConfigEditor initialized');
             WorldsConfig.init();
             console.log('[Dashboard] WorldsConfig initialized');
+            Events.init();
+            console.log('[Dashboard] Events initialized');
             Animations.init();
             console.log('[Dashboard] Animations initialized');
 
@@ -962,7 +980,11 @@
                 showNavItem('chat-logs', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_CHAT_LOGS));
 
                 // Content
-                showSection('nav-section-content', Auth.hasPermission(CONFIG.PERMISSIONS.NEWS_CREATE));
+                const hasContent = Auth.hasPermission(CONFIG.PERMISSIONS.NEWS_CREATE) ||
+                                   Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_EVENTS);
+                showSection('nav-section-content', hasContent);
+                showNavItem('news', Auth.hasPermission(CONFIG.PERMISSIONS.NEWS_CREATE));
+                showNavItem('events', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_EVENTS));
 
                 // Worlds
                 const hasWorlds = Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_WORLDS) ||

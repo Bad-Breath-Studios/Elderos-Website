@@ -105,7 +105,11 @@ const CONFIG = {
         TAG_PLAYERS: 'TAG_PLAYERS',
         // Search utilities
         SEARCH_ITEMS: 'SEARCH_ITEMS',
-        SEARCH_HISCORES: 'SEARCH_HISCORES'
+        SEARCH_HISCORES: 'SEARCH_HISCORES',
+        // Events
+        VIEW_EVENTS: 'VIEW_EVENTS',
+        CREATE_EVENT: 'CREATE_EVENT',
+        MANAGE_EVENTS: 'MANAGE_EVENTS'
     },
 
     // Ashpire account ID (owner account for restricted endpoints)

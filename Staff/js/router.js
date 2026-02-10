@@ -9,7 +9,7 @@ const Router = {
         'dashboard', 'players',
         'reports', 'bans', 'mutes', 'timeouts',
         'staff-logs', 'player-logs', 'chat-logs',
-        'news',
+        'news', 'events',
         'worlds-overview', 'worlds-commands',
         'field-config', 'store-config', 'system-logs', 'vote-config',
         'ashpire-revenue', 'ashpire-controls', 'hub-config', 'worlds-config'
@@ -108,6 +108,9 @@ const Router = {
         if (this.currentPage === 'ashpire-revenue' && typeof AshpireRevenue !== 'undefined') {
             AshpireRevenue.onPageLeave();
         }
+        if (this.currentPage === 'events' && typeof Events !== 'undefined') {
+            Events.onPageLeave();
+        }
 
         // Hide all pages
         document.querySelectorAll('.page').forEach(p => {
@@ -138,6 +141,7 @@ const Router = {
             'player-logs': 'Player Logs',
             'chat-logs': 'Chat Logs',
             news: 'News Management',
+            events: 'Event Scheduler',
             'worlds-overview': 'Worlds Overview',
             'worlds-commands': 'Game Commands',
             'field-config': 'Field Configuration',
@@ -227,6 +231,9 @@ const Router = {
                 break;
             case 'vote-config':
                 if (typeof VoteConfigEditor !== 'undefined') { VoteConfigEditor.onPageLoad(); }
+                break;
+            case 'events':
+                if (typeof Events !== 'undefined') { Events.onPageLoad(); }
                 break;
             case 'ashpire-revenue':
                 if (typeof AshpireRevenue !== 'undefined') { AshpireRevenue.onPageLoad(); }
