@@ -36,7 +36,7 @@
         { key: 'runecraft',    name: 'Runecraft',     icon: 'assets/skills/runecrafting.png' },
         { key: 'slayer',       name: 'Slayer',        icon: 'assets/skills/slayer.png' },
         { key: 'farming',      name: 'Farming',       icon: 'assets/skills/farming.png' },
-        { key: 'construction', name: 'Construction',  icon: 'assets/skills/construction.png' },
+        { key: 'augmentation', name: 'Augmentation',   icon: 'assets/skills/augmentation.png' },
         { key: 'hunter',       name: 'Hunter',        icon: 'assets/skills/hunter.png' },
     ];
 
