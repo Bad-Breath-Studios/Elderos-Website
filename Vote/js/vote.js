@@ -352,6 +352,7 @@ const Vote = {
         }
 
         const { sites } = this.state;
+        container.dataset.count = sites.length;
         container.innerHTML = sites.map(site => {
             const voted = site.voted;
             const onCooldown = site.cooldownRemaining > 0 && !voted;

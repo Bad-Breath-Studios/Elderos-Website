@@ -343,6 +343,15 @@ body {
     gap: 16px;
     margin-bottom: 24px;
 }
+#vote-sites[data-count="1"] {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#vote-sites[data-count="2"] {
+    grid-template-columns: repeat(2, 1fr);
+}
 
 .auth-message {
     grid-column: 1 / -1;
