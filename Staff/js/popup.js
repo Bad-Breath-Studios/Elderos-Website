@@ -141,7 +141,9 @@ const Popup = {
             <!-- Player Header -->
             <div class="player-header">
                 <div class="player-avatar-large">
-                    <span class="player-avatar-large-initial">${player.username.charAt(0).toUpperCase()}</span>
+                    ${player.discordAvatarUrl
+                        ? `<img src="${this._escapeHtml(player.discordAvatarUrl)}" alt="${player.username.charAt(0).toUpperCase()}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="player-avatar-large-initial" style="display:none">${player.username.charAt(0).toUpperCase()}</span>`
+                        : `<span class="player-avatar-large-initial">${player.username.charAt(0).toUpperCase()}</span>`}
                 </div>
                 <div class="player-header-info">
                     <div class="player-header-top">

@@ -264,7 +264,7 @@
                 html += `
                     <a href="${profileHref(p.username)}" class="liked-card">
                         <span class="liked-rank">${i + 1}</span>
-                        <div class="liked-avatar ${rc}">${initial}</div>
+                        <div class="liked-avatar ${rc}">${avatarInner(p.avatarUrl, initial)}</div>
                         <div class="liked-info">
                             <div class="liked-name">${escapeHtml(p.username)}</div>
                             <div class="liked-meta">${rankLabel}<span>Total: ${formatNumber(p.totalLevel || 0)}</span></div>
@@ -290,7 +290,7 @@
                 const rc = rankClass(p.donatorRank);
                 html += `
                     <a href="${profileHref(p.username)}" class="online-card">
-                        <div class="online-avatar ${rc}">${initial}</div>
+                        <div class="online-avatar ${rc}">${avatarInner(p.avatarUrl, initial)}</div>
                         <div class="online-info">
                             <div class="online-name">${escapeHtml(p.username)}</div>
                             <div class="online-detail">Combat ${p.combatLevel || 3} · Total ${formatNumber(p.totalLevel || 0)}</div>
@@ -317,7 +317,7 @@
                 const rc = rankClass(p.donatorRank);
                 html += `
                     <a href="${profileHref(p.username)}" class="newest-card">
-                        <div class="newest-avatar ${rc}">${initial}</div>
+                        <div class="newest-avatar ${rc}">${avatarInner(p.avatarUrl, initial)}</div>
                         <div class="newest-name">${escapeHtml(p.username)}</div>
                         <div class="newest-date">${joinedAgo(p.createdAt)}</div>
                     </a>`;
@@ -326,6 +326,14 @@
         }
 
         body.innerHTML = html;
+    }
+
+    /** Build avatar inner HTML — Discord image with initial fallback, or just initial */
+    function avatarInner(avatarUrl, initial) {
+        if (avatarUrl) {
+            return `<img src="${escapeHtml(avatarUrl)}" alt="${initial}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none;align-items:center;justify-content:center;width:100%;height:100%">${initial}</span>`;
+        }
+        return initial;
     }
 
     function joinedAgo(timestamp) {
@@ -524,9 +532,15 @@
                             <span>Playtime: ${formatPlaytime(data.totalPlaytimeMinutes)}</span>
                         </div>
                     </div>
-                    <div class="profile-like-btn ${liked}" id="like-btn" title="${isOwnProfile ? 'You cannot like your own profile' : 'Like this profile'}">
-                        <span class="like-heart">${data.likedByViewer ? '❤️' : '🤍'}</span>
-                        <span class="like-count" id="like-count">${likeCount}</span>
+                    <div class="profile-social">
+                        <div class="profile-views" title="Profile views">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <span class="views-count">${formatNumber(data.views || 0)}</span>
+                        </div>
+                        <div class="profile-like-btn ${liked}" id="like-btn" title="${isOwnProfile ? 'You cannot like your own profile' : 'Like this profile'}">
+                            <span class="like-heart">${data.likedByViewer ? '❤️' : '🤍'}</span>
+                            <span class="like-count" id="like-count">${likeCount}</span>
+                        </div>
                     </div>
                 </div>
             </div>`;

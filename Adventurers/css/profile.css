@@ -134,12 +134,32 @@
     width: 14px; height: 14px; image-rendering: pixelated; vertical-align: -2px;
 }
 
+/* ── Social Row (views + like) ──────────────────────────────── */
+.profile-social {
+    display: flex; align-items: center; gap: 8px;
+    margin-left: auto; flex-shrink: 0;
+}
+
+.profile-views {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 6px 12px; border-radius: 8px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border, rgba(255,255,255,0.05));
+    font-family: 'Outfit', sans-serif;
+}
+
+.profile-views svg { color: rgba(255,255,255,0.18); }
+
+.views-count {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+    color: rgba(255,255,255,0.42);
+}
+
 /* ── Like Button ────────────────────────────────────────────── */
 .profile-like-btn {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 6px 14px; border-radius: 8px;
     background: rgba(255,255,255,0.03); border: 1px solid var(--border, rgba(255,255,255,0.05));
-    cursor: pointer; transition: all 200ms; margin-left: auto; flex-shrink: 0;
+    cursor: pointer; transition: all 200ms; flex-shrink: 0;
     font-family: 'Outfit', sans-serif;
 }
 
@@ -597,6 +617,7 @@
 .liked-avatar.ruby     { background: linear-gradient(135deg, #dc2626, #f87171); }
 .liked-avatar.emerald  { background: linear-gradient(135deg, #16a34a, #4ade80); }
 .liked-avatar.none     { background: linear-gradient(135deg, #555, #888); }
+.liked-avatar img      { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
 .liked-info { flex: 1; min-width: 0; }
 .liked-name { font-size: 13px; font-weight: 600; color: var(--text-bright, #eeeef0); margin-bottom: 1px; }
@@ -638,6 +659,7 @@
 .online-avatar.diamond  { background: linear-gradient(135deg, #2563eb, #60a5fa); }
 .online-avatar.ruby     { background: linear-gradient(135deg, #dc2626, #f87171); }
 .online-avatar.emerald  { background: linear-gradient(135deg, #16a34a, #4ade80); }
+.online-avatar img      { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
 .online-info { flex: 1; min-width: 0; }
 .online-name { font-size: 13px; font-weight: 600; color: var(--text-bright, #eeeef0); margin-bottom: 1px; }
@@ -669,6 +691,7 @@
 .newest-avatar.diamond  { background: linear-gradient(135deg, #2563eb, #60a5fa); }
 .newest-avatar.ruby     { background: linear-gradient(135deg, #dc2626, #f87171); }
 .newest-avatar.emerald  { background: linear-gradient(135deg, #16a34a, #4ade80); }
+.newest-avatar img      { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 
 .newest-name { font-size: 12px; font-weight: 600; color: var(--text-bright, #eeeef0); margin-bottom: 2px; }
 .newest-date { font-size: 9px; color: rgba(255,255,255,0.18); }
@@ -760,7 +783,7 @@
     .profile-row-2 { justify-content: center; }
     .profile-status { justify-content: center; }
     .profile-meta { justify-content: center; }
-    .profile-like-btn { margin: 8px auto 0; }
+    .profile-social { margin: 8px auto 0; justify-content: center; }
     .page-content { padding: 20px 12px 40px; }
     /* Landing page */
     .landing-two-col { grid-template-columns: 1fr; }
