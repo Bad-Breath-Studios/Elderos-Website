@@ -72,7 +72,7 @@
                 const excerpt = stripMarkdown(post.content || post.body || '');
 
                 card.innerHTML = `
-                    <span class="news-card-badge ${badgeClass}">${(post.category || 'Update').toLowerCase()}</span>
+                    <span class="news-card-badge ${badgeClass}">${escapeHtml((post.category || 'Update').toLowerCase())}</span>
                     <div class="news-card-title">${escapeHtml(post.title)}</div>
                     <div class="news-card-excerpt">${escapeHtml(excerpt)}</div>
                     <div class="news-card-date">${formatDate(post.createdAt || post.publishedAt)}</div>

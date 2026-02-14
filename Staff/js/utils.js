@@ -237,7 +237,7 @@ const Utils = {
         for (const [key, value] of Object.entries(attributes)) {
             if (key === 'className') {
                 el.className = value;
-            } else if (key === 'innerHTML') {
+            } else if (key === 'dangerousInnerHTML') {
                 el.innerHTML = value;
             } else if (key === 'textContent') {
                 el.textContent = value;

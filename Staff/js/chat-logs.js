@@ -289,22 +289,44 @@ const ChatLogs = {
 
     _highlightMessage(msg, searchTerm, isRegex) {
         if (!msg) return '<span class="log-muted">\u2014</span>';
-        const escaped = this._escapeHtml(msg);
-        const truncated = msg.length > 80 ? this._escapeHtml(msg.substring(0, 80)) + '...' : escaped;
-
-        if (!searchTerm) return truncated;
+        const raw = msg.length > 80 ? msg.substring(0, 80) + '...' : msg;
+        if (!searchTerm) return this._escapeHtml(raw);
 
         try {
             let regex;
             if (isRegex) {
+                if (this._isUnsafeRegex(searchTerm)) return this._escapeHtml(raw);
                 regex = new RegExp(searchTerm, 'gi');
             } else {
                 regex = new RegExp(this._escapeRegex(searchTerm), 'gi');
             }
-            return truncated.replace(regex, match => `<mark class="chat-highlight">${match}</mark>`);
+            // Split-escape-wrap: match on raw text, escape segments individually
+            const parts = [];
+            let lastIndex = 0;
+            let m;
+            regex.lastIndex = 0;
+            while ((m = regex.exec(raw)) !== null) {
+                if (m.index > lastIndex) parts.push(this._escapeHtml(raw.substring(lastIndex, m.index)));
+                parts.push(`<mark class="chat-highlight">${this._escapeHtml(m[0])}</mark>`);
+                lastIndex = regex.lastIndex;
+                if (m[0].length === 0) { regex.lastIndex++; }
+            }
+            if (lastIndex < raw.length) parts.push(this._escapeHtml(raw.substring(lastIndex)));
+            return parts.join('');
         } catch {
-            return truncated;
+            return this._escapeHtml(raw);
         }
+    },
+
+    _isUnsafeRegex(pattern) {
+        if (pattern.length > 100) return true;
+        // Simple string scan for nested quantifiers: )+, )*, ){, +*, ++, etc.
+        for (let i = 1; i < pattern.length; i++) {
+            const prev = pattern[i - 1];
+            const curr = pattern[i];
+            if ((prev === ')' || prev === ']') && (curr === '+' || curr === '*' || curr === '{')) return true;
+        }
+        return false;
     },
 
     _escapeRegex(str) {

@@ -8,6 +8,37 @@
     gap: 16px;
 }
 
+/* Header */
+.system-logs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.system-logs-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.system-logs-refresh-btn {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.system-logs-refresh-btn:hover {
+    border-color: var(--accent);
+    background: rgba(244, 14, 0, 0.06);
+}
+
 /* Filters */
 .system-logs-filters {
     background: var(--bg-elevated);

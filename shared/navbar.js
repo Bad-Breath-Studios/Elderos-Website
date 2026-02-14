@@ -6,6 +6,21 @@
 (function () {
     'use strict';
 
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    function validateDiscordId(id) {
+        return typeof id === 'string' && /^\d{17,20}$/.test(id);
+    }
+
+    function validateAvatarHash(hash) {
+        return typeof hash === 'string' && /^(a_)?[0-9a-f]{32}$/.test(hash);
+    }
+
     // Detect active page from hostname + path
     function getActivePage() {
         const host = window.location.hostname;
@@ -27,8 +42,8 @@
     }
 
     function getAvatarHTML(user, username, size) {
-        const initial = username ? username.charAt(0).toUpperCase() : '?';
-        if (user && user.discordId && user.discordAvatarHash) {
+        const initial = escapeHtml(username ? username.charAt(0).toUpperCase() : '?');
+        if (user && validateDiscordId(user.discordId) && validateAvatarHash(user.discordAvatarHash)) {
             const url = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.discordAvatarHash}.png?size=${size || 64}`;
             return `<img class="nav-avatar nav-avatar-img" src="${url}" alt="${initial}" onerror="this.outerHTML='<div class=\\'nav-avatar\\'>${initial}</div>'">`;
         }
@@ -48,7 +63,7 @@
                 <div class="nav-auth">
                     <button class="nav-user-btn" id="nav-user-btn">
                         ${getAvatarHTML(user, username, 64)}
-                        <span class="nav-username">${username || 'Player'}</span>
+                        <span class="nav-username">${escapeHtml(username) || 'Player'}</span>
                         <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                     </button>
                     <div class="nav-dropdown" id="nav-dropdown">
@@ -85,7 +100,7 @@
                 <div class="nav-mobile-auth">
                     <div class="nav-mobile-user">
                         ${getAvatarHTML(user, username, 48)}
-                        <span class="nav-mobile-user-name">${username || 'Player'}</span>
+                        <span class="nav-mobile-user-name">${escapeHtml(username) || 'Player'}</span>
                     </div>
                     <button class="nav-mobile-logout" id="nav-mobile-logout">Log Out</button>
                 </div>`;
@@ -100,7 +115,7 @@
             <nav class="shared-nav" id="shared-nav">
                 <div class="nav-group">
                     <div class="nav-left">
-                        <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+                        <a href="https://wiki.elderos.io" class="nav-link" target="_blank" rel="noopener noreferrer">Wiki</a>
                         <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
                         <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                     </div>
@@ -116,7 +131,7 @@
                         <a href="https://adventurers.elderos.io" class="nav-link${activeClass('adventurers')}">Adventurers</a>
                         <a href="https://creators.elderos.io" class="nav-link${activeClass('creators')}">Creators</a>
                         <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
-                        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+                        <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank" rel="noopener noreferrer">Discord</a>
                     </div>
                 </div>
 
@@ -130,13 +145,13 @@
             </nav>
 
             <div class="nav-mobile-menu" id="nav-mobile-menu">
-                <a href="https://wiki.elderos.io" class="nav-link" target="_blank">Wiki</a>
+                <a href="https://wiki.elderos.io" class="nav-link" target="_blank" rel="noopener noreferrer">Wiki</a>
                 <a href="https://hiscores.elderos.io" class="nav-link${activeClass('hiscores')}">Hiscores</a>
                 <a href="https://adventurers.elderos.io" class="nav-link${activeClass('adventurers')}">Adventurers</a>
                 <a href="https://creators.elderos.io" class="nav-link${activeClass('creators')}">Creators</a>
                 <a href="https://news.elderos.io" class="nav-link${activeClass('news')}">News</a>
                 <a href="https://vote.elderos.io" class="nav-link${activeClass('vote')}">Vote</a>
-                <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank">Discord</a>
+                <a href="https://discord.gg/MwkvVMFmfg" class="nav-link" target="_blank" rel="noopener noreferrer">Discord</a>
                 ${mobileAuthHTML}
             </div>
 

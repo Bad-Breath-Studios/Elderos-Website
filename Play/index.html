@@ -523,7 +523,7 @@
             Elderos isn't quite ready for public release yet. Join our Discord community to stay updated on development progress and be the first to know when we launch.
         </p>
 
-        <a href="https://discord.gg/MwkvVMFmfg" class="modal-discord-btn" target="_blank">
+        <a href="https://discord.gg/MwkvVMFmfg" class="modal-discord-btn" target="_blank" rel="noopener noreferrer">
             <img src="assets/discord-icon.png" alt="">
             Join Our Discord
         </a>
@@ -538,27 +538,7 @@
 <script src="/shared/navbar.js?v=13"></script>
 <script src="/shared/footer.js?v=3"></script>
 
-<script>
-    // Coming soon modal
-    function showComingSoon(e) {
-        e.preventDefault();
-        document.getElementById('modal').classList.add('active');
-    }
-
-    function closeModal() {
-        document.getElementById('modal').classList.remove('active');
-    }
-
-    // Close modal on backdrop click
-    document.getElementById('modal').addEventListener('click', function(e) {
-        if (e.target === this) closeModal();
-    });
-
-    // Close modal on Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeModal();
-    });
-</script>
+<script src="js/modal.js?v=1"></script>
 
 </body>
 </html>

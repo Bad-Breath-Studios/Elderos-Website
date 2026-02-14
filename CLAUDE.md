@@ -115,6 +115,17 @@ Then manually trigger deploy in cPanel → Git Version Control → "Update from 
 - Do NOT modify `.cpanel.yml` unless adding a new subdomain
 - Cache busting (`?v=N`) on CSS/JS references is still needed — Cloudflare CDN caches aggressively
 
+## Security
+
+All security rules (CSP, escaping, SRI, headers, etc.) are in **`SECURITY.md`**. Read it before writing any JS or modifying `.htaccess` files. Key rules:
+
+- No inline `<script>` blocks — all JS in external files
+- Always `escapeHtml()` user-controlled data before inserting into HTML
+- All `target="_blank"` links need `rel="noopener noreferrer"`
+- CDN resources need SRI `integrity` attributes
+- No `http://localhost` in production CSP
+- Validate regex input before `new RegExp()` (ReDoS protection)
+
 ## Assets
 
 Common assets duplicated across pages (each page is self-contained):

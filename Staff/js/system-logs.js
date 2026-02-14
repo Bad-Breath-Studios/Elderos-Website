@@ -25,12 +25,20 @@ const SystemLogs = {
 
     onPageLeave() {},
 
+    _getFilteredSources() {
+        return this.SOURCES.filter(s => s !== 'STORE' || Auth.isAshpire());
+    },
+
     render() {
         const container = document.getElementById('page-system-logs');
         if (!container) return;
 
         container.innerHTML = `
             <div class="system-logs-page">
+                <div class="system-logs-header">
+                    <h2 class="system-logs-title">System Logs</h2>
+                    <button class="system-logs-refresh-btn" id="slRefreshBtn">Refresh</button>
+                </div>
                 <div class="system-logs-filters" id="systemLogsFilters">
                     ${this._renderFilters()}
                 </div>
@@ -60,7 +68,7 @@ const SystemLogs = {
                     <label>Source</label>
                     <select id="slFilterSource" class="system-logs-select">
                         <option value="">All Sources</option>
-                        ${this.SOURCES.map(s => `<option value="${s}" ${this._filters.source === s ? 'selected' : ''}>${s}</option>`).join('')}
+                        ${this._getFilteredSources().map(s => `<option value="${s}" ${this._filters.source === s ? 'selected' : ''}>${s}</option>`).join('')}
                     </select>
                 </div>
                 <div class="system-logs-filter-group">
@@ -84,6 +92,7 @@ const SystemLogs = {
     },
 
     _bindEvents() {
+        document.getElementById('slRefreshBtn')?.addEventListener('click', () => this.load());
         document.getElementById('slFilterApply')?.addEventListener('click', () => this._applyFilters());
         document.getElementById('slFilterClear')?.addEventListener('click', () => {
             this._filters = {};

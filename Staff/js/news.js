@@ -397,7 +397,7 @@ const News = {
             MAINTENANCE: { class: 'maintenance', label: 'Maintenance' }
         };
 
-        const cat = categories[(category || '').toUpperCase()] || { class: 'update', label: category || 'Update' };
+        const cat = categories[(category || '').toUpperCase()] || { class: 'update', label: this._escapeHtml(category) || 'Update' };
         return `<span class="news-badge ${cat.class}">${cat.label}</span>`;
     },
 
@@ -1046,7 +1046,11 @@ const News = {
         html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
 
         // Links [text](url)
-        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+            if (!/^(https?:|mailto:)/i.test(url)) return text;
+            const safeUrl = url.replace(/"/g, '&quot;');
+            return `<a href="${safeUrl}" target="_blank" rel="noopener">${text}</a>`;
+        });
 
         // Unordered lists
         html = html.replace(/^- (.+)$/gm, '<li>$1</li>');

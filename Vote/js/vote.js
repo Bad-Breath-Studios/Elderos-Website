@@ -360,7 +360,7 @@ const Vote = {
             let statusText = 'Ready to vote';
             let dotClass = 'ready';
             let timerHtml = '<div class="vote-timer ready-text">READY</div>';
-            let btnHtml = `<button class="vote-btn ready" data-site-id="${site.id}" data-vote-url="${this.escapeHtml(site.voteUrl)}" onclick="Vote.openVoteSite(this)">VOTE &rarr;</button>`;
+            let btnHtml = `<button class="vote-btn ready" data-site-id="${this.escapeHtml(site.id)}" data-vote-url="${this.escapeHtml(site.voteUrl)}" onclick="Vote.openVoteSite(this)">VOTE &rarr;</button>`;
 
             if (voted) {
                 statusClass = 'voted';
@@ -398,7 +398,9 @@ const Vote = {
 
     openVoteSite(btn) {
         const url = btn.dataset.voteUrl;
-        if (url) window.open(url, '_blank');
+        if (url && /^https?:\/\//i.test(url)) {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        }
     },
 
     // === Render: Daily Progress ===
