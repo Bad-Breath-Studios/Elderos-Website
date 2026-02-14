@@ -15,7 +15,7 @@ DirectoryIndex index.html
     Header always set Referrer-Policy "strict-origin-when-cross-origin"
     Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.elderos.io; frame-ancestors 'none';"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.elderos.io http://localhost:8083 http://localhost:8084; frame-ancestors 'none';"
 
     <FilesMatch "\.(css|js)$">
         Header set Cache-Control "max-age=3600, public"
