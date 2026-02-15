@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/shared/shared.css?v=1">
     <link rel="stylesheet" href="/shared/navbar.css?v=8">
     <link rel="stylesheet" href="/shared/footer.css?v=1">
+    <link rel="stylesheet" href="css/slider.css?v=1">
     <link rel="stylesheet" href="css/home.css?v=1">
 </head>
 <body>
@@ -50,6 +51,60 @@
     </div>
 
 </section>
+
+<!--  CONTENT SLIDER          -->
+<!-- ======================== -->
+<section class="content-slider" id="content-slider">
+    <div class="slider-viewport">
+        <!-- Slides -->
+        <div class="slide active" data-index="0">
+            <div class="slide-bg" style="background-image: url('assets/sliders/SLIDE_1.jpg')"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2 class="slide-title">Forge Your Legend</h2>
+                <p class="slide-desc">A world built for those who play with purpose. Every session matters.</p>
+            </div>
+        </div>
+        <div class="slide" data-index="1">
+            <div class="slide-bg" style="background-image: url('assets/sliders/SLIDE_2.png')"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2 class="slide-title">Conquer the Impossible</h2>
+                <p class="slide-desc">Endgame bosses, layered mastery, and rewards that never stop scaling.</p>
+            </div>
+        </div>
+        <div class="slide" data-index="2">
+            <div class="slide-bg" style="background-image: url('assets/sliders/SLIDE_3.jpg')"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h2 class="slide-title">A World Worth Exploring</h2>
+                <p class="slide-desc">Deep content, meaningful progression, and more ways to play than you'd expect.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="slider-nav">
+        <button class="slider-arrow slider-prev" aria-label="Previous slide">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="slider-dots">
+            <button class="slider-dot active" data-index="0"></button>
+            <button class="slider-dot" data-index="1"></button>
+            <button class="slider-dot" data-index="2"></button>
+        </div>
+        <button class="slider-arrow slider-next" aria-label="Next slide">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="slider-progress">
+        <div class="slider-progress-bar"></div>
+    </div>
+</section>
+
+<div class="section-divider"></div>
 
 <!-- ======================== -->
 <!--  FEATURES                -->
@@ -170,6 +225,7 @@
 <script src="js/home.js?v=1"></script>
 
 <script src="js/scroll.js?v=1"></script>
+<script src="js/slider.js?v=1"></script>
 
 </body>
 </html>
