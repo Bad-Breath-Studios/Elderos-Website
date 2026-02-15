@@ -6,9 +6,11 @@
     'use strict';
 
     const AUTOPLAY_INTERVAL = 6000; // ms per slide
+    const FADE_DURATION = 1200; // must match CSS transition duration
     let currentIndex = 0;
     let autoplayTimer = null;
     let isPaused = false;
+    let isTransitioning = false;
 
     const slides = document.querySelectorAll('.content-slider .slide');
     const dots = document.querySelectorAll('.content-slider .slider-dot');
@@ -19,31 +21,48 @@
     if (!slides.length) return;
 
     function goToSlide(index, resetAutoplay = true) {
+        if (isTransitioning) return;
+
         // Clamp / wrap
         if (index < 0) index = slides.length - 1;
         if (index >= slides.length) index = 0;
+        if (index === currentIndex) return;
 
-        // Deactivate current
-        slides[currentIndex].classList.remove('active');
-        dots[currentIndex].classList.remove('active');
+        isTransitioning = true;
+        const outgoing = slides[currentIndex];
+        const outDot = dots[currentIndex];
 
-        // Reset Ken Burns animation on outgoing slide
-        const outBg = slides[currentIndex].querySelector('.slide-bg');
-        outBg.style.animation = 'none';
-        outBg.offsetHeight; // force reflow
-        outBg.style.animation = '';
+        // Mark outgoing as leaving (keeps it visible during crossfade)
+        outgoing.classList.remove('active');
+        outgoing.classList.add('leaving');
+        outDot.classList.remove('active');
 
         currentIndex = index;
 
-        // Activate new
-        slides[currentIndex].classList.add('active');
-        dots[currentIndex].classList.add('active');
+        // Activate new slide
+        const incoming = slides[currentIndex];
 
-        // Reset Ken Burns animation on incoming slide
-        const inBg = slides[currentIndex].querySelector('.slide-bg');
+        // Reset Ken Burns on incoming slide so it starts fresh
+        const inBg = incoming.querySelector('.slide-bg');
         inBg.style.animation = 'none';
         inBg.offsetHeight; // force reflow
         inBg.style.animation = '';
+
+        incoming.classList.add('active');
+        dots[currentIndex].classList.add('active');
+
+        // After fade completes, clean up the outgoing slide
+        setTimeout(() => {
+            outgoing.classList.remove('leaving');
+
+            // Reset Ken Burns on outgoing slide (now fully hidden)
+            const outBg = outgoing.querySelector('.slide-bg');
+            outBg.style.animation = 'none';
+            outBg.offsetHeight;
+            outBg.style.animation = '';
+
+            isTransitioning = false;
+        }, FADE_DURATION);
 
         // Restart progress bar
         restartProgress();

@@ -19,6 +19,7 @@
     overflow: hidden;
     border: 1px solid var(--border);
     background: var(--bg-card);
+    transform: translateZ(0);
 }
 
 /* ======================== */
@@ -29,13 +30,21 @@
     position: absolute;
     inset: 0;
     opacity: 0;
-    z-index: 0;
-    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .slide.active {
     opacity: 1;
-    z-index: 1;
+    z-index: 2;
+}
+
+/* Keep outgoing slide visible during crossfade */
+.slide.leaving {
+    opacity: 0;
+    z-index: 2;
 }
 
 /* Background image with Ken Burns */
@@ -47,11 +56,18 @@
     background-size: cover;
     background-position: center;
     will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0) scale(1.08);
     animation: kenBurnsZoomOut 8s ease-in-out forwards;
     animation-play-state: paused;
 }
 
 .slide.active .slide-bg {
+    animation-play-state: running;
+}
+
+/* Keep Ken Burns running while fading out */
+.slide.leaving .slide-bg {
     animation-play-state: running;
 }
 
@@ -111,15 +127,34 @@
     font-size: clamp(1.4rem, 3vw, 2.2rem);
     letter-spacing: 0.04em;
     color: #fff;
+    text-shadow: 0 0 0 transparent;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s,
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s,
+                text-shadow 0.8s ease 0.6s;
 }
 
 .slide.active .slide-title {
     opacity: 1;
     transform: translateY(0);
+    text-shadow:
+        0 0 10px rgba(249, 115, 22, 0.5),
+        0 0 30px rgba(249, 115, 22, 0.2);
+    animation: titleGlow 3s ease-in-out 1.2s infinite;
+}
+
+@keyframes titleGlow {
+    0%, 100% {
+        text-shadow:
+            0 0 10px rgba(249, 115, 22, 0.5),
+            0 0 30px rgba(249, 115, 22, 0.2);
+    }
+    50% {
+        text-shadow:
+            0 0 14px rgba(249, 115, 22, 0.65),
+            0 0 40px rgba(249, 115, 22, 0.3);
+    }
 }
 
 .slide-desc {
