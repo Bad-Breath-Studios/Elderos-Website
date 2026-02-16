@@ -153,9 +153,22 @@ const AshpireControls = {
                             </label>
                         </div>
 
+                        <div class="ashpire-toggle-divider"></div>
+
+                        <div class="ashpire-toggle-row">
+                            <div class="ashpire-toggle-info">
+                                <div class="ashpire-toggle-label">Allow Admin+ Bypass</div>
+                                <div class="ashpire-toggle-desc">Allow logged-in Administrator+ accounts to bypass the website lockdown and access public subdomains normally.</div>
+                            </div>
+                            <label class="ashpire-toggle">
+                                <input type="checkbox" id="toggleSiteLockdownAdminBypass" ${data.siteLockdownAdminBypass ? 'checked' : ''} ${!data.siteLockdownEnabled ? 'disabled' : ''}>
+                                <span class="ashpire-toggle-slider"></span>
+                            </label>
+                        </div>
+
                         <div class="ashpire-panel-status ${data.siteLockdownEnabled ? 'lockdown-active' : ''}" id="siteLockdownStatusBar">
                             <span class="ashpire-status-dot ${data.siteLockdownEnabled ? 'lockdown' : ''}"></span>
-                            <span id="siteLockdownStatusText">${data.siteLockdownEnabled ? 'Website lockdown active \u2014 All public subdomains redirect to homepage' : 'Website lockdown inactive \u2014 All subdomains accessible'}</span>
+                            <span id="siteLockdownStatusText">${this._siteLockdownStatusText(data)}</span>
                         </div>
                     </div>
                 </div>
@@ -218,7 +231,15 @@ const AshpireControls = {
 
         // Bind website lockdown toggle
         document.getElementById('toggleSiteLockdown')?.addEventListener('change', (e) => {
-            this._updateSiteLockdown(e.target.checked);
+            const enabled = e.target.checked;
+            const bypassToggle = document.getElementById('toggleSiteLockdownAdminBypass');
+            if (bypassToggle) bypassToggle.disabled = !enabled;
+            this._updateSiteLockdown(enabled);
+        });
+
+        // Bind website lockdown admin bypass toggle
+        document.getElementById('toggleSiteLockdownAdminBypass')?.addEventListener('change', (e) => {
+            this._updateSiteLockdownAdminBypass(e.target.checked);
         });
 
         // Bind collapsible section headers
@@ -303,13 +324,25 @@ const AshpireControls = {
             const text = document.getElementById('siteLockdownStatusText');
             if (bar) bar.classList.toggle('lockdown-active', data.siteLockdownEnabled);
             if (dot) dot.classList.toggle('lockdown', data.siteLockdownEnabled);
-            if (text) text.textContent = data.siteLockdownEnabled
-                ? 'Website lockdown active \u2014 All public subdomains redirect to homepage'
-                : 'Website lockdown inactive \u2014 All subdomains accessible';
+            if (text) text.textContent = this._siteLockdownStatusText(data);
 
             Toast.success(`Website lockdown ${enabled ? 'enabled' : 'disabled'}`);
         } catch (error) {
             Toast.error('Failed to update website lockdown: ' + error.message);
+            this.load();
+        }
+    },
+
+    async _updateSiteLockdownAdminBypass(enabled) {
+        try {
+            const data = await API.ashpire.updateAuthSettings({ siteLockdownAdminBypass: enabled });
+
+            const text = document.getElementById('siteLockdownStatusText');
+            if (text) text.textContent = this._siteLockdownStatusText(data);
+
+            Toast.success(`Admin bypass ${enabled ? 'enabled' : 'disabled'}`);
+        } catch (error) {
+            Toast.error('Failed to update admin bypass: ' + error.message);
             this.load();
         }
     },
@@ -420,6 +453,16 @@ const AshpireControls = {
             return 'Lockdown enabled \u2014 No rank restriction set';
         }
         return `Lockdown active \u2014 ${role.charAt(0) + role.slice(1).toLowerCase()}+ only`;
+    },
+
+    _siteLockdownStatusText(data) {
+        if (!data.siteLockdownEnabled) {
+            return 'Website lockdown inactive \u2014 All subdomains accessible';
+        }
+        if (data.siteLockdownAdminBypass) {
+            return 'Website lockdown active \u2014 Admin+ accounts can bypass';
+        }
+        return 'Website lockdown active \u2014 All public subdomains redirect to homepage';
     },
 
     _timeAgo(epochMs) {

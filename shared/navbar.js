@@ -336,8 +336,19 @@
                 const resp = await fetch('https://api.elderos.io/api/v1/public/site-status');
                 const data = await resp.json();
                 if (data.lockdown) {
-                    window.location.href = 'https://elderos.io';
-                    return;
+                    // Check if admin bypass is enabled and user qualifies
+                    let canBypass = false;
+                    if (data.adminBypass && typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
+                        const user = Auth.getUser();
+                        const bypassRoles = ['ADMINISTRATOR', 'DEVELOPER', 'OWNER'];
+                        if (user && user.staffRole && bypassRoles.includes(user.staffRole)) {
+                            canBypass = true;
+                        }
+                    }
+                    if (!canBypass) {
+                        window.location.href = 'https://elderos.io';
+                        return;
+                    }
                 }
             } catch (e) { /* API unreachable — don't block */ }
         }
