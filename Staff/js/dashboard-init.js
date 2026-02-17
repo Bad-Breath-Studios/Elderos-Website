@@ -5,7 +5,9 @@
 
     // Check authentication
     console.log('[Dashboard] Checking auth...');
+    alert('DASHBOARD-INIT: About to call requireAuth(). Token: ' + (Auth.getToken() ? Auth.getToken().substring(0, 8) + '...' : 'NONE'));
     const isValid = await Auth.requireAuth();
+    alert('DASHBOARD-INIT: requireAuth returned ' + isValid);
     console.log('[Dashboard] Auth result:', isValid);
     if (!isValid) {
         console.log('[Dashboard] Auth failed, returning early');
