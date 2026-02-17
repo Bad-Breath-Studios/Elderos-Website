@@ -64,7 +64,7 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
-                    <img src="assets/logo.png" alt="Elderos" onerror="this.style.display='none'; this.parentElement.innerHTML='<span style=\'color: var(--accent); font-size: 24px; font-weight: 700;\'>ELDEROS</span>';">
+                    <img src="assets/logo.png" alt="Elderos" id="sidebarLogo">
                 </div>
             </div>
 
@@ -750,17 +750,7 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <!-- Scripts -->
-    <script>
-        // Global error handler to catch any JS errors
-        window.onerror = function(msg, url, line, col, error) {
-            console.error('[GLOBAL ERROR]', msg, 'at', url, 'line', line, error);
-            return false;
-        };
-        window.addEventListener('unhandledrejection', function(event) {
-            console.error('[UNHANDLED PROMISE REJECTION]', event.reason);
-        });
-        console.log('[Boot] Error handlers registered');
-    </script>
+    <script src="js/error-handler.js"></script>
     <script src="js/lib/chart.umd.min.js"></script>
     <script src="js/lib/chartjs-adapter-date-fns.bundle.min.js"></script>
     <!-- CodeMirror 5 + YAML mode + js-yaml -->

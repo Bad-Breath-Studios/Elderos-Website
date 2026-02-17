@@ -321,11 +321,14 @@ const Auth = {
      */
     async validateSession() {
         if (!this.isAuthenticated()) {
+            console.warn('[Auth] validateSession: not authenticated (no token found)');
             return false;
         }
 
         try {
+            console.log('[Auth] validateSession: calling API.auth.validate()...');
             const response = await API.auth.validate();
+            console.log('[Auth] validateSession: success', response?.user?.username);
 
             // Update user data if returned
             if (response.user) {
@@ -336,8 +339,20 @@ const Auth = {
             this.startValidation();
             return true;
         } catch (error) {
-            this.clearSession();
-            return false;
+            console.error('[Auth] validateSession FAILED:', error.status, error.message, error);
+
+            // Only clear session on explicit auth failures (401/403)
+            // Network errors, timeouts, and server errors should not destroy a potentially valid session
+            if (error.status === 401 || error.status === 403) {
+                this.clearSession();
+                return false;
+            }
+
+            // For non-auth errors (network, timeout, 5xx), keep session and still allow access
+            // The periodic validation will retry later
+            console.warn('[Auth] validateSession: non-auth error (status=' + error.status + '), keeping session');
+            this.startValidation();
+            return true;
         }
     },
 
