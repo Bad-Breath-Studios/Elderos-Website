@@ -395,7 +395,7 @@ const StaffClips = {
                 <td>${this._esc(e.reason || '-')}</td>
                 <td>${this._esc(e.addedByName || 'ID:' + e.addedBy)}</td>
                 <td>${e.createdAt ? new Date(e.createdAt).toLocaleDateString() : '-'}</td>
-                <td><button class="clips-row-btn remove" data-ip="${this._esc(e.ipAddress)}">Remove</button></td>
+                <td><button class="clips-row-btn remove" data-bl-id="${e.id}">Remove</button></td>
             </tr>`).join('')}</tbody>
         </table>`;
     },
@@ -421,11 +421,11 @@ const StaffClips = {
             });
         });
 
-        document.querySelectorAll('.clips-row-btn[data-ip]').forEach(btn => {
+        document.querySelectorAll('.clips-row-btn[data-bl-id]').forEach(btn => {
             btn.addEventListener('click', async () => {
                 if (!confirm('Remove this IP from the blacklist?')) return;
                 try {
-                    await API.clips.removeFromBlacklist(btn.dataset.ip);
+                    await API.clips.removeFromBlacklist(btn.dataset.blId);
                     Popup.toast('IP removed', 'success');
                     this._loadBlacklist();
                 } catch (e) {

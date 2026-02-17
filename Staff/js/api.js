@@ -985,71 +985,71 @@ const API = {
 
     clips: {
         async getSubmissions(params = {}) {
-            return API.get('/clips/admin/submissions', params);
+            return API.get('/clips/submissions', params);
         },
 
         async approveSubmission(id) {
-            return API.post(`/clips/admin/submissions/${id}/approve`);
+            return API.post(`/clips/submissions/${id}/approve`);
         },
 
         async removeSubmission(id) {
-            return API.post(`/clips/admin/submissions/${id}/remove`);
+            return API.post(`/clips/submissions/${id}/remove`);
         },
 
         async searchUsers(query) {
-            return API.get('/clips/admin/users', { query });
+            return API.get('/clips/users/search', { q: query });
         },
 
         async blockUser(userId, banType, reason) {
-            return API.post(`/clips/admin/users/${userId}/block`, { banType, reason });
+            return API.post(`/clips/users/${userId}/block`, { banType, reason });
         },
 
         async unblockUser(userId) {
-            return API.post(`/clips/admin/users/${userId}/unblock`);
+            return API.post(`/clips/users/${userId}/unblock`);
         },
 
         async clearUserSubmissions(userId) {
-            return API.post(`/clips/admin/users/${userId}/clear-submissions`);
+            return API.post(`/clips/users/${userId}/clear-submissions`);
         },
 
         async getPeriods(params = {}) {
-            return API.get('/clips/admin/periods', params);
+            return API.get('/clips/periods', params);
         },
 
         async createPeriod(data) {
-            return API.post('/clips/admin/periods', data);
+            return API.post('/clips/periods', data);
         },
 
         async finalizePeriod(periodId) {
-            return API.post(`/clips/admin/periods/${periodId}/finalize`);
+            return API.post(`/clips/periods/${periodId}/finalize`);
         },
 
         async archivePeriod(periodId) {
-            return API.post(`/clips/admin/periods/${periodId}/archive`);
+            return API.post(`/clips/periods/${periodId}/archive`);
         },
 
         async getBlacklist() {
-            return API.get('/clips/admin/blacklist');
+            return API.get('/clips/ip-blacklist');
         },
 
-        async addToBlacklist(ip, reason) {
-            return API.post('/clips/admin/blacklist', { ip, reason });
+        async addToBlacklist(ipAddress, reason) {
+            return API.post('/clips/ip-blacklist', { ipAddress, reason });
         },
 
-        async removeFromBlacklist(ip) {
-            return API.delete('/clips/admin/blacklist', { ip });
+        async removeFromBlacklist(id) {
+            return API.post(`/clips/ip-blacklist/${id}/remove`);
         },
 
         async getAuditLog(params = {}) {
-            return API.get('/clips/admin/audit', params);
+            return API.get('/clips/audit-log', params);
         },
 
         async getPayouts(periodId) {
-            return API.get(`/clips/admin/payouts/${periodId}`);
+            return API.get('/clips/payouts', { period: periodId });
         },
 
         async markPaid(resultId) {
-            return API.post(`/clips/admin/payouts/${resultId}/paid`);
+            return API.post(`/clips/payouts/${resultId}/mark-paid`);
         }
     },
 
