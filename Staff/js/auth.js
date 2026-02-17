@@ -362,6 +362,15 @@ const Auth = {
     async requireAuth() {
         const isValid = await this.validateSession();
         if (!isValid) {
+            // DEBUG: log all auth state before redirecting
+            console.error('[Auth] requireAuth FAILED — dumping state:');
+            console.error('[Auth]   token exists:', !!localStorage.getItem(CONFIG.TOKEN_KEY));
+            console.error('[Auth]   session exists:', !!localStorage.getItem(CONFIG.SESSION_KEY));
+            console.error('[Auth]   _session:', JSON.stringify(this._session));
+            console.error('[Auth]   API_BASE:', CONFIG.API_BASE);
+            // Temporarily halt redirect so we can read the console
+            document.title = 'AUTH FAILED - check console';
+            alert('Auth validation failed — check console for details. (This alert is temporary for debugging.)');
             window.location.href = 'index.html';
             return false;
         }
