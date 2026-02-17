@@ -37,6 +37,7 @@ const API = {
 
             // Handle 401 Unauthorized (but not for auth endpoints - they handle their own errors)
             if (response.status === 401 && !endpoint.startsWith('/auth/')) {
+                alert('401 KICKED BY: ' + endpoint + '\nURL: ' + url + '\nToken: ' + (token ? token.substring(0, 8) + '...' : 'NONE'));
                 Auth.clearSession();
                 window.location.href = 'index.html';
                 throw new APIError('Session expired', 401);
