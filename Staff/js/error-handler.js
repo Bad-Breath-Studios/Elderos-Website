@@ -1,6 +1,3 @@
-// TEMPORARY DEBUG — remove after investigation
-alert('PAGE LOADED: ' + location.href + '\nToken: ' + (localStorage.getItem('elderos_staff_token') ? 'YES' : 'NO'));
-
 // Global error handler to catch any JS errors
 window.onerror = function(msg, url, line, col, error) {
     console.error('[GLOBAL ERROR]', msg, 'at', url, 'line', line, error);
