@@ -70,6 +70,8 @@
     console.log('[Dashboard] WorldsConfig initialized');
     Events.init();
     console.log('[Dashboard] Events initialized');
+    StaffClips.init();
+    console.log('[Dashboard] StaffClips initialized');
     Animations.init();
     console.log('[Dashboard] Animations initialized');
 
@@ -177,6 +179,7 @@
         showSection('nav-section-content', hasContent);
         showNavItem('news', Auth.hasPermission(CONFIG.PERMISSIONS.NEWS_CREATE));
         showNavItem('events', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_EVENTS));
+        showNavItem('clips', Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_EVENTS));
 
         // Worlds
         const hasWorlds = Auth.hasPermission(CONFIG.PERMISSIONS.VIEW_WORLDS) ||

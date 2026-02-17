@@ -1,0 +1,319 @@
+/* ── Staff Panel — Top 10 Clips Admin ────────────── */
+
+/* Sub-tab bar */
+.clips-subtabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0;
+}
+.clips-subtab {
+    padding: 8px 18px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 200ms;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+}
+.clips-subtab:hover { color: var(--text-primary); }
+.clips-subtab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+}
+
+/* Clips toolbar */
+.clips-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.clips-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.clips-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clips-search-input {
+    padding: 7px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: inherit;
+    outline: none;
+    width: 240px;
+}
+.clips-search-input:focus { border-color: var(--accent); }
+.clips-search-input::placeholder { color: var(--text-tertiary); }
+
+.clips-filter-select {
+    padding: 7px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 12px;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+}
+.clips-filter-select option { background: var(--bg-card); }
+
+.clips-btn {
+    padding: 7px 16px;
+    border-radius: var(--radius-md);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms;
+    font-family: inherit;
+    border: none;
+}
+.clips-btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+.clips-btn-primary:hover { opacity: 0.9; }
+.clips-btn-secondary {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+}
+.clips-btn-secondary:hover { border-color: var(--border-hover); color: var(--text-primary); }
+.clips-btn-danger {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.15);
+    color: #f87171;
+}
+.clips-btn-danger:hover { background: rgba(239,68,68,0.15); }
+.clips-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Clips table */
+.clips-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+.clips-table th {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 14px;
+    text-align: left;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border-subtle);
+}
+.clips-table td {
+    padding: 10px 14px;
+    font-size: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+    color: var(--text-primary);
+}
+.clips-table tr:last-child td { border-bottom: none; }
+.clips-table tr:hover td { background: var(--bg-elevated); }
+
+.clips-table .title-cell {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+}
+.clips-table .video-link {
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+}
+.clips-table .video-link:hover { text-decoration: underline; }
+
+/* Status badges */
+.clips-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.clips-status.active { background: rgba(34,197,94,0.12); color: #4ade80; }
+.clips-status.approved { background: rgba(34,197,94,0.12); color: #4ade80; }
+.clips-status.pending { background: rgba(234,179,8,0.12); color: #facc15; }
+.clips-status.rejected { background: rgba(239,68,68,0.12); color: #f87171; }
+.clips-status.removed { background: rgba(239,68,68,0.12); color: #f87171; }
+.clips-status.finalized { background: rgba(59,130,246,0.12); color: #60a5fa; }
+.clips-status.voting_closed { background: rgba(168,85,247,0.12); color: #c084fc; }
+.clips-status.archived { background: rgba(255,255,255,0.04); color: var(--text-tertiary); }
+.clips-status.paid { background: rgba(34,197,94,0.12); color: #4ade80; }
+.clips-status.unpaid { background: rgba(234,179,8,0.12); color: #facc15; }
+.clips-status.blocked { background: rgba(239,68,68,0.12); color: #f87171; }
+.clips-status.warn { background: rgba(234,179,8,0.12); color: #facc15; }
+
+/* Action buttons in table rows */
+.clips-row-actions {
+    display: flex;
+    gap: 4px;
+}
+.clips-row-btn {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    border: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 150ms;
+}
+.clips-row-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
+.clips-row-btn.approve { border-color: rgba(34,197,94,0.2); color: #4ade80; }
+.clips-row-btn.approve:hover { background: rgba(34,197,94,0.06); }
+.clips-row-btn.remove { border-color: rgba(239,68,68,0.15); color: #f87171; }
+.clips-row-btn.remove:hover { background: rgba(239,68,68,0.06); }
+.clips-row-btn.finalize { border-color: rgba(59,130,246,0.2); color: #60a5fa; }
+.clips-row-btn.finalize:hover { background: rgba(59,130,246,0.06); }
+
+/* Empty state */
+.clips-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-tertiary);
+    font-size: 13px;
+}
+
+/* Pagination */
+.clips-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+}
+.clips-page-btn {
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 150ms;
+}
+.clips-page-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
+.clips-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.clips-page-info {
+    font-size: 11px;
+    color: var(--text-tertiary);
+}
+
+/* Clips modal (reuses popup pattern) */
+.clips-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(4px);
+}
+.clips-modal {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.clips-modal h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 16px;
+}
+.clips-modal .form-row {
+    margin-bottom: 14px;
+}
+.clips-modal .form-row label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+.clips-modal .form-row input,
+.clips-modal .form-row select,
+.clips-modal .form-row textarea {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-input);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    box-sizing: border-box;
+}
+.clips-modal .form-row input:focus,
+.clips-modal .form-row select:focus { border-color: var(--accent); }
+.clips-modal .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+/* Stats row for periods */
+.clips-stats-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.clips-stat-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 18px;
+    text-align: center;
+    flex: 1;
+}
+.clips-stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: var(--font-mono, monospace);
+    color: var(--text-primary);
+}
+.clips-stat-label {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}

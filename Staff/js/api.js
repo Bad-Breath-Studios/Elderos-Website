@@ -981,6 +981,78 @@ const API = {
         }
     },
 
+    // ==================== CLIPS ADMIN ENDPOINTS ====================
+
+    clips: {
+        async getSubmissions(params = {}) {
+            return API.get('/clips/admin/submissions', params);
+        },
+
+        async approveSubmission(id) {
+            return API.post(`/clips/admin/submissions/${id}/approve`);
+        },
+
+        async removeSubmission(id) {
+            return API.post(`/clips/admin/submissions/${id}/remove`);
+        },
+
+        async searchUsers(query) {
+            return API.get('/clips/admin/users', { query });
+        },
+
+        async blockUser(userId, banType, reason) {
+            return API.post(`/clips/admin/users/${userId}/block`, { banType, reason });
+        },
+
+        async unblockUser(userId) {
+            return API.post(`/clips/admin/users/${userId}/unblock`);
+        },
+
+        async clearUserSubmissions(userId) {
+            return API.post(`/clips/admin/users/${userId}/clear-submissions`);
+        },
+
+        async getPeriods(params = {}) {
+            return API.get('/clips/admin/periods', params);
+        },
+
+        async createPeriod(data) {
+            return API.post('/clips/admin/periods', data);
+        },
+
+        async finalizePeriod(periodId) {
+            return API.post(`/clips/admin/periods/${periodId}/finalize`);
+        },
+
+        async archivePeriod(periodId) {
+            return API.post(`/clips/admin/periods/${periodId}/archive`);
+        },
+
+        async getBlacklist() {
+            return API.get('/clips/admin/blacklist');
+        },
+
+        async addToBlacklist(ip, reason) {
+            return API.post('/clips/admin/blacklist', { ip, reason });
+        },
+
+        async removeFromBlacklist(ip) {
+            return API.delete('/clips/admin/blacklist', { ip });
+        },
+
+        async getAuditLog(params = {}) {
+            return API.get('/clips/admin/audit', params);
+        },
+
+        async getPayouts(periodId) {
+            return API.get(`/clips/admin/payouts/${periodId}`);
+        },
+
+        async markPaid(resultId) {
+            return API.post(`/clips/admin/payouts/${resultId}/paid`);
+        }
+    },
+
     // ==================== ADMIN ENDPOINTS ====================
 
     admin: {

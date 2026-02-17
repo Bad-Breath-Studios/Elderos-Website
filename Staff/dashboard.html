@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="css/telemetry.css?v=3">
     <link rel="stylesheet" href="css/item-search.css?v=3">
     <link rel="stylesheet" href="css/events.css?v=2">
+    <link rel="stylesheet" href="css/staff-clips.css?v=1">
     <link rel="stylesheet" href="css/hub-config.css?v=1">
     <link rel="stylesheet" href="css/container-editor.css?v=1">
     <link rel="stylesheet" href="css/skill-editor.css?v=1">
@@ -174,6 +175,13 @@
                             <line x1="3" y1="10" x2="21" y2="10"/>
                         </svg>
                         <span class="nav-item-label">Events</span>
+                    </a>
+                    <a href="#clips" class="nav-item" data-page="clips">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="23 7 16 12 23 17 23 7"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                        </svg>
+                        <span class="nav-item-label">Top 10 Clips</span>
                     </a>
                 </div>
 
@@ -679,6 +687,11 @@
                     <!-- Content populated by events.js -->
                 </div>
 
+                <!-- Top 10 Clips Page -->
+                <div class="page hidden" id="page-clips">
+                    <!-- Content populated by staff-clips.js -->
+                </div>
+
                 <!-- Field Config Page (Developer/Owner only) -->
                 <div class="page hidden" id="page-field-config">
                     <!-- Content populated by field-config.js -->
@@ -794,6 +807,7 @@
     <script src="js/vote-config.js?v=1"></script>
     <script src="js/worlds-config.js?v=2"></script>
     <script src="js/events.js?v=2"></script>
+    <script src="js/staff-clips.js?v=1"></script>
     <script src="js/animations.js?v=18"></script>
     <script src="js/dashboard-init.js?v=1"></script>
 </body>

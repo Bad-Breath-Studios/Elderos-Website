@@ -81,36 +81,85 @@
         setTimeout(() => el.remove(), 4000);
     }
 
+    // ── Tab System ─────────────────────────────────────
+    // Expose a simple registration API so other modules (clips.js) can plug in.
+
+    const _tabs = {};
+    let _activeTab = 'videos';
+
+    window.CreatorsTabs = {
+        register(id, initFn) {
+            _tabs[id] = { initFn, initialized: false };
+        },
+        switchTo(id) {
+            switchTab(id);
+        }
+    };
+
+    function switchTab(id) {
+        if (_activeTab === id) return;
+        _activeTab = id;
+
+        // Update tab bar UI
+        document.querySelectorAll('.page-tab').forEach(t => {
+            t.classList.toggle('active', t.dataset.tab === id);
+        });
+
+        // Show/hide panels
+        document.querySelectorAll('.tab-panel').forEach(p => {
+            p.style.display = p.id === 'tab-content-' + id ? '' : 'none';
+        });
+
+        // Lazy-init the tab module on first switch
+        const entry = _tabs[id];
+        if (entry && !entry.initialized) {
+            entry.initialized = true;
+            entry.initFn();
+        }
+    }
+
     // ── Page Init ────────────────────────────────────────
 
     async function init() {
         const root = document.getElementById('creators-root');
         if (!root) return;
 
-        // Build the page skeleton
+        // Build the page skeleton with tab bar
         root.innerHTML = `
             <div class="page-content">
                 <div class="page-hero">
                     <div class="page-title"><span class="page-title-accent">Creators</span></div>
                     <div class="page-sub">Community content creators, videos, and giveaways</div>
                 </div>
-                <div class="main-layout">
-                    <div class="videos-section">
-                        <div class="section-label">Latest Videos</div>
-                        <div id="video-list" class="video-list"><div class="loading-spinner"></div></div>
-                        <div id="load-more-row" class="load-more-row" style="display:none">
-                            <button class="load-more-btn" id="load-more-btn">Load More</button>
+                <div class="page-tabs">
+                    <button class="page-tab active" data-tab="videos">Videos</button>
+                    <button class="page-tab" data-tab="clips">Top 10 Clips</button>
+                </div>
+                <div id="tab-content-videos" class="tab-panel">
+                    <div class="main-layout">
+                        <div class="videos-section">
+                            <div class="section-label">Latest Videos</div>
+                            <div id="video-list" class="video-list"><div class="loading-spinner"></div></div>
+                            <div id="load-more-row" class="load-more-row" style="display:none">
+                                <button class="load-more-btn" id="load-more-btn">Load More</button>
+                            </div>
+                        </div>
+                        <div class="sidebar">
+                            <div class="section-label">Active Giveaways</div>
+                            <div id="sidebar-giveaways" class="giveaways-sidebar"><div class="loading-spinner"></div></div>
+                            <div class="section-label" style="margin-top:4px">Our Creators</div>
+                            <div id="sidebar-creators" class="creators-card"><div class="loading-spinner"></div></div>
                         </div>
                     </div>
-                    <div class="sidebar">
-                        <div class="section-label">Active Giveaways</div>
-                        <div id="sidebar-giveaways" class="giveaways-sidebar"><div class="loading-spinner"></div></div>
-                        <div class="section-label" style="margin-top:4px">Our Creators</div>
-                        <div id="sidebar-creators" class="creators-card"><div class="loading-spinner"></div></div>
-                    </div>
+                    <div id="bottom-section"></div>
                 </div>
-                <div id="bottom-section"></div>
+                <div id="tab-content-clips" class="tab-panel" style="display:none"></div>
             </div>`;
+
+        // Tab switching
+        document.querySelectorAll('.page-tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
 
         document.getElementById('load-more-btn').addEventListener('click', loadMoreVideos);
 
@@ -129,6 +178,11 @@
 
         // Render bottom section after we know the user's role
         renderBottomSection();
+
+        // If URL hash requests clips tab, switch immediately
+        if (window.location.hash === '#clips') {
+            switchTab('clips');
+        }
     }
 
     // ── Check Creator Status ─────────────────────────────
