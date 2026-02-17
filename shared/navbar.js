@@ -339,7 +339,21 @@
                     // Check if admin bypass is enabled and user qualifies
                     let canBypass = false;
                     if (data.adminBypass && typeof Auth !== 'undefined' && Auth.isLoggedIn()) {
-                        const user = Auth.getUser();
+                        let user = Auth.getUser();
+                        // localStorage is per-origin — user data from elderos.io isn't
+                        // available on subdomains. Fetch and cache it from the API.
+                        if (!user) {
+                            try {
+                                const meResp = await fetch(Auth.API_BASE + '/api/auth/me', {
+                                    headers: Auth.getAuthHeader()
+                                });
+                                const meData = await meResp.json();
+                                if (meData.success && meData.account) {
+                                    Auth.storeLogin(Auth.getToken(), meData.account);
+                                    user = meData.account;
+                                }
+                            } catch (_) { /* fetch failed — can't bypass */ }
+                        }
                         const bypassRoles = ['ADMINISTRATOR', 'DEVELOPER', 'OWNER'];
                         if (user && user.staffRole && bypassRoles.includes(user.staffRole)) {
                             canBypass = true;
